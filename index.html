@@ -438,6 +438,53 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .rich-hook-breakdown{font-size:11px;color:var(--t3);font-family:var(--mono);letter-spacing:.04em;line-height:1.6}
 .rich-caption-box{position:relative;background:var(--surface);border:1px solid var(--border2);border-radius:2px;padding:28px 32px;margin-bottom:16px;font-size:16px;color:var(--t1);line-height:1.9;white-space:pre-wrap;box-shadow:0 0 40px rgba(124,58,237,.08)}
 .rich-caption-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3));border-radius:2px 2px 0 0}
+
+/* ── ONBOARDING ── */
+.ob-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.ob-overlay.open{opacity:1;pointer-events:all}
+.ob-modal{background:var(--surface);border:1px solid var(--border2);border-radius:2px;width:100%;max-width:560px;padding:0;overflow:hidden;position:relative}
+.ob-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3))}
+.ob-header{padding:32px 40px 24px}
+.ob-logo{font-family:var(--display);font-size:13px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:var(--purple3);margin-bottom:16px}
+.ob-step-bar{display:flex;gap:4px;margin-bottom:24px}
+.ob-step-dot{height:2px;flex:1;background:var(--border2);border-radius:1px;transition:background .3s}
+.ob-step-dot.done{background:var(--purple2)}
+.ob-step-dot.active{background:var(--purple3)}
+.ob-title{font-family:var(--display);font-size:clamp(28px,4vw,40px);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;color:var(--white);line-height:.95;margin-bottom:8px}
+.ob-sub{font-size:13px;color:var(--t3);line-height:1.6}
+.ob-body{padding:24px 40px 32px}
+.ob-step{display:none}
+.ob-step.active{display:block}
+.ob-input{background:var(--bg);border:1px solid var(--border2);color:var(--t1);font-family:var(--font);font-size:15px;padding:14px 18px;outline:none;width:100%;border-radius:2px;transition:border-color .2s,box-shadow .2s;margin-bottom:4px}
+.ob-input:focus{border-color:var(--purple2);box-shadow:0 0 0 3px rgba(124,58,237,.12)}
+.ob-input::placeholder{color:var(--t3)}
+.ob-hint{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.08em;margin-bottom:20px}
+.ob-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.ob-pill{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:10px 18px;background:transparent;border:1px solid var(--border2);color:var(--t3);cursor:pointer;border-radius:100px;transition:all .2s}
+.ob-pill:hover{border-color:var(--purple2);color:var(--purple3)}
+.ob-pill.on{background:rgba(124,58,237,.15);border-color:var(--purple2);color:var(--purple3)}
+.ob-footer{padding:20px 40px 32px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border)}
+.ob-back-btn{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);background:none;border:none;cursor:pointer;transition:color .2s}
+.ob-back-btn:hover{color:var(--t1)}
+.ob-next-btn{font-family:var(--display);font-size:13px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;background:var(--white);color:var(--bg);border:none;padding:14px 32px;cursor:pointer;border-radius:2px;transition:all .2s}
+.ob-next-btn:hover{background:#e8e8e8}
+.ob-next-btn:disabled{opacity:.4;cursor:not-allowed}
+.ob-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+@media(max-width:480px){.ob-grid{grid-template-columns:1fr}}
+
+/* ── DASHBOARD REDESIGN ── */
+.dash-profile-bar{background:var(--surface);border:1px solid var(--border2);border-radius:2px;padding:20px 28px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden}
+.dash-profile-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3))}
+.dash-profile-left{display:flex;align-items:center;gap:16px}
+.dash-profile-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple2));display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:20px;font-weight:900;color:var(--white);flex-shrink:0}
+.dash-profile-info{}
+.dash-profile-name{font-family:var(--display);font-size:22px;font-weight:900;text-transform:uppercase;color:var(--white);line-height:1}
+.dash-profile-meta{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.08em;margin-top:3px}
+.dash-profile-right{display:flex;gap:24px}
+.dash-profile-stat{text-align:center}
+.dash-profile-stat-num{font-family:var(--display);font-size:28px;font-weight:900;color:var(--white);line-height:1}
+.dash-profile-stat-label{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
+@media(max-width:600px){.dash-profile-bar{flex-direction:column;gap:16px;text-align:center}.dash-profile-left{flex-direction:column}.dash-profile-right{justify-content:center}}
 </style>
 </head>
 <body>
@@ -504,6 +551,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 
     <!-- DASHBOARD -->
     <section id="sec-dashboard">
+      <div id="dash-profile-bar" class="dash-profile-bar" style="display:none"></div>
       <div class="dash-hero">
         <div class="dash-greeting" id="dash-greeting">Welcome back</div>
         <div class="dash-headline">What are<br>we building<br>today?</div>
@@ -763,6 +811,104 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
   </main>
 </div>
 
+
+<!-- ONBOARDING MODAL -->
+<div class="ob-overlay" id="ob-overlay">
+  <div class="ob-modal">
+    <div class="ob-header">
+      <div class="ob-logo">PURX — Setup</div>
+      <div class="ob-step-bar">
+        <div class="ob-step-dot active" id="ob-dot-0"></div>
+        <div class="ob-step-dot" id="ob-dot-1"></div>
+        <div class="ob-step-dot" id="ob-dot-2"></div>
+        <div class="ob-step-dot" id="ob-dot-3"></div>
+        <div class="ob-step-dot" id="ob-dot-4"></div>
+        <div class="ob-step-dot" id="ob-dot-5"></div>
+      </div>
+      <div class="ob-title" id="ob-title">What's your name?</div>
+      <div class="ob-sub" id="ob-sub">PURX uses this to personalize every output for you.</div>
+    </div>
+    <div class="ob-body">
+
+      <!-- Step 0: Name + Handle -->
+      <div class="ob-step active" id="ob-step-0">
+        <input class="ob-input" id="ob-name" placeholder="Your first name" maxlength="40">
+        <div class="ob-hint">Used for greetings and personalized outputs</div>
+        <input class="ob-input" id="ob-handle" placeholder="Instagram handle (optional)" maxlength="40">
+        <div class="ob-hint">e.g. @yourhandle — helps PURX write in your voice</div>
+      </div>
+
+      <!-- Step 1: Niches -->
+      <div class="ob-step" id="ob-step-1">
+        <div class="ob-pills" id="ob-niche-pills">
+          <button class="ob-pill" data-val="lifestyle">Lifestyle</button>
+          <button class="ob-pill" data-val="cars">Cars</button>
+          <button class="ob-pill" data-val="fashion">Fashion</button>
+          <button class="ob-pill" data-val="fitness">Fitness</button>
+          <button class="ob-pill" data-val="motivation">Motivation</button>
+          <button class="ob-pill" data-val="business">Business</button>
+          <button class="ob-pill" data-val="food">Food</button>
+          <button class="ob-pill" data-val="travel">Travel</button>
+          <button class="ob-pill" data-val="beauty">Beauty</button>
+          <button class="ob-pill" data-val="tech">Tech</button>
+          <button class="ob-pill" data-val="real estate">Real Estate</button>
+          <button class="ob-pill" data-val="music">Music</button>
+        </div>
+        <div class="ob-hint">Select all that apply — you can pick multiple</div>
+      </div>
+
+      <!-- Step 2: Goal -->
+      <div class="ob-step" id="ob-step-2">
+        <div class="ob-pills" id="ob-goal-pills">
+          <button class="ob-pill" data-val="grow followers fast">Grow followers fast</button>
+          <button class="ob-pill" data-val="build a personal brand">Build a personal brand</button>
+          <button class="ob-pill" data-val="monetize my audience">Monetize my audience</button>
+          <button class="ob-pill" data-val="go viral">Go viral</button>
+          <button class="ob-pill" data-val="drive traffic to my business">Drive business traffic</button>
+          <button class="ob-pill" data-val="build an engaged community">Build community</button>
+        </div>
+        <div class="ob-hint">Pick your primary goal right now</div>
+      </div>
+
+      <!-- Step 3: Location -->
+      <div class="ob-step" id="ob-step-3">
+        <div class="ob-grid">
+          <div>
+            <input class="ob-input" id="ob-city" placeholder="City" maxlength="60">
+            <div class="ob-hint">e.g. Tampa</div>
+          </div>
+          <div>
+            <input class="ob-input" id="ob-state" placeholder="State" maxlength="40">
+            <div class="ob-hint">e.g. Florida</div>
+          </div>
+        </div>
+        <div class="ob-hint" style="margin-top:8px">Used for posting time recommendations and local hashtags</div>
+      </div>
+
+      <!-- Step 4: Creator Level -->
+      <div class="ob-step" id="ob-step-4">
+        <div class="ob-pills" id="ob-level-pills">
+          <button class="ob-pill" data-val="micro">Micro Creator — Under 10K</button>
+          <button class="ob-pill" data-val="growing">Growing — 10K to 100K</button>
+          <button class="ob-pill" data-val="established">Established — 100K+</button>
+        </div>
+        <div class="ob-hint" style="margin-top:12px">This shapes how aggressively PURX builds your strategy</div>
+      </div>
+
+      <!-- Step 5: Followers -->
+      <div class="ob-step" id="ob-step-5">
+        <input class="ob-input" id="ob-followers" type="number" placeholder="Current follower count" min="0" max="10000000">
+        <div class="ob-hint">Your starting point — PURX uses this to calibrate every plan</div>
+      </div>
+
+    </div>
+    <div class="ob-footer">
+      <button class="ob-back-btn" id="ob-back" onclick="obBack()" style="visibility:hidden">← Back</button>
+      <button class="ob-next-btn" id="ob-next" onclick="obNext()">Continue →</button>
+    </div>
+  </div>
+</div>
+
 <!-- HISTORY MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal">
@@ -809,11 +955,9 @@ function showApp() {
   document.getElementById('auth-screen').classList.remove('active');
   document.getElementById('app-screen').classList.add('active');
   document.getElementById('user-email-display').textContent = currentUser?.email || '';
-  const hour = new Date().getHours();
-  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-  document.getElementById('dash-greeting').textContent = greeting;
   showSection('dashboard');
   loadStats();
+  loadProfile();
 }
 
 function showAuth() {
@@ -983,7 +1127,7 @@ function copyModal(){
 
 // ── AI TOOLS ──
 const PROMPTS = {
-  caption:(niche,goal,brief)=>
+  caption:(niche,goal,brief,profileCtx)=>
     `You are PURX — an elite Instagram content strategist. A ${niche} creator needs a caption. Goal: ${goal}. Post: "${brief||'a premium, aspirational lifestyle moment'}".
 
 Generate ONE Instagram caption then a strategic breakdown. Format your response EXACTLY like this with these exact labels:
@@ -1005,8 +1149,10 @@ CAPTION VOICE NOTE:
 
 Do NOT be generic. Every line must be specific to ${niche} and "${goal}". Output only the formatted response above.`,
 
-  hook:(niche,brief,style)=>
+  hook:(niche,brief,style,profileCtx)=>
     `You are PURX — an elite Instagram Reels strategist. A ${niche} creator needs opening hooks. Style: ${style}. Reel concept: "${brief||'a premium, aspirational lifestyle moment'}".
+
+CREATOR PROFILE: ${profileCtx || "A serious Instagram creator"}
 
 Generate exactly 5 scroll-stopping hooks then a breakdown. Format EXACTLY like this:
 
@@ -1032,8 +1178,10 @@ DELIVERY NOTE:
 
 What NOT to use: "Nobody tells you this", "I need to talk about", "Here's what I learned" — overused and skip-inducing. Output only the formatted response above.`,
 
-  hashtag:(niche,brief)=>
+  hashtag:(niche,brief,profileCtx)=>
     `You are PURX — an Instagram growth strategist. A ${niche} creator needs a hashtag strategy. Post: "${brief||'premium '+niche+' content'}".
+
+CREATOR PROFILE: ${profileCtx || "A serious Instagram creator"}
 
 Generate a 15-hashtag strategy with explanation. Format EXACTLY like this:
 
@@ -1076,21 +1224,21 @@ async function runTool(tool) {
       getNiche:()=>getPillVal('cap-niche-pills'),
       getGoal:()=>getPillVal('cap-goal-pills'),
       getBrief:()=>document.getElementById('cap-brief').value.trim(),
-      getPrompt:(n,g,b)=>PROMPTS.caption(n,g,b),
+      getPrompt:(n,g,b)=>PROMPTS.caption(n,g,b,getProfileContext()),
       btnId:'cap-btn',loadId:'cap-loading',outId:'cap-output',textId:'cap-text',isCalendar:false
     },
     hook:{
       getNiche:()=>getPillVal('hook-niche-pills'),
       getGoal:()=>getPillVal('hook-style-pills'),
       getBrief:()=>document.getElementById('hook-brief').value.trim(),
-      getPrompt:(n,g,b)=>PROMPTS.hook(n,b,g),
+      getPrompt:(n,g,b)=>PROMPTS.hook(n,b,g,getProfileContext()),
       btnId:'hook-btn',loadId:'hook-loading',outId:'hook-output',textId:'hook-text',isCalendar:false
     },
     hashtag:{
       getNiche:()=>getPillVal('ht-niche-pills'),
       getGoal:()=>'',
       getBrief:()=>document.getElementById('ht-brief').value.trim(),
-      getPrompt:(n,g,b)=>PROMPTS.hashtag(n,b),
+      getPrompt:(n,g,b)=>PROMPTS.hashtag(n,b,getProfileContext()),
       btnId:'ht-btn',loadId:'ht-loading',outId:'ht-output',textId:'ht-text',isCalendar:false
     },
     _unused_calendar:{
@@ -1782,6 +1930,260 @@ function showToast(msg) {
   t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+
+// ── USER PROFILE ──
+let userProfile = null;
+
+async function loadProfile() {
+  if (!currentUser) return;
+  try {
+    const { data, error } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+    if (error || !data) {
+      // No profile yet — show onboarding
+      setTimeout(() => obOpen(), 800);
+      return;
+    }
+    userProfile = data;
+    if (!data.onboarded) {
+      setTimeout(() => obOpen(), 800);
+      return;
+    }
+    applyProfile(data);
+  } catch(e) {
+    console.warn('Profile load error:', e);
+  }
+}
+
+function applyProfile(p) {
+  if (!p) return;
+  const hour = new Date().getHours();
+  const timeGreet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const name = p.name ? p.name.split(' ')[0] : '';
+
+  // Dashboard greeting
+  const greetEl = document.getElementById('dash-greeting');
+  if (greetEl) greetEl.textContent = name ? timeGreet + ', ' + name : timeGreet;
+
+  // Profile bar
+  renderProfileBar(p);
+
+  // Pre-fill planner fields
+  if (p.current_followers) {
+    const cfEl = document.getElementById('cal-current-followers');
+    if (cfEl && !cfEl.value) cfEl.value = p.current_followers;
+  }
+
+  // Pre-select niche pills in all tools
+  if (p.niches && p.niches.length > 0) {
+    const firstNiche = p.niches[0];
+    ['cap-niche-pills','hook-niche-pills','ht-niche-pills','cal-niche-pills'].forEach(rowId => {
+      const row = document.getElementById(rowId);
+      if (!row) return;
+      row.querySelectorAll('.pill').forEach(pill => {
+        pill.classList.toggle('on', pill.dataset.val === firstNiche);
+      });
+    });
+  }
+}
+
+function renderProfileBar(p) {
+  const bar = document.getElementById('dash-profile-bar');
+  if (!bar) return;
+  const name = p.name || 'Creator';
+  const initial = name.charAt(0).toUpperCase();
+  const niches = (p.niches || []).join(' · ');
+  const location = [p.city, p.state].filter(Boolean).join(', ');
+  const meta = [niches, location, p.creator_level ? p.creator_level + ' creator' : ''].filter(Boolean).join(' — ');
+
+  bar.innerHTML =
+    '<div class="dash-profile-left">' +
+      '<div class="dash-profile-avatar">' + initial + '</div>' +
+      '<div class="dash-profile-info">' +
+        '<div class="dash-profile-name">' + escH(name) + '</div>' +
+        '<div class="dash-profile-meta">' + escH(meta) + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="dash-profile-right">' +
+      '<div class="dash-profile-stat">' +
+        '<div class="dash-profile-stat-num" id="stat-total">0</div>' +
+        '<div class="dash-profile-stat-label">Generations</div>' +
+      '</div>' +
+      '<div class="dash-profile-stat">' +
+        '<div class="dash-profile-stat-num" id="stat-captions">0</div>' +
+        '<div class="dash-profile-stat-label">Captions</div>' +
+      '</div>' +
+      '<div class="dash-profile-stat">' +
+        '<div class="dash-profile-stat-num" id="stat-hooks">0</div>' +
+        '<div class="dash-profile-stat-label">Hooks</div>' +
+      '</div>' +
+    '</div>';
+  bar.style.display = 'flex';
+}
+
+// ── ONBOARDING ──
+let obStep = 0;
+const obStepCount = 6;
+
+const obSteps = [
+  { title: "What's your name?", sub: "PURX uses this to personalize every output for you." },
+  { title: "Pick your niche(s)", sub: "Select all that apply. The more specific, the better your outputs." },
+  { title: "What's your main goal?", sub: "This shapes how every tool generates content for you." },
+  { title: "Where are you based?", sub: "Used for posting time recommendations and local hashtags." },
+  { title: "What level are you at?", sub: "This calibrates how aggressively PURX builds your strategy." },
+  { title: "How many followers do you have?", sub: "Your starting point — used across every tool automatically." }
+];
+
+function obOpen() {
+  obStep = 0;
+  obRender();
+  document.getElementById('ob-overlay').classList.add('open');
+}
+
+function obClose() {
+  document.getElementById('ob-overlay').classList.remove('open');
+}
+
+function obRender() {
+  // Update title and sub
+  document.getElementById('ob-title').textContent = obSteps[obStep].title;
+  document.getElementById('ob-sub').textContent = obSteps[obStep].sub;
+
+  // Update step dots
+  for (let i = 0; i < obStepCount; i++) {
+    const dot = document.getElementById('ob-dot-' + i);
+    if (!dot) continue;
+    dot.className = 'ob-step-dot ' + (i < obStep ? 'done' : i === obStep ? 'active' : '');
+  }
+
+  // Show/hide steps
+  for (let i = 0; i < obStepCount; i++) {
+    const s = document.getElementById('ob-step-' + i);
+    if (s) s.classList.toggle('active', i === obStep);
+  }
+
+  // Back button
+  const backBtn = document.getElementById('ob-back');
+  backBtn.style.visibility = obStep === 0 ? 'hidden' : 'visible';
+
+  // Next button label
+  const nextBtn = document.getElementById('ob-next');
+  nextBtn.textContent = obStep === obStepCount - 1 ? 'Launch PURX →' : 'Continue →';
+}
+
+function obBack() {
+  if (obStep > 0) { obStep--; obRender(); }
+}
+
+async function obNext() {
+  // Validate current step
+  if (obStep === 0) {
+    const name = document.getElementById('ob-name').value.trim();
+    if (!name) { showToast('Enter your name to continue'); return; }
+  }
+  if (obStep === 1) {
+    const selected = document.querySelectorAll('#ob-niche-pills .ob-pill.on');
+    if (selected.length === 0) { showToast('Pick at least one niche'); return; }
+  }
+  if (obStep === 2) {
+    const selected = document.querySelectorAll('#ob-goal-pills .ob-pill.on');
+    if (selected.length === 0) { showToast('Pick your main goal'); return; }
+  }
+  if (obStep === 4) {
+    const selected = document.querySelectorAll('#ob-level-pills .ob-pill.on');
+    if (selected.length === 0) { showToast('Pick your creator level'); return; }
+  }
+
+  if (obStep < obStepCount - 1) {
+    obStep++;
+    obRender();
+    return;
+  }
+
+  // Final step — save profile
+  const btn = document.getElementById('ob-next');
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+
+  const niches = Array.from(document.querySelectorAll('#ob-niche-pills .ob-pill.on')).map(p => p.dataset.val);
+  const goal = document.querySelector('#ob-goal-pills .ob-pill.on')?.dataset.val || '';
+  const level = document.querySelector('#ob-level-pills .ob-pill.on')?.dataset.val || '';
+  const followers = parseInt(document.getElementById('ob-followers').value) || 0;
+
+  const profileData = {
+    id: currentUser.id,
+    name: document.getElementById('ob-name').value.trim(),
+    handle: document.getElementById('ob-handle').value.trim().replace('@',''),
+    city: document.getElementById('ob-city').value.trim(),
+    state: document.getElementById('ob-state').value.trim(),
+    niches,
+    goal,
+    creator_level: level,
+    current_followers: followers,
+    onboarded: true,
+    updated_at: new Date().toISOString()
+  };
+
+  try {
+    const { error } = await sb.from('profiles').upsert(profileData);
+    if (error) throw error;
+    userProfile = profileData;
+    applyProfile(profileData);
+    obClose();
+    showToast('Welcome to PURX, ' + profileData.name.split(' ')[0] + '!');
+  } catch(e) {
+    console.error('Profile save error:', e);
+    showToast('Error saving profile — please try again');
+    btn.disabled = false;
+    btn.textContent = 'Launch PURX →';
+  }
+}
+
+// Multi-select pills in onboarding
+document.addEventListener('DOMContentLoaded', () => {
+  ['ob-niche-pills'].forEach(rowId => {
+    const row = document.getElementById(rowId);
+    if (!row) return;
+    row.addEventListener('click', e => {
+      const pill = e.target.closest('.ob-pill');
+      if (!pill) return;
+      pill.classList.toggle('on');
+    });
+  });
+  ['ob-goal-pills','ob-level-pills'].forEach(rowId => {
+    const row = document.getElementById(rowId);
+    if (!row) return;
+    row.addEventListener('click', e => {
+      const pill = e.target.closest('.ob-pill');
+      if (!pill) return;
+      row.querySelectorAll('.ob-pill').forEach(p => p.classList.remove('on'));
+      pill.classList.add('on');
+    });
+  });
+});
+
+// Profile-aware prompt builder
+function getProfileContext() {
+  if (!userProfile) return '';
+  const name = userProfile.name || '';
+  const niches = (userProfile.niches || []).join(' and ');
+  const goal = userProfile.goal || '';
+  const city = userProfile.city || '';
+  const state = userProfile.state || '';
+  const level = userProfile.creator_level || '';
+  const followers = userProfile.current_followers || 0;
+  const handle = userProfile.handle ? '@' + userProfile.handle : '';
+
+  let ctx = '';
+  if (name) ctx += 'Creator name: ' + name + '. ';
+  if (handle) ctx += 'Handle: ' + handle + '. ';
+  if (niches) ctx += 'Niche: ' + niches + '. ';
+  if (goal) ctx += 'Goal: ' + goal + '. ';
+  if (city && state) ctx += 'Location: ' + city + ', ' + state + '. ';
+  if (level) ctx += 'Creator level: ' + level + '. ';
+  if (followers) ctx += 'Current followers: ' + followers.toLocaleString() + '. ';
+  return ctx;
 }
 
 // Init
