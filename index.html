@@ -196,6 +196,66 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
   .form-section{padding:24px}
   .usage-badge{display:none}
 }
+
+/* ── PLANNER STYLES ── */
+.planner-summary{background:var(--surface);border:1px solid var(--border2);border-radius:2px;padding:28px;margin-bottom:24px}
+.planner-summary-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--purple3);margin-bottom:12px}
+.planner-summary-title{font-family:var(--display);font-size:28px;font-weight:900;text-transform:uppercase;color:var(--white);line-height:1;margin-bottom:8px}
+.planner-summary-logic{font-size:13px;color:var(--t2);line-height:1.65;margin-bottom:20px;border-left:2px solid var(--purple);padding-left:16px;font-style:italic}
+.planner-goal-gap{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:8px 16px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);color:var(--purple3);border-radius:100px;margin-bottom:20px}
+.planner-meta-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:640px){.planner-meta-grid{grid-template-columns:repeat(4,1fr)}}
+.planner-meta-card{background:var(--bg2);border:1px solid var(--border);padding:14px 16px;border-radius:2px}
+.planner-meta-label{font-family:var(--mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+.planner-meta-val{font-size:12px;color:var(--t2);line-height:1.5}
+.planner-day{margin-bottom:32px}
+.planner-day-header{display:flex;align-items:flex-start;justify-content:space-between;padding:20px 24px;background:var(--surface);border:1px solid var(--border2);border-radius:2px 2px 0 0;border-bottom:1px solid var(--border)}
+.planner-day-left{display:flex;align-items:center;gap:20px}
+.planner-day-num{font-family:var(--display);font-size:48px;font-weight:900;color:var(--t4);line-height:1}
+.planner-day-info{}
+.planner-day-date{font-family:var(--display);font-size:22px;font-weight:900;text-transform:uppercase;color:var(--white);line-height:1}
+.planner-day-name{font-family:var(--mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);margin-top:2px}
+.planner-day-objectives{text-align:right}
+.planner-day-obj-primary{font-family:var(--mono);font-size:9px;color:var(--t2);letter-spacing:.06em}
+.planner-day-tp-badge{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;background:var(--bg);border:1px solid var(--border2);color:var(--t3);border-radius:100px;margin-top:8px;display:inline-block}
+.planner-day-outcome{font-size:12px;color:var(--t3);padding:12px 24px;background:var(--bg2);border-left:1px solid var(--border2);border-right:1px solid var(--border2);line-height:1.5}
+.planner-touchpoints{display:flex;flex-direction:column;gap:0}
+.planner-tp{background:var(--surface);border:1px solid var(--border2);border-top:none;position:relative}
+.planner-tp:last-child{border-radius:0 0 2px 2px}
+.planner-tp-accent{position:absolute;left:0;top:0;bottom:0;width:3px}
+.planner-tp-accent.awareness{background:var(--purple)}
+.planner-tp-accent.authority{background:var(--amber)}
+.planner-tp-accent.conversion{background:var(--green)}
+.planner-tp-inner{padding:24px 24px 24px 28px}
+.planner-tp-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.planner-tp-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.planner-tp-time{font-family:var(--mono);font-size:11px;color:var(--t2);letter-spacing:.06em;font-weight:500}
+.planner-tp-format{font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;background:var(--bg2);border:1px solid var(--border);color:var(--t2);border-radius:100px}
+.planner-tp-slot{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;border:1px solid}
+.planner-tp-slot.morning{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2);color:var(--amber)}
+.planner-tp-slot.afternoon{background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.2);color:var(--purple3)}
+.planner-tp-slot.evening{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.2);color:var(--green)}
+.planner-tp-role-badge{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;border:1px solid var(--border);color:var(--t3)}
+.planner-tp-confidence{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.06em;white-space:nowrap}
+.planner-tp-title{font-family:var(--display);font-size:clamp(18px,3vw,26px);font-weight:900;text-transform:uppercase;letter-spacing:.02em;color:var(--white);line-height:1.05;margin-bottom:6px}
+.planner-tp-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.planner-tp-pill{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.15);color:var(--purple3);border-radius:100px}
+.planner-tp-hook{font-size:14px;color:var(--t1);line-height:1.7;padding:16px 20px;background:var(--bg2);border:1px solid var(--border);border-radius:2px;margin-bottom:16px}
+.planner-tp-caption-starter{font-size:13px;color:var(--purple3);line-height:1.65;padding:14px 18px;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.15);border-radius:2px;margin-bottom:16px}
+.planner-tp-caption-label{font-family:var(--mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--purple2);margin-bottom:6px}
+.planner-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+@media(max-width:540px){.planner-detail-grid{grid-template-columns:1fr}}
+.planner-detail-card{background:var(--bg2);border:1px solid var(--border);padding:14px 16px;border-radius:2px}
+.planner-detail-label{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+.planner-detail-val{font-size:12px;color:var(--t2);line-height:1.55}
+.planner-bottom-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px}
+@media(max-width:640px){.planner-bottom-grid{grid-template-columns:1fr}}
+.planner-perf-card{background:var(--bg2);border:1px solid var(--border);padding:14px 16px;border-radius:2px}
+.planner-perf-label{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+.planner-perf-label.perf{color:var(--green)}
+.planner-perf-label.algo{color:var(--purple3)}
+.planner-perf-label.redflag{color:var(--red)}
+.planner-perf-val{font-family:var(--mono);font-size:11px;color:var(--t2);line-height:1.6}
 </style>
 </head>
 <body>
@@ -431,11 +491,11 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
       </div>
     </section>
 
-    <!-- CALENDAR TOOL -->
+    <!-- PLANNER TOOL -->
     <section id="sec-calendar" class="tool-panel">
       <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
-      <div class="panel-title">Content<br>Calendar</div>
-      <div class="panel-sub">04 — Your full week mapped out</div>
+      <div class="panel-title">Content<br>Planner</div>
+      <div class="panel-sub">04 — Your full content operating system</div>
       <div class="form-section">
         <label class="form-label">Your niche</label>
         <div class="pill-row" id="cal-niche-pills">
@@ -446,26 +506,57 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
           <button class="pill" data-val="fitness">Fitness</button>
           <button class="pill" data-val="business">Business</button>
         </div>
-        <label class="form-label">Weekly goal</label>
-        <div class="pill-row" id="cal-goal-pills">
-          <button class="pill on" data-val="grow reach and followers">Grow reach</button>
-          <button class="pill" data-val="maximize engagement">Max engagement</button>
-          <button class="pill" data-val="build brand authority">Build authority</button>
-          <button class="pill" data-val="go viral">Go viral</button>
+
+        <label class="form-label">Weekly theme or focus</label>
+        <input class="form-input" id="cal-theme" placeholder="e.g. summer content series, morning routine reveal, car meet week...">
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div>
+            <label class="form-label" style="margin-top:16px">Current followers</label>
+            <input class="form-input" id="cal-current-followers" type="number" placeholder="e.g. 1900" min="0">
+          </div>
+          <div>
+            <label class="form-label" style="margin-top:16px">Follower goal</label>
+            <input class="form-input" id="cal-goal-followers" type="number" placeholder="e.g. 5000" min="0">
+          </div>
         </div>
-        <label class="form-label">Content theme or upcoming ideas (optional)</label>
-        <textarea class="form-textarea" id="cal-brief" placeholder="e.g. Want to mix car content, outfit videos, and a motivational reel this week..."></textarea>
-        <button class="gen-btn" id="cal-btn" onclick="runTool('calendar')">Build My Week →</button>
+
+        <label class="form-label">Weekly target</label>
+        <div class="pill-row" id="cal-goal-pills">
+          <button class="pill on" data-val="grow reach and followers">Grow audience</button>
+          <button class="pill" data-val="build brand authority">Build authority</button>
+          <button class="pill" data-val="maximize engagement">Increase engagement</button>
+          <button class="pill" data-val="drive follower conversion">Drive conversion</button>
+        </div>
+
+        <label class="form-label">Touchpoints per day</label>
+        <div class="pill-row" id="cal-tp-pills">
+          <button class="pill" data-val="1">1 per day</button>
+          <button class="pill on" data-val="2">2 per day</button>
+          <button class="pill" data-val="3">3 per day</button>
+        </div>
+
+        <label class="form-label">Calendar duration</label>
+        <div class="pill-row" id="cal-dur-pills">
+          <button class="pill" data-val="5">5 days</button>
+          <button class="pill on" data-val="7">7 days</button>
+          <button class="pill" data-val="14">14 days</button>
+        </div>
+
+        <button class="gen-btn" id="cal-btn" onclick="runPlanner()">Build My Calendar →</button>
       </div>
+
       <div class="loading" id="cal-loading">
-        <div class="ld-label">Building your content calendar</div>
+        <div class="ld-label">Building your content operating system</div>
         <div class="ld-bar"><div class="ld-fill"></div></div>
         <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
       </div>
-      <div class="output-wrap" id="cal-output">
-        <div class="cal-grid" id="cal-days"></div>
-        <div class="cal-copy-row" id="cal-copy-row" style="display:none">
-          <button class="copy-btn" onclick="copyCalendar()">Copy full calendar</button>
+
+      <div id="cal-output" style="display:none;margin-top:24px">
+        <div id="planner-summary"></div>
+        <div id="planner-days"></div>
+        <div style="margin-top:16px">
+          <button class="copy-btn" onclick="copyPlannerText()">Copy full calendar</button>
         </div>
       </div>
     </section>
@@ -704,13 +795,79 @@ function copyModal(){
 // ── AI TOOLS ──
 const PROMPTS = {
   caption:(niche,goal,brief)=>
-    `You are PURX, a premium Instagram growth platform. Generate ONE Instagram caption for a ${niche} creator. Goal: ${goal}. Post: "${brief||'premium lifestyle content'}". Style: lowercase, effortless, understated luxury. 1-2 short punchy sentences. Include 3-5 sharp hashtags at the end. Output ONLY the caption — no quotes, no explanation.`,
+    `You are PURX — an elite Instagram content strategist used by serious creators who invest in their growth. You understand the psychology of scroll-stopping content, what the Instagram algorithm rewards in 2025, and how top creators in every niche build loyalty and reach simultaneously.
+
+Generate ONE Instagram caption for a ${niche} creator. Their goal is to ${goal}. Here is what the post is about: "${brief||'a premium, aspirational lifestyle moment'}".
+
+Your caption must:
+- Feel like it was written by a real human who lives this niche — not a marketing bot
+- Open with a line that earns the "more" tap or stops the scroll entirely
+- Have a distinct voice: confident, self-aware, never try-hard or desperate
+- Be written in all lowercase — this is intentional and signals effortlessness
+- Use white space strategically if the caption is longer than 1 line (line breaks feel intentional, not lazy)
+- End with either a subtle CTA, an open question that invites real replies, or a statement so sharp it makes people want to save it
+- Include 4-6 tightly chosen hashtags on a new line at the end — mix of niche-specific and mid-tier (avoid massive generic tags like #love or #instagood that bury posts instantly)
+
+Do NOT write something someone could get from ChatGPT for free. This caption should feel premium, specific, and real.
+Output ONLY the caption and hashtags. No explanation, no quotes around it, no preamble.`,
+
   hook:(niche,brief,style)=>
-    `You are PURX. Generate exactly 5 high-retention Reel opening hooks for a ${niche} creator. Style: ${style}. Reel: "${brief||'premium lifestyle content'}". Each hook: punchy, 1-2 sentences max. Number them 1-5. Output hooks only — no intro, no explanation.`,
+    `You are PURX — an elite Instagram Reels strategist who understands exactly why people stop scrolling and why they keep watching. You study retention curves, viral content patterns, and the psychology of attention in the ${niche} space.
+
+Generate exactly 5 distinct, high-retention Reel opening hooks for a ${niche} creator. Hook style: ${style}. The Reel concept: "${brief||'a premium, aspirational lifestyle moment'}".
+
+Each hook must:
+- Land in the FIRST 1-2 seconds of spoken or on-screen text — this is the only moment that matters
+- Be written the way a real person talks, not the way a marketer writes
+- Create an immediate open loop, tension, or curiosity that makes stopping feel like a loss
+- Be specific enough to feel real — vague hooks lose instantly
+- Match the ${style} style authentically — if bold statement, make it genuinely bold. If question, make it one they actually wonder about. If controversial, make it a real debate worth having. If storytime, drop them mid-scene.
+- Be varied from each other — different angles, different emotional triggers, different sentence structures
+
+What NOT to do: generic openers like "I need to talk about...", "Nobody tells you this...", or "Here's what I learned..." — these are overused and skip-inducing now.
+
+Number them 1–5. Output ONLY the 5 hooks. No intro, no explanation, no label other than the number.`,
+
   hashtag:(niche,brief)=>
-    `You are PURX. Generate a strategic 15-hashtag set for a ${niche} creator. Post: "${brief||'premium lifestyle content'}". Organize into exactly 3 groups: BROAD (5 tags, 1M+ posts), MID-TIER (5 tags, 100K–1M), NICHE (5 tags, under 100K). Each group on its own line with the label. Output hashtags only.`,
+    `You are PURX — an Instagram growth strategist who understands how hashtag reach actually works in 2025. You know that using only massive hashtags buries posts, using only tiny ones limits reach, and the real strategy is a tiered mix that gets the post seen by the right people at the right scale.
+
+Generate a strategic 15-hashtag set for a ${niche} creator. Post context: "${brief||'premium lifestyle content in the '+niche+' space'}".
+
+Structure the output into exactly 3 labeled groups:
+
+BROAD — 5 hashtags (1M–5M posts): These are the big reach plays. Pick ones that are active and relevant to the niche, not completely generic catch-alls. People in this niche actually use and follow these.
+
+MID-TIER — 5 hashtags (50K–500K posts): The sweet spot. Engaged communities, real discovery potential, not so saturated that the post disappears in seconds. These should be specific to the content and niche.
+
+NICHE — 5 hashtags (under 50K posts): Tight, specific, loyal audiences. These are the tags where the creator's ideal follower actually lives. Highly targeted. Often community-driven.
+
+Rules:
+- Every hashtag must be real and currently active on Instagram
+- No hashtag should appear in more than one group
+- All hashtags must be directly relevant to ${niche} and the specific post — no filler
+- Think about the actual human who would search or follow each tag
+
+Output ONLY the three labeled groups and their hashtags. No explanation, no extra commentary.`,
+
   calendar:(niche,goal,brief)=>
-    `You are PURX. Build a 7-day Instagram content calendar for a ${niche} creator. Goal: ${goal}. Theme: "${brief||'lifestyle and growth content'}". Return ONLY a JSON array with exactly 7 objects. Each object: "day", "type" (Reel/Carousel/Story), "concept" (1-sentence idea), "time" (e.g. "7:00 PM"), "why" (1-sentence reason). Output ONLY raw JSON — no markdown, no backticks.`
+    `You are PURX — an elite Instagram content strategist who builds weekly content systems for serious creators. You understand posting cadence, content variety, algorithm behavior, and how to sequence a week of content so it builds momentum rather than just filling a grid.
+
+Build a complete 7-day Instagram content calendar for a ${niche} creator. Their weekly goal: ${goal}. Their content direction: "${brief||'a mix of lifestyle, niche-specific, and growth-focused content'}".
+
+For each day, think strategically:
+- What type of content serves this day's role in the week? (Monday needs to re-engage, mid-week needs to educate or entertain, Friday/weekend can be more personal or viral-focused)
+- What format fits the concept? Reels get reach. Carousels get saves. Stories build intimacy. Use all three across the week.
+- What time actually performs for this niche and content type?
+- Why does THIS concept work for THIS goal — be specific, not generic
+
+Return ONLY a valid JSON array with exactly 7 objects. Each object must have these exact keys:
+- "day": the day name (Monday through Sunday)
+- "type": content format (Reel, Carousel, or Story)
+- "concept": a specific, actionable 1-sentence content idea — not vague, something they can actually film or create today
+- "time": optimal posting time (e.g. "6:30 PM")
+- "why": 1 sharp sentence explaining the strategic reason this concept works for their goal
+
+Output ONLY the raw JSON array. No markdown fences, no backticks, no explanation before or after.`
 };
 
 async function callWorker(prompt) {
@@ -748,12 +905,9 @@ async function runTool(tool) {
       getPrompt:(n,g,b)=>PROMPTS.hashtag(n,b),
       btnId:'ht-btn',loadId:'ht-loading',outId:'ht-output',textId:'ht-text',isCalendar:false
     },
-    calendar:{
-      getNiche:()=>getPillVal('cal-niche-pills'),
-      getGoal:()=>getPillVal('cal-goal-pills'),
-      getBrief:()=>document.getElementById('cal-brief').value.trim(),
-      getPrompt:(n,g,b)=>PROMPTS.calendar(n,g,b),
-      btnId:'cal-btn',loadId:'cal-loading',outId:'cal-output',textId:null,isCalendar:true
+    _unused_calendar:{
+      getNiche:()=>'',getGoal:()=>'',getBrief:()=>'',getPrompt:()=>'',
+      btnId:'',loadId:'',outId:'',textId:null,isCalendar:false
     }
   };
 
@@ -773,11 +927,7 @@ async function runTool(tool) {
     const prompt=cfg.getPrompt(niche,goal,brief);
     const result=await callWorker(prompt);
 
-    if(cfg.isCalendar){
-      renderCalendar(result);
-    } else {
-      document.getElementById(cfg.textId).textContent=result;
-    }
+    document.getElementById(cfg.textId).textContent=result;
 
     output.classList.add('show');
 
@@ -794,41 +944,324 @@ async function runTool(tool) {
   btn.disabled=false;
 }
 
-let lastCalendarData = [];
+// ── PLANNER ──
+let lastPlannerData = null;
 
-function renderCalendar(raw) {
-  const container=document.getElementById('cal-days');
-  const copyRow=document.getElementById('cal-copy-row');
-  container.innerHTML='';
-  try {
-    const days=JSON.parse(raw.replace(/```json|```/g,'').trim());
-    lastCalendarData=days;
-    days.forEach(day=>{
-      const el=document.createElement('div');
-      el.className='cal-day';
-      el.innerHTML=`
-        <div class="cal-day-header">
-          <div class="cal-day-name">${day.day}</div>
-          <div style="display:flex;align-items:center;gap:10px">
-            <div class="cal-day-time">${day.time}</div>
-            <div class="cal-day-type">${day.type}</div>
-          </div>
-        </div>
-        <div class="cal-day-content">${day.concept}</div>
-        <div class="cal-day-why">${day.why}</div>
-      `;
-      container.appendChild(el);
-    });
-    copyRow.style.display='block';
-  } catch {
-    container.innerHTML=`<div class="output-card"><div class="output-text">${raw}</div></div>`;
-  }
+function getPlannerInputs() {
+  const niche = getPillVal('cal-niche-pills') || 'lifestyle';
+  const theme = document.getElementById('cal-theme').value.trim() || 'premium lifestyle content';
+  const currentF = parseInt(document.getElementById('cal-current-followers').value) || 0;
+  const goalF = parseInt(document.getElementById('cal-goal-followers').value) || 0;
+  const goal = getPillVal('cal-goal-pills') || 'grow reach and followers';
+  const tp = parseInt(getPillVal('cal-tp-pills')) || 2;
+  const dur = parseInt(getPillVal('cal-dur-pills')) || 7;
+  return { niche, theme, currentF, goalF, goal, tp, dur };
 }
 
-function copyCalendar() {
-  if(!lastCalendarData.length)return;
-  const text=lastCalendarData.map(d=>`${d.day} — ${d.time} — ${d.type}\n${d.concept}\n(${d.why})`).join('\n\n');
-  navigator.clipboard.writeText(text).then(()=>showToast('Calendar copied'));
+function buildPlannerPrompt(inputs) {
+  const { niche, theme, currentF, goalF, goal, tp, dur } = inputs;
+  const gap = goalF > currentF ? goalF - currentF : 0;
+  const gapNote = gap > 0 ? `The creator has ${currentF} followers and wants to reach ${goalF} — a gap of ${gap} followers.` : `The creator currently has ${currentF} followers.`;
+
+  return `You are PURX — an elite Instagram content strategist building a full content operating system for a serious creator. This is not a generic planner. Every output must justify itself strategically. If a post idea is generic, do not include it.
+
+CREATOR BRIEF:
+- Niche: ${niche}
+- Weekly theme: "${theme}"
+- ${gapNote}
+- Weekly target: ${goal}
+- Touchpoints per day: ${tp}
+- Calendar duration: ${dur} days
+
+YOUR JOB:
+Build a ${dur}-day content operating system. Each day has exactly ${tp} touchpoint(s). Each touchpoint is a fully detailed post plan — not a suggestion, a complete strategic brief.
+
+Touchpoint roles to rotate through (use all three across the week in sequence):
+- AWARENESS: reach-focused, hooks new viewers, Reels preferred
+- AUTHORITY: depth content, builds trust and saves, Carousels preferred  
+- CONVERSION: moves passive attention to active behavior, Stories or CTAs
+
+Week logic rule: Start Monday with awareness/reach. Build authority mid-week. Compound into conversion and trust by the end. The week should tell a story, not just list posts.
+
+Return ONLY a valid raw JSON object with this exact structure (no markdown, no backticks, no explanation):
+
+{
+  "week_summary": {
+    "goal_gap": ${gap},
+    "weekly_theme": "${theme}",
+    "touchpoints_per_day": ${tp},
+    "week_logic": "one sharp paragraph explaining the strategic arc of the full week",
+    "posting_model": "one sentence on why this touchpoint cadence serves the goal",
+    "personalization": "one sentence showing this is shaped by their specific follower count, goal, and theme",
+    "paid_value": "one sentence on what makes this more valuable than a free generic planner",
+    "priority": "Every post must create reach, trust, or conversion. If it does none of the three it should not be in the calendar."
+  },
+  "days": [
+    {
+      "day_number": 1,
+      "day_name": "Monday",
+      "date_label": "DAY 1",
+      "primary_objective": "one word or short phrase",
+      "secondary_objective": "one word or short phrase",
+      "target_outcome": "one sentence specific to their follower gap and weekly goal",
+      "touchpoints": [
+        {
+          "time": "9:15 AM",
+          "slot": "Morning",
+          "format": "Reel",
+          "role": "Awareness",
+          "pillar": "Identity Content",
+          "role_description": "one short phrase: what this touchpoint achieves",
+          "title": "specific content title, not generic",
+          "hook_direction": "one sentence: what the hook must accomplish and how",
+          "visual_direction": "one sentence: exactly what to shoot and how the first frame should look",
+          "story_companion": "one sentence: what story content to post after, within 90 minutes",
+          "save_trigger": "one sentence: why someone would save this",
+          "dm_prompt": "one sentence: what question to ask or what to invite in comments/DMs",
+          "execution_note": "two sentences: what premium execution looks like for this specific post",
+          "performance_signal": "Projected reach X · Saves target Y · Comment target Z · Follower conversion target W",
+          "confidence_score": 85,
+          "algorithm_note": "one sentence: this post's role in the algorithm and why the timing works",
+          "hashtag_focus": "Primary: 3 specific hashtags · Support: niche-specific + discovery + authority tags",
+          "conversion_path": "one sentence: where to direct attention after this post",
+          "red_flags": "one sentence: what would make this post fail",
+          "caption_starter": "one sentence: tone direction plus an actual opening line they can use or adapt"
+        }
+      ]
+    }
+  ]
+}
+
+Generate all ${dur} days with exactly ${tp} touchpoints each. Make every title, hook direction, visual direction, and caption starter specific to the ${niche} niche and the theme "${theme}". No generic filler. Output ONLY the raw JSON.`;
+}
+
+async function runPlanner() {
+  const btn = document.getElementById('cal-btn');
+  const loading = document.getElementById('cal-loading');
+  const output = document.getElementById('cal-output');
+
+  const inputs = getPlannerInputs();
+
+  btn.disabled = true;
+  loading.classList.add('show');
+  output.style.display = 'none';
+
+  try {
+    const prompt = buildPlannerPrompt(inputs);
+    const raw = await callWorker(prompt);
+    const cleaned = raw.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+    const data = JSON.parse(cleaned);
+
+    if (!data.week_summary || !Array.isArray(data.days)) throw new Error('Invalid planner structure');
+
+    lastPlannerData = data;
+    renderPlanner(data);
+    output.style.display = 'block';
+
+    // Save to history
+    await saveGeneration('calendar', JSON.stringify(data), {
+      niche: inputs.niche,
+      theme: inputs.theme,
+      currentF: inputs.currentF,
+      goalF: inputs.goalF,
+      goal: inputs.goal,
+      tp: inputs.tp,
+      dur: inputs.dur
+    });
+    loadStats();
+
+  } catch(e) {
+    showToast('Error building calendar — please try again.');
+    console.error('Planner error:', e);
+  }
+
+  loading.classList.remove('show');
+  btn.disabled = false;
+}
+
+function renderPlanner(data) {
+  const ws = data.week_summary;
+  const summaryEl = document.getElementById('planner-summary');
+  const daysEl = document.getElementById('planner-days');
+
+  // Week summary
+  summaryEl.innerHTML = `
+    <div class="planner-summary">
+      <div class="planner-summary-label">PURX Legendary Planner</div>
+      <div class="planner-summary-title">Planner Mode · ${escH(ws.weekly_theme)}</div>
+      <div style="margin:12px 0">
+        <span class="planner-goal-gap">Goal gap: ${ws.goal_gap > 0 ? ws.goal_gap.toLocaleString() + ' followers' : 'Growth focused'}</span>
+      </div>
+      <div class="planner-summary-logic">${escH(ws.week_logic)}</div>
+      <div class="planner-meta-grid">
+        <div class="planner-meta-card">
+          <div class="planner-meta-label">Posting Model</div>
+          <div class="planner-meta-val">${escH(ws.posting_model)}</div>
+        </div>
+        <div class="planner-meta-card">
+          <div class="planner-meta-label">Personalization</div>
+          <div class="planner-meta-val">${escH(ws.personalization)}</div>
+        </div>
+        <div class="planner-meta-card">
+          <div class="planner-meta-label">Paid Value</div>
+          <div class="planner-meta-val">${escH(ws.paid_value)}</div>
+        </div>
+        <div class="planner-meta-card">
+          <div class="planner-meta-label">Priority</div>
+          <div class="planner-meta-val">${escH(ws.priority)}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Days
+  daysEl.innerHTML = '';
+  data.days.forEach(day => {
+    const dayEl = document.createElement('div');
+    dayEl.className = 'planner-day';
+    const tpCount = day.touchpoints ? day.touchpoints.length : 0;
+
+    dayEl.innerHTML = `
+      <div class="planner-day-header">
+        <div class="planner-day-left">
+          <div class="planner-day-num">${day.day_number}</div>
+          <div class="planner-day-info">
+            <div class="planner-day-date">${escH(day.date_label || day.day_name)}</div>
+            <div class="planner-day-name">${escH(day.day_name || '')}</div>
+          </div>
+        </div>
+        <div class="planner-day-objectives">
+          <div class="planner-day-obj-primary">Primary: ${escH(day.primary_objective || '')}</div>
+          <div class="planner-day-obj-primary" style="color:var(--t3)">Secondary: ${escH(day.secondary_objective || '')}</div>
+          <div class="planner-day-tp-badge">${tpCount} planned touchpoint${tpCount !== 1 ? 's' : ''}</div>
+        </div>
+      </div>
+      <div class="planner-day-outcome">${escH(day.target_outcome || '')}</div>
+      <div class="planner-touchpoints" id="tp-day-${day.day_number}"></div>
+    `;
+    daysEl.appendChild(dayEl);
+
+    // Render touchpoints
+    const tpContainer = document.getElementById(`tp-day-${day.day_number}`);
+    (day.touchpoints || []).forEach(tp => {
+      const role = (tp.role || '').toLowerCase();
+      const slot = (tp.slot || '').toLowerCase();
+      const tpEl = document.createElement('div');
+      tpEl.className = 'planner-tp';
+      tpEl.innerHTML = `
+        <div class="planner-tp-accent ${role}"></div>
+        <div class="planner-tp-inner">
+          <div class="planner-tp-header">
+            <div class="planner-tp-meta">
+              <span class="planner-tp-time">${escH(tp.time)}</span>
+              <span class="planner-tp-format">${escH(tp.format)}</span>
+              <span class="planner-tp-slot ${slot}">${escH(tp.slot)}</span>
+              <span class="planner-tp-role-badge">${escH(tp.role)}</span>
+            </div>
+            <div class="planner-tp-confidence">
+              ${tp.confidence_score ? tp.confidence_score + '/100' : ''}
+            </div>
+          </div>
+
+          <div class="planner-tp-title">${escH(tp.title)}</div>
+
+          <div class="planner-tp-pills">
+            <span class="planner-tp-pill">Pillar · ${escH(tp.pillar)}</span>
+            <span class="planner-tp-pill">Role · ${escH(tp.role_description)}</span>
+          </div>
+
+          <div class="planner-tp-hook">${escH(tp.hook_direction)}</div>
+
+          <div class="planner-tp-caption-starter">
+            <div class="planner-tp-caption-label">Caption Starter</div>
+            ${escH(tp.caption_starter)}
+          </div>
+
+          <div class="planner-detail-grid">
+            <div class="planner-detail-card">
+              <div class="planner-detail-label">Visual Direction</div>
+              <div class="planner-detail-val">${escH(tp.visual_direction)}</div>
+            </div>
+            <div class="planner-detail-card">
+              <div class="planner-detail-label">Story Companion</div>
+              <div class="planner-detail-val">${escH(tp.story_companion)}</div>
+            </div>
+            <div class="planner-detail-card">
+              <div class="planner-detail-label" style="color:var(--amber)">Save Trigger</div>
+              <div class="planner-detail-val">${escH(tp.save_trigger)}</div>
+            </div>
+            <div class="planner-detail-card">
+              <div class="planner-detail-label" style="color:var(--purple3)">DM Prompt</div>
+              <div class="planner-detail-val">${escH(tp.dm_prompt)}</div>
+            </div>
+            <div class="planner-detail-card">
+              <div class="planner-detail-label">Execution Note</div>
+              <div class="planner-detail-val">${escH(tp.execution_note)}</div>
+            </div>
+            <div class="planner-detail-card">
+              <div class="planner-detail-label">Hashtag Focus</div>
+              <div class="planner-detail-val">${escH(tp.hashtag_focus)}</div>
+            </div>
+            <div class="planner-detail-card">
+              <div class="planner-detail-label">Conversion Path</div>
+              <div class="planner-detail-val">${escH(tp.conversion_path)}</div>
+            </div>
+            <div class="planner-detail-card">
+              <div class="planner-detail-label">Algorithm Note</div>
+              <div class="planner-detail-val">${escH(tp.algorithm_note)}</div>
+            </div>
+          </div>
+
+          <div class="planner-bottom-grid">
+            <div class="planner-perf-card">
+              <div class="planner-perf-label perf">Performance Signal</div>
+              <div class="planner-perf-val">${escH(tp.performance_signal)}</div>
+            </div>
+            <div class="planner-perf-card">
+              <div class="planner-perf-label algo">Algorithm Note</div>
+              <div class="planner-perf-val">${escH(tp.algorithm_note)}</div>
+            </div>
+            <div class="planner-perf-card">
+              <div class="planner-perf-label redflag">Red Flags</div>
+              <div class="planner-perf-val">${escH(tp.red_flags)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+      tpContainer.appendChild(tpEl);
+    });
+  });
+}
+
+function escH(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+function copyPlannerText() {
+  if (!lastPlannerData) return;
+  const ws = lastPlannerData.week_summary;
+  let out = `PURX CONTENT PLANNER\nTheme: ${ws.weekly_theme}\nGoal gap: ${ws.goal_gap} followers\n\n${ws.week_logic}\n\n`;
+  lastPlannerData.days.forEach(day => {
+    out += `═══ ${day.day_name} — ${day.date_label} ═══\n`;
+    out += `Objective: ${day.primary_objective}\n${day.target_outcome}\n\n`;
+    (day.touchpoints || []).forEach(tp => {
+      out += `  [${tp.time}] ${tp.format} · ${tp.role}\n`;
+      out += `  ${tp.title}\n`;
+      out += `  Hook: ${tp.hook_direction}\n`;
+      out += `  Caption starter: ${tp.caption_starter}\n`;
+      out += `  Visual: ${tp.visual_direction}\n`;
+      out += `  Save trigger: ${tp.save_trigger}\n`;
+      out += `  DM prompt: ${tp.dm_prompt}\n`;
+      out += `  ${tp.performance_signal}\n\n`;
+    });
+  });
+  navigator.clipboard.writeText(out).then(() => showToast('Calendar copied'));
 }
 
 function copyOutput(id) {
