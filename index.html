@@ -1169,82 +1169,118 @@ function copyModal(){
 // ── AI TOOLS ──
 const PROMPTS = {
   caption:(niche,goal,brief,profileCtx)=>
-    `You are PURX — an elite Instagram content strategist. A ${niche} creator needs a caption. Goal: ${goal}. Post: "${brief||'a premium, aspirational lifestyle moment'}".
+    `You are PURX — an elite Instagram content strategist with deep, current knowledge of how the Instagram algorithm actually works right now. You don't rely on outdated rules. You understand that the algorithm is constantly evolving and you reason from first principles: what earns genuine engagement, what signals trust to the system, what makes real humans stop and read.
 
-Generate ONE Instagram caption then a strategic breakdown. Format your response EXACTLY like this with these exact labels:
+CREATOR PROFILE: ${profileCtx || 'A serious Instagram creator'}
 
-CAPTION:
-[the caption in all lowercase, 1-3 lines, punchy and specific to the ${niche} niche, include 4-6 hashtags on a new line]
+TASK: Generate ONE Instagram caption for this ${niche} creator. Their goal: ${goal}. Post description: "${brief || 'a premium, aspirational lifestyle moment'}".
+
+CAPTION REQUIREMENTS:
+- Written in all lowercase — signals effortlessness, not laziness
+- Opens with a line that earns the tap or the stop — not a generic statement
+- Voice: confident, specific, human — sounds like someone who actually lives this niche
+- 1-3 lines max — tight, no filler
+- End with a question, statement worth saving, or subtle CTA
+- 4-6 hashtags on a new line — mix of mid-tier and niche-specific, never massive generic tags
+
+After the caption, provide this breakdown with EXACTLY these labels:
 
 WHY THIS WORKS:
-[2 sentences: what psychological trigger the opening line uses and why it earns the scroll-stop or "more" tap]
+[The specific psychological trigger this caption uses and why it earns attention from a ${niche} audience right now — be specific, not generic]
 
-BEST TIME TO POST:
-[1 sentence: specific time and day that performs best for ${niche} content and why]
+POSTING SCHEDULE:
+[Give a full week posting schedule — which days and exact times perform best for ${niche} content and WHY. Format: Day — Time — Reason. Cover at least 4 days. Base this on what drives the most reach and saves for this type of content.]
 
 PERFORMANCE TIP:
-[1 sentence: one specific thing to do in the first 30 minutes after posting to boost reach — comment strategy, story companion, or engagement tactic]
+[One specific action to take within the first 30 minutes of posting to signal engagement to the algorithm — be tactical and specific to ${niche}]
+
+ACTION SEQUENCE:
+[3 numbered steps to execute right now: 1) what to do immediately before posting, 2) what to do within 30 minutes of posting, 3) what to do that evening to compound the reach]
 
 CAPTION VOICE NOTE:
-[1 sentence: what makes this caption sound like a real person in the ${niche} space and not a bot — what to protect when editing]
+[The one phrase or line in this caption that makes it sound human and real — protect this when editing, it is the soul of the caption]
 
-Do NOT be generic. Every line must be specific to ${niche} and "${goal}". Output only the formatted response above.`,
+Output only the caption followed by the labeled sections above. No preamble, no extra commentary.`,
 
   hook:(niche,brief,style,profileCtx)=>
-    `You are PURX — an elite Instagram Reels strategist. A ${niche} creator needs opening hooks. Style: ${style}. Reel concept: "${brief||'a premium, aspirational lifestyle moment'}".
+    `You are PURX — an elite Instagram Reels strategist who understands the real mechanics of why people stop scrolling and keep watching. You think about attention as a finite resource and you know that the first 1-2 seconds of a reel determine everything — whether it gets pushed or buried.
 
-CREATOR PROFILE: ${profileCtx || "A serious Instagram creator"}
+CREATOR PROFILE: ${profileCtx || 'A serious Instagram creator'}
 
-Generate exactly 5 scroll-stopping hooks then a breakdown. Format EXACTLY like this:
+TASK: Generate 5 scroll-stopping Reel opening hooks for this ${niche} creator. Hook style: ${style}. Reel concept: "${brief || 'a premium, aspirational lifestyle moment'}".
+
+HOOK REQUIREMENTS:
+- Each hook lands in the first 1-2 seconds — spoken or on-screen text
+- Written the way a real person in the ${niche} space actually talks
+- Creates an open loop, tension, or pattern interrupt immediately
+- Specific enough to feel real — vague hooks get skipped
+- Each one uses a different emotional trigger and angle
+- Never use: "Nobody tells you this", "I need to talk about", "Here's what I learned", "POV:" alone — these are dead
+
+Format EXACTLY like this:
 
 HOOKS:
-1. [hook — punchy, specific, written like a real person talks]
+1. [hook]
 2. [hook]
 3. [hook]
 4. [hook]
 5. [hook]
 
 HOOK BREAKDOWN:
-1. [what attention trigger this uses — curiosity / identity / controversy / pattern interrupt / story — and why it works for ${niche}]
+1. [The specific attention mechanism this hook uses — what psychological trigger, why it works for ${niche} RIGHT NOW, what makes it different from the generic version]
 2. [same]
 3. [same]
 4. [same]
 5. [same]
 
 BEST HOOK FOR REACH:
-[which number and exactly why it will perform best for a ${niche} creator trying to grow right now]
+[Which number, why it will outperform the others for a ${niche} creator specifically, and what type of audience it attracts]
+
+POSTING SCHEDULE:
+[Full week posting schedule for Reels in the ${niche} niche — which days, what times, and why those windows work. Format: Day — Time — Why. Cover at least 4 days. Think about when this specific audience is most active and most likely to share.]
 
 DELIVERY NOTE:
-[1 sentence on how to deliver these hooks on camera or on screen — pace, energy, text placement — to maximize the first 2 seconds]
+[Exactly how to deliver this hook on camera or as text — pace, placement, energy, timing — to maximize the first 2 seconds]
 
-What NOT to use: "Nobody tells you this", "I need to talk about", "Here's what I learned" — overused and skip-inducing. Output only the formatted response above.`,
+ACTION SEQUENCE:
+[3 steps: 1) What to do right before posting the reel, 2) What to do within the first hour, 3) What to do 24 hours later to push the algorithm again]
+
+Output only the formatted sections above. No preamble.`,
 
   hashtag:(niche,brief,profileCtx)=>
-    `You are PURX — an Instagram growth strategist. A ${niche} creator needs a hashtag strategy. Post: "${brief||'premium '+niche+' content'}".
+    `You are PURX — an Instagram growth strategist who understands how hashtag discovery actually works right now. You know that hashtag strategy is not about volume — it is about precision. The right tags put your content in front of the right people at the right moment. The wrong tags bury it instantly.
 
-CREATOR PROFILE: ${profileCtx || "A serious Instagram creator"}
+CREATOR PROFILE: ${profileCtx || 'A serious Instagram creator'}
 
-Generate a 15-hashtag strategy with explanation. Format EXACTLY like this:
+TASK: Generate a strategic 15-hashtag set for this ${niche} creator. Post: "${brief || 'premium ' + niche + ' content'}".
+
+Format EXACTLY like this:
 
 BROAD (1M–5M posts):
-[5 hashtags on one line]
-STRATEGY: [1 sentence on what this tier does — who it puts the post in front of and what the risk/reward is at this scale]
+[5 hashtags]
+STRATEGY: [Who finds your post here, what the competition looks like, and what engagement signal you need in the first 30 minutes to stay visible in this tier]
 
 MID-TIER (50K–500K posts):
-[5 hashtags on one line]
-STRATEGY: [1 sentence on why this is the highest-value tier and what kind of account finds the post here]
+[5 hashtags]
+STRATEGY: [Why this tier is the highest-value play for a ${niche} creator, who actively searches these tags, and how long your post stays discoverable here]
 
 NICHE (under 50K posts):
-[5 hashtags on one line]
-STRATEGY: [1 sentence on who lives in these tags — the exact type of follower this attracts and why they convert better]
+[5 hashtags]
+STRATEGY: [The specific type of follower who lives in these tags, why they convert to loyal followers at a higher rate, and why this tier protects your account from bot engagement]
+
+POSTING SCHEDULE:
+[Best days and times to post ${niche} content for maximum hashtag discovery — which days have the most active browsers in these tags and why. Format: Day — Time — Why. Cover at least 4 days.]
 
 POSTING ORDER TIP:
-[1 sentence on whether to put hashtags in the caption or first comment, and why it matters for the ${niche} niche specifically]
+[Caption vs first comment — what works best for ${niche} content right now and exactly why it matters for reach]
 
 HASHTAGS TO AVOID:
-[3 specific hashtags that seem relevant but actually bury ${niche} posts — with a one-line reason for each]
+[3 specific hashtags that seem relevant but will hurt this post — with a precise reason for each: bot activity, oversaturation, wrong audience, or algorithm penalty]
 
-Every hashtag must be real, active, and directly relevant to ${niche} and the specific post. Output only the formatted response above.`
+ACTION SEQUENCE:
+[3 steps: 1) What to do with hashtags right at posting, 2) What to check 1 hour after posting, 3) How to use these hashtags in stories to compound reach]
+
+Every hashtag must be real, active, and directly relevant to ${niche} and this specific post. Output only the formatted sections above.`
 };
 
 async function callWorker(prompt) {
@@ -1788,19 +1824,17 @@ function getSectionContent(lines, label, nextLabels) {
 }
 
 function renderCaptionOutput(el, lines) {
-  const allLabels = ['CAPTION:','WHY THIS WORKS:','BEST TIME TO POST:','PERFORMANCE TIP:','CAPTION VOICE NOTE:'];
+  const allLabels = ['CAPTION:','WHY THIS WORKS:','POSTING SCHEDULE:','PERFORMANCE TIP:','ACTION SEQUENCE:','CAPTION VOICE NOTE:'];
   const caption = getSectionContent(lines, 'CAPTION:', allLabels.slice(1));
   const why = getSectionContent(lines, 'WHY THIS WORKS:', allLabels.slice(2));
-  const timing = getSectionContent(lines, 'BEST TIME TO POST:', allLabels.slice(3));
+  const schedule = getSectionContent(lines, 'POSTING SCHEDULE:', allLabels.slice(3));
   const tip = getSectionContent(lines, 'PERFORMANCE TIP:', allLabels.slice(4));
+  const action = getSectionContent(lines, 'ACTION SEQUENCE:', allLabels.slice(5));
   const voice = getSectionContent(lines, 'CAPTION VOICE NOTE:', []);
 
-  // Extract time hint for action bar
-  const timeMatch = timing.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)?\s*(?:at\s*)?([0-9]+(?::[0-9]+)?\s*(?:AM|PM|am|pm))/i);
-  const timeTag = timeMatch ? (timeMatch[1] ? timeMatch[1] + ' ' : '') + timeMatch[2] : 'Best time inside';
-
-  // Extract first action from tip
-  const tipShort = tip.split('.')[0] || tip;
+  // Extract first day/time for action bar
+  const schedMatch = schedule.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)[^\n]*/i);
+  const schedTag = schedMatch ? schedMatch[0].substring(0,40) : 'Schedule inside';
 
   el.innerHTML =
     '<div class="cap-output-wrap">' +
@@ -1809,8 +1843,8 @@ function renderCaptionOutput(el, lines) {
         '<div class="cap-hero-text">' + escH(caption) + '</div>' +
       '</div>' +
       '<div class="cap-action-bar">' +
-        '<span class="cap-action-tag time">🕐 Post: ' + escH(timeTag) + '</span>' +
-        '<span class="cap-action-tag tip">⚡ ' + escH(tipShort) + '</span>' +
+        '<span class="cap-action-tag time">📅 ' + escH(schedTag) + '</span>' +
+        '<span class="cap-action-tag tip">⚡ ' + escH((tip.split('.')[0] || tip).substring(0,60)) + '</span>' +
       '</div>' +
       '<div class="cap-insight-grid">' +
         '<div class="cap-insight-card">' +
@@ -1818,15 +1852,19 @@ function renderCaptionOutput(el, lines) {
           '<div class="cap-insight-card-val">' + escH(why) + '</div>' +
         '</div>' +
         '<div class="cap-insight-card">' +
-          '<div class="cap-insight-card-label amber">Best Time to Post</div>' +
-          '<div class="cap-insight-card-val">' + escH(timing) + '</div>' +
-        '</div>' +
-        '<div class="cap-insight-card">' +
-          '<div class="cap-insight-card-label green">Performance Tip</div>' +
+          '<div class="cap-insight-card-label amber">Performance Tip</div>' +
           '<div class="cap-insight-card-val">' + escH(tip) + '</div>' +
         '</div>' +
-        '<div class="cap-insight-card">' +
-          '<div class="cap-insight-card-label purple">Caption Voice Note</div>' +
+        '<div class="cap-insight-card" style="grid-column:1/-1">' +
+          '<div class="cap-insight-card-label green">Posting Schedule</div>' +
+          '<div class="cap-insight-card-val" style="white-space:pre-line">' + escH(schedule) + '</div>' +
+        '</div>' +
+        '<div class="cap-insight-card" style="grid-column:1/-1">' +
+          '<div class="cap-insight-card-label purple">Action Sequence — Do This Now</div>' +
+          '<div class="cap-insight-card-val" style="white-space:pre-line">' + escH(action) + '</div>' +
+        '</div>' +
+        '<div class="cap-insight-card" style="grid-column:1/-1">' +
+          '<div class="cap-insight-card-label default">Caption Voice Note</div>' +
           '<div class="cap-insight-card-val">' + escH(voice) + '</div>' +
         '</div>' +
       '</div>' +
@@ -1842,11 +1880,13 @@ function extractHookType(breakdown) {
 }
 
 function renderHookOutput(el, lines) {
-  const allLabels = ['HOOKS:','HOOK BREAKDOWN:','BEST HOOK FOR REACH:','DELIVERY NOTE:'];
+  const allLabels = ['HOOKS:','HOOK BREAKDOWN:','BEST HOOK FOR REACH:','POSTING SCHEDULE:','DELIVERY NOTE:','ACTION SEQUENCE:'];
   const hooksRaw = getSectionContent(lines, 'HOOKS:', allLabels.slice(1));
   const breakdownRaw = getSectionContent(lines, 'HOOK BREAKDOWN:', allLabels.slice(2));
   const best = getSectionContent(lines, 'BEST HOOK FOR REACH:', allLabels.slice(3));
-  const delivery = getSectionContent(lines, 'DELIVERY NOTE:', []);
+  const schedule = getSectionContent(lines, 'POSTING SCHEDULE:', allLabels.slice(4));
+  const delivery = getSectionContent(lines, 'DELIVERY NOTE:', allLabels.slice(5));
+  const action = getSectionContent(lines, 'ACTION SEQUENCE:', []);
 
   const hookLines = hooksRaw.split(/(?=\d+\.\s)/).map(h => h.trim()).filter(h => h);
   const breakdownLines = breakdownRaw.split(/(?=\d+\.\s)/).map(b => b.trim()).filter(b => b);
@@ -1884,6 +1924,14 @@ function renderHookOutput(el, lines) {
         '<div class="hook-bottom-card-label">Delivery Note</div>' +
         '<div class="hook-bottom-card-val">' + escH(delivery) + '</div>' +
       '</div>' +
+      '<div class="hook-bottom-card green" style="grid-column:1/-1">' +
+        '<div class="hook-bottom-card-label">Reel Posting Schedule</div>' +
+        '<div class="hook-bottom-card-val" style="white-space:pre-line">' + escH(schedule) + '</div>' +
+      '</div>' +
+      '<div class="hook-bottom-card amber" style="grid-column:1/-1">' +
+        '<div class="hook-bottom-card-label">Action Sequence — Do This Now</div>' +
+        '<div class="hook-bottom-card-val" style="white-space:pre-line">' + escH(action) + '</div>' +
+      '</div>' +
     '</div>' +
     '</div>';
 }
@@ -1899,7 +1947,8 @@ function renderHashtagOutput(el, lines) {
     const chunkLines = chunk.split('\n').map(l => l.trim()).filter(l => l);
     let tags = '', strategy = '';
     chunkLines.forEach(l => {
-      if (l.toUpperCase().startsWith('STRATEGY:')) strategy = l.substring(9).trim();
+      const up = l.toUpperCase();
+      if (up.startsWith('STRATEGY:')) strategy = l.substring(9).trim();
       else if (l.includes('#')) tags += (tags ? ' ' : '') + l;
     });
     return { tags, strategy };
@@ -1907,20 +1956,24 @@ function renderHashtagOutput(el, lines) {
 
   const broad = getTier('BROAD', 'MID-TIER');
   const mid = getTier('MID-TIER', 'NICHE');
-  const niche = getTier('NICHE', 'POSTING ORDER');
+  const niche = getTier('NICHE', 'POSTING SCHEDULE');
+  const schedule = getSectionContent(lines, 'POSTING SCHEDULE:', ['POSTING ORDER TIP:']);
   const posting = getSectionContent(lines, 'POSTING ORDER TIP:', ['HASHTAGS TO AVOID:']);
-  const avoid = getSectionContent(lines, 'HASHTAGS TO AVOID:', []);
+  const avoid = getSectionContent(lines, 'HASHTAGS TO AVOID:', ['ACTION SEQUENCE:']);
+  const action = getSectionContent(lines, 'ACTION SEQUENCE:', []);
 
   el.innerHTML =
     '<div class="ht-output-wrap">' +
     '<div class="ht-tier-grid">' +
-      htTier('broad', 'BROAD', '1M – 5M posts', broad.tags, broad.strategy) +
-      htTier('mid', 'MID-TIER', '50K – 500K posts', mid.tags, mid.strategy) +
+      htTier('broad', 'BROAD', '1M to 5M posts', broad.tags, broad.strategy) +
+      htTier('mid', 'MID-TIER', '50K to 500K posts', mid.tags, mid.strategy) +
       htTier('niche', 'NICHE', 'Under 50K posts', niche.tags, niche.strategy) +
     '</div>' +
     '<div class="ht-bottom-grid">' +
+      '<div class="ht-bottom-card amber" style="grid-column:1/-1"><div class="ht-bottom-card-label">Posting Schedule</div><div class="ht-bottom-card-val" style="white-space:pre-line">' + escH(schedule) + '</div></div>' +
       '<div class="ht-bottom-card amber"><div class="ht-bottom-card-label">Posting Order Tip</div><div class="ht-bottom-card-val">' + escH(posting) + '</div></div>' +
       '<div class="ht-bottom-card red"><div class="ht-bottom-card-label">Hashtags to Avoid</div><div class="ht-bottom-card-val">' + escH(avoid) + '</div></div>' +
+      '<div class="ht-bottom-card amber" style="grid-column:1/-1"><div class="ht-bottom-card-label">Action Sequence — Do This Now</div><div class="ht-bottom-card-val" style="white-space:pre-line">' + escH(action) + '</div></div>' +
     '</div>' +
     '</div>';
 }
