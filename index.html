@@ -256,6 +256,19 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .planner-perf-label.algo{color:var(--purple3)}
 .planner-perf-label.redflag{color:var(--red)}
 .planner-perf-val{font-family:var(--mono);font-size:11px;color:var(--t2);line-height:1.6}
+
+/* ── RICH OUTPUT ── */
+.rich-output{font-size:14px;color:var(--t1);line-height:1.75}
+.rich-output .section-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--purple3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.rich-output .section-label::before{content:'';width:16px;height:1px;background:var(--purple2)}
+.rich-output .section-label:first-child{margin-top:0}
+.rich-output .section-body{color:var(--t1);white-space:pre-wrap;line-height:1.75}
+.rich-output .section-note{font-size:12px;color:var(--t2);line-height:1.65;padding:12px 16px;background:var(--bg2);border-left:2px solid var(--purple);margin-top:6px;border-radius:0 2px 2px 0}
+.rich-output .hook-item{padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:12px}
+.rich-output .hook-item:last-child{border-bottom:none}
+.rich-output .hook-num{font-family:var(--mono);font-size:9px;color:var(--t3);min-width:16px;margin-top:2px}
+.rich-output .hook-text{color:var(--t1);font-size:14px;line-height:1.6}
+.rich-output .hook-breakdown{font-size:12px;color:var(--t3);margin-top:4px;font-style:italic}
 </style>
 </head>
 <body>
@@ -802,79 +815,78 @@ function copyModal(){
 // ── AI TOOLS ──
 const PROMPTS = {
   caption:(niche,goal,brief)=>
-    `You are PURX — an elite Instagram content strategist used by serious creators who invest in their growth. You understand the psychology of scroll-stopping content, what the Instagram algorithm rewards in 2025, and how top creators in every niche build loyalty and reach simultaneously.
+    `You are PURX — an elite Instagram content strategist. A ${niche} creator needs a caption. Goal: ${goal}. Post: "${brief||'a premium, aspirational lifestyle moment'}".
 
-Generate ONE Instagram caption for a ${niche} creator. Their goal is to ${goal}. Here is what the post is about: "${brief||'a premium, aspirational lifestyle moment'}".
+Generate ONE Instagram caption then a strategic breakdown. Format your response EXACTLY like this with these exact labels:
 
-Your caption must:
-- Feel like it was written by a real human who lives this niche — not a marketing bot
-- Open with a line that earns the "more" tap or stops the scroll entirely
-- Have a distinct voice: confident, self-aware, never try-hard or desperate
-- Be written in all lowercase — this is intentional and signals effortlessness
-- Use white space strategically if the caption is longer than 1 line (line breaks feel intentional, not lazy)
-- End with either a subtle CTA, an open question that invites real replies, or a statement so sharp it makes people want to save it
-- Include 4-6 tightly chosen hashtags on a new line at the end — mix of niche-specific and mid-tier (avoid massive generic tags like #love or #instagood that bury posts instantly)
+CAPTION:
+[the caption in all lowercase, 1-3 lines, punchy and specific to the ${niche} niche, include 4-6 hashtags on a new line]
 
-Do NOT write something someone could get from ChatGPT for free. This caption should feel premium, specific, and real.
-Output ONLY the caption and hashtags. No explanation, no quotes around it, no preamble.`,
+WHY THIS WORKS:
+[2 sentences: what psychological trigger the opening line uses and why it earns the scroll-stop or "more" tap]
+
+BEST TIME TO POST:
+[1 sentence: specific time and day that performs best for ${niche} content and why]
+
+PERFORMANCE TIP:
+[1 sentence: one specific thing to do in the first 30 minutes after posting to boost reach — comment strategy, story companion, or engagement tactic]
+
+CAPTION VOICE NOTE:
+[1 sentence: what makes this caption sound like a real person in the ${niche} space and not a bot — what to protect when editing]
+
+Do NOT be generic. Every line must be specific to ${niche} and "${goal}". Output only the formatted response above.`,
 
   hook:(niche,brief,style)=>
-    `You are PURX — an elite Instagram Reels strategist who understands exactly why people stop scrolling and why they keep watching. You study retention curves, viral content patterns, and the psychology of attention in the ${niche} space.
+    `You are PURX — an elite Instagram Reels strategist. A ${niche} creator needs opening hooks. Style: ${style}. Reel concept: "${brief||'a premium, aspirational lifestyle moment'}".
 
-Generate exactly 5 distinct, high-retention Reel opening hooks for a ${niche} creator. Hook style: ${style}. The Reel concept: "${brief||'a premium, aspirational lifestyle moment'}".
+Generate exactly 5 scroll-stopping hooks then a breakdown. Format EXACTLY like this:
 
-Each hook must:
-- Land in the FIRST 1-2 seconds of spoken or on-screen text — this is the only moment that matters
-- Be written the way a real person talks, not the way a marketer writes
-- Create an immediate open loop, tension, or curiosity that makes stopping feel like a loss
-- Be specific enough to feel real — vague hooks lose instantly
-- Match the ${style} style authentically — if bold statement, make it genuinely bold. If question, make it one they actually wonder about. If controversial, make it a real debate worth having. If storytime, drop them mid-scene.
-- Be varied from each other — different angles, different emotional triggers, different sentence structures
+HOOKS:
+1. [hook — punchy, specific, written like a real person talks]
+2. [hook]
+3. [hook]
+4. [hook]
+5. [hook]
 
-What NOT to do: generic openers like "I need to talk about...", "Nobody tells you this...", or "Here's what I learned..." — these are overused and skip-inducing now.
+HOOK BREAKDOWN:
+1. [what attention trigger this uses — curiosity / identity / controversy / pattern interrupt / story — and why it works for ${niche}]
+2. [same]
+3. [same]
+4. [same]
+5. [same]
 
-Number them 1–5. Output ONLY the 5 hooks. No intro, no explanation, no label other than the number.`,
+BEST HOOK FOR REACH:
+[which number and exactly why it will perform best for a ${niche} creator trying to grow right now]
+
+DELIVERY NOTE:
+[1 sentence on how to deliver these hooks on camera or on screen — pace, energy, text placement — to maximize the first 2 seconds]
+
+What NOT to use: "Nobody tells you this", "I need to talk about", "Here's what I learned" — overused and skip-inducing. Output only the formatted response above.`,
 
   hashtag:(niche,brief)=>
-    `You are PURX — an Instagram growth strategist who understands how hashtag reach actually works in 2025. You know that using only massive hashtags buries posts, using only tiny ones limits reach, and the real strategy is a tiered mix that gets the post seen by the right people at the right scale.
+    `You are PURX — an Instagram growth strategist. A ${niche} creator needs a hashtag strategy. Post: "${brief||'premium '+niche+' content'}".
 
-Generate a strategic 15-hashtag set for a ${niche} creator. Post context: "${brief||'premium lifestyle content in the '+niche+' space'}".
+Generate a 15-hashtag strategy with explanation. Format EXACTLY like this:
 
-Structure the output into exactly 3 labeled groups:
+BROAD (1M–5M posts):
+[5 hashtags on one line]
+STRATEGY: [1 sentence on what this tier does — who it puts the post in front of and what the risk/reward is at this scale]
 
-BROAD — 5 hashtags (1M–5M posts): These are the big reach plays. Pick ones that are active and relevant to the niche, not completely generic catch-alls. People in this niche actually use and follow these.
+MID-TIER (50K–500K posts):
+[5 hashtags on one line]
+STRATEGY: [1 sentence on why this is the highest-value tier and what kind of account finds the post here]
 
-MID-TIER — 5 hashtags (50K–500K posts): The sweet spot. Engaged communities, real discovery potential, not so saturated that the post disappears in seconds. These should be specific to the content and niche.
+NICHE (under 50K posts):
+[5 hashtags on one line]
+STRATEGY: [1 sentence on who lives in these tags — the exact type of follower this attracts and why they convert better]
 
-NICHE — 5 hashtags (under 50K posts): Tight, specific, loyal audiences. These are the tags where the creator's ideal follower actually lives. Highly targeted. Often community-driven.
+POSTING ORDER TIP:
+[1 sentence on whether to put hashtags in the caption or first comment, and why it matters for the ${niche} niche specifically]
 
-Rules:
-- Every hashtag must be real and currently active on Instagram
-- No hashtag should appear in more than one group
-- All hashtags must be directly relevant to ${niche} and the specific post — no filler
-- Think about the actual human who would search or follow each tag
+HASHTAGS TO AVOID:
+[3 specific hashtags that seem relevant but actually bury ${niche} posts — with a one-line reason for each]
 
-Output ONLY the three labeled groups and their hashtags. No explanation, no extra commentary.`,
-
-  calendar:(niche,goal,brief)=>
-    `You are PURX — an elite Instagram content strategist who builds weekly content systems for serious creators. You understand posting cadence, content variety, algorithm behavior, and how to sequence a week of content so it builds momentum rather than just filling a grid.
-
-Build a complete 7-day Instagram content calendar for a ${niche} creator. Their weekly goal: ${goal}. Their content direction: "${brief||'a mix of lifestyle, niche-specific, and growth-focused content'}".
-
-For each day, think strategically:
-- What type of content serves this day's role in the week? (Monday needs to re-engage, mid-week needs to educate or entertain, Friday/weekend can be more personal or viral-focused)
-- What format fits the concept? Reels get reach. Carousels get saves. Stories build intimacy. Use all three across the week.
-- What time actually performs for this niche and content type?
-- Why does THIS concept work for THIS goal — be specific, not generic
-
-Return ONLY a valid JSON array with exactly 7 objects. Each object must have these exact keys:
-- "day": the day name (Monday through Sunday)
-- "type": content format (Reel, Carousel, or Story)
-- "concept": a specific, actionable 1-sentence content idea — not vague, something they can actually film or create today
-- "time": optimal posting time (e.g. "6:30 PM")
-- "why": 1 sharp sentence explaining the strategic reason this concept works for their goal
-
-Output ONLY the raw JSON array. No markdown fences, no backticks, no explanation before or after.`
+Every hashtag must be real, active, and directly relevant to ${niche} and the specific post. Output only the formatted response above.`
 };
 
 async function callWorker(prompt) {
@@ -934,7 +946,7 @@ async function runTool(tool) {
     const prompt=cfg.getPrompt(niche,goal,brief);
     const result=await callWorker(prompt);
 
-    document.getElementById(cfg.textId).textContent=result;
+    renderRichOutput(cfg.textId, result);
 
     output.classList.add('show');
 
@@ -1365,6 +1377,64 @@ function copyPlannerText() {
     });
   });
   navigator.clipboard.writeText(out).then(() => showToast('Calendar copied'));
+}
+
+function renderRichOutput(textId, rawText) {
+  const el = document.getElementById(textId);
+  const labels = [
+    'CAPTION:','WHY THIS WORKS:','BEST TIME TO POST:','PERFORMANCE TIP:','CAPTION VOICE NOTE:',
+    'HOOKS:','HOOK BREAKDOWN:','BEST HOOK FOR REACH:','DELIVERY NOTE:',
+    'BROAD (1M–5M posts):','MID-TIER (50K–500K posts):','NICHE (under 50K posts):',
+    'STRATEGY:','POSTING ORDER TIP:','HASHTAGS TO AVOID:'
+  ];
+  let html = '<div class="rich-output">';
+  const lines = rawText.split('\n');
+  let currentLabel = null;
+  let currentBody = [];
+
+  function flushSection() {
+    if (!currentLabel && currentBody.length === 0) return;
+    if (currentLabel) {
+      html += '<div class="section-label">' + escapeHtml(currentLabel.replace(':','')) + '</div>';
+    }
+    const bodyText = currentBody.join('\n').trim();
+    if (bodyText) {
+      const isNote = currentLabel && (
+        currentLabel.includes('STRATEGY') || currentLabel.includes('TIP') ||
+        currentLabel.includes('NOTE') || currentLabel.includes('WHY') ||
+        currentLabel.includes('BEST') || currentLabel.includes('DELIVERY') ||
+        currentLabel.includes('AVOID') || currentLabel.includes('VOICE')
+      );
+      html += isNote
+        ? '<div class="section-note">' + escapeHtml(bodyText) + '</div>'
+        : '<div class="section-body">' + escapeHtml(bodyText) + '</div>';
+    }
+    currentBody = [];
+  }
+
+  lines.forEach(function(line) {
+    const trimmed = line.trim();
+    const matchedLabel = labels.find(function(l){ return trimmed === l || trimmed.startsWith(l); });
+    if (matchedLabel) {
+      flushSection();
+      currentLabel = matchedLabel;
+      const rest = trimmed.slice(matchedLabel.length).trim();
+      if (rest) currentBody.push(rest);
+    } else {
+      currentBody.push(line);
+    }
+  });
+  flushSection();
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/\n/g,'<br>');
 }
 
 function copyOutput(id) {
