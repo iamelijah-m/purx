@@ -1819,26 +1819,27 @@ function formatSchedule(raw) {
   var NL = String.fromCharCode(10);
   var text = String(raw);
   var dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  // Break before each day name that appears mid-sentence
   dayNames.forEach(function(day) {
     var parts = text.split(day);
     if (parts.length > 1) {
-      for (var i = 1; i < parts.length; i++) {
-        var prev = parts[i-1];
-        if (prev.length > 0 && prev[prev.length-1] !== NL) {
-          parts[i-1] = prev + NL;
+      for (var i = 0; i < parts.length - 1; i++) {
+        var last = parts[i];
+        if (last.length > 0 && last[last.length - 1] !== NL) {
+          parts[i] = last + NL;
         }
       }
       text = parts.join(day);
     }
   });
-  var steps = ['1) ','2) ','3) ','1. ','2. ','3. '];
-  steps.forEach(function(step) {
-    var parts = text.split(' ' + step);
-    if (parts.length > 1) {
-      text = parts[0];
-      for (var i = 1; i < parts.length; i++) {
-        text += NL + step + parts[i];
+  // Break before numbered steps like "1)" or "2." at word boundaries
+  ['1) ','2) ','3) ','1. ','2. ','3. '].forEach(function(step) {
+    var idx = text.indexOf(' ' + step);
+    while (idx !== -1) {
+      if (idx > 0 && text[idx - 1] !== NL) {
+        text = text.substring(0, idx) + NL + text.substring(idx + 1);
       }
+      idx = text.indexOf(' ' + step, idx + step.length + 1);
     }
   });
   return text.split(NL).map(function(l){ return l.trim(); }).filter(function(l){ return l.length > 0; }).join(NL);
@@ -1867,17 +1868,31 @@ function getSectionContent(lines, label, nextLabels) {
 }
 
 function renderCaptionOutput(el, lines) {
-  const allLabels = ['CAPTION:','WHY THIS WORKS:','POSTING SCHEDULE:','PERFORMANCE TIP:','ACTION SEQUENCE:','CAPTION VOICE NOTE:'];
-  const caption = getSectionContent(lines, 'CAPTION:', allLabels.slice(1));
-  const why = getSectionContent(lines, 'WHY THIS WORKS:', allLabels.slice(2));
-  const schedule = getSectionContent(lines, 'POSTING SCHEDULE:', allLabels.slice(3));
-  const tip = getSectionContent(lines, 'PERFORMANCE TIP:', allLabels.slice(4));
-  const action = getSectionContent(lines, 'ACTION SEQUENCE:', allLabels.slice(5));
-  const voice = getSectionContent(lines, 'CAPTION VOICE NOTE:', []);
+  var allLabels = ['WHY THIS WORKS:','POSTING SCHEDULE:','PERFORMANCE TIP:','ACTION SEQUENCE:','CAPTION VOICE NOTE:','CAPTION:'];
 
-  // Extract first day/time for action bar
-  const schedMatch = schedule.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)[^\n]*/i);
-  const schedTag = schedMatch ? schedMatch[0].substring(0,40) : 'Schedule inside';
+  // Try CAPTION: label first, then fall back to everything before first label
+  var captionByLabel = getSectionContent(lines, 'CAPTION:', ['WHY THIS WORKS:','POSTING SCHEDULE:','PERFORMANCE TIP:']);
+  var caption = captionByLabel;
+  if (!caption) {
+    var capLines = [];
+    for (var i = 0; i < lines.length; i++) {
+      var up = lines[i].toUpperCase().trim();
+      if (allLabels.some(function(l){ return up.startsWith(l); })) break;
+      capLines.push(lines[i]);
+    }
+    caption = capLines.join('\n').trim();
+  }
+
+  var why = getSectionContent(lines, 'WHY THIS WORKS:', ['POSTING SCHEDULE:','PERFORMANCE TIP:','ACTION SEQUENCE:','CAPTION VOICE NOTE:']);
+  var schedule = getSectionContent(lines, 'POSTING SCHEDULE:', ['PERFORMANCE TIP:','ACTION SEQUENCE:','CAPTION VOICE NOTE:']);
+  var tip = getSectionContent(lines, 'PERFORMANCE TIP:', ['ACTION SEQUENCE:','CAPTION VOICE NOTE:']);
+  var action = getSectionContent(lines, 'ACTION SEQUENCE:', ['CAPTION VOICE NOTE:']);
+  var voice = getSectionContent(lines, 'CAPTION VOICE NOTE:', []);
+
+  var schedFormatted = formatSchedule(schedule);
+  var schedLines = schedFormatted.split(String.fromCharCode(10)).filter(function(l){ return l.trim(); });
+  var schedTag = schedLines.length > 0 ? schedLines[0].substring(0, 50) : 'See schedule below';
+  var tipShort = tip ? tip.split('.')[0].substring(0, 65) : '';
 
   el.innerHTML =
     '<div class="cap-output-wrap">' +
@@ -1886,8 +1901,8 @@ function renderCaptionOutput(el, lines) {
         '<div class="cap-hero-text">' + escH(caption) + '</div>' +
       '</div>' +
       '<div class="cap-action-bar">' +
-        '<span class="cap-action-tag time">📅 ' + escH(schedTag) + '</span>' +
-        '<span class="cap-action-tag tip">⚡ ' + escH((tip.split('.')[0] || tip).substring(0,60)) + '</span>' +
+        '<span class="cap-action-tag time">Post: ' + escH(schedTag) + '</span>' +
+        (tipShort ? '<span class="cap-action-tag tip">Tip: ' + escH(tipShort) + '</span>' : '') +
       '</div>' +
       '<div class="cap-insight-grid">' +
         '<div class="cap-insight-card">' +
@@ -1900,16 +1915,16 @@ function renderCaptionOutput(el, lines) {
         '</div>' +
         '<div class="cap-insight-card" style="grid-column:1/-1">' +
           '<div class="cap-insight-card-label green">Posting Schedule</div>' +
-          '<div class="cap-insight-card-val" style="white-space:pre-line">' + escH(formatSchedule(schedule)) + '</div>' +
+          '<div class="cap-insight-card-val" style="white-space:pre-line">' + escH(schedFormatted) + '</div>' +
         '</div>' +
         '<div class="cap-insight-card" style="grid-column:1/-1">' +
-          '<div class="cap-insight-card-label purple">Action Sequence — Do This Now</div>' +
+          '<div class="cap-insight-card-label purple">Action Sequence</div>' +
           '<div class="cap-insight-card-val" style="white-space:pre-line">' + escH(formatSchedule(action)) + '</div>' +
         '</div>' +
-        '<div class="cap-insight-card" style="grid-column:1/-1">' +
+        (voice ? '<div class="cap-insight-card" style="grid-column:1/-1">' +
           '<div class="cap-insight-card-label default">Caption Voice Note</div>' +
           '<div class="cap-insight-card-val">' + escH(voice) + '</div>' +
-        '</div>' +
+        '</div>' : '') +
       '</div>' +
     '</div>';
 }
