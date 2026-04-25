@@ -260,82 +260,150 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 /* ── RICH OUTPUT ── */
 .rich-output{display:flex;flex-direction:column;gap:0}
 
-/* Caption box — hero element */
-.rich-caption-box{
-  position:relative;background:var(--surface);
-  border:1px solid var(--border2);border-radius:2px;
-  padding:28px 32px;margin-bottom:16px;
-  font-size:16px;color:var(--t1);line-height:1.9;white-space:pre-wrap;
-  box-shadow:0 0 40px rgba(124,58,237,.08);
+/* ── CAPTION TOOL OUTPUT ── */
+.cap-output-wrap{display:flex;flex-direction:column;gap:0}
+.cap-hero{
+  position:relative;padding:40px;margin-bottom:1px;
+  background:linear-gradient(135deg,rgba(124,58,237,.08) 0%,rgba(6,6,6,0) 60%),var(--surface);
+  border:1px solid var(--border2);border-radius:2px 2px 0 0;
+  border-bottom:none;
 }
-.rich-caption-box::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+.cap-hero::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
   background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3));
-  border-radius:2px 2px 0 0;
 }
+.cap-hero-label{
+  font-family:var(--mono);font-size:8px;letter-spacing:.25em;
+  text-transform:uppercase;color:var(--purple3);margin-bottom:20px;
+  display:flex;align-items:center;gap:8px;
+}
+.cap-hero-label::before{content:'';width:24px;height:1px;background:var(--purple2)}
+.cap-hero-text{
+  font-size:18px;color:var(--white);line-height:1.85;
+  white-space:pre-wrap;font-weight:400;letter-spacing:.01em;
+}
+.cap-action-bar{
+  background:var(--bg2);border:1px solid var(--border2);
+  border-top:none;padding:16px 40px;margin-bottom:16px;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  border-radius:0 0 2px 2px;
+}
+.cap-action-tag{
+  font-family:var(--mono);font-size:9px;letter-spacing:.1em;
+  text-transform:uppercase;padding:6px 14px;border-radius:100px;
+  display:flex;align-items:center;gap:6px;
+}
+.cap-action-tag.time{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--amber)}
+.cap-action-tag.tip{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--green)}
+.cap-insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:16px;border:1px solid var(--border2);border-radius:2px;overflow:hidden}
+@media(max-width:640px){.cap-insight-grid{grid-template-columns:1fr}}
+.cap-insight-card{background:var(--surface);padding:20px 24px}
+.cap-insight-card-label{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px}
+.cap-insight-card-label.purple{color:var(--purple3)}
+.cap-insight-card-label.amber{color:var(--amber)}
+.cap-insight-card-label.green{color:var(--green)}
+.cap-insight-card-val{font-size:13px;color:var(--t2);line-height:1.7}
 
-/* Card grid */
+/* ── HOOK TOOL OUTPUT ── */
+.hook-output-wrap{display:flex;flex-direction:column;gap:0}
+.hook-list{border:1px solid var(--border2);border-radius:2px;overflow:hidden;margin-bottom:16px}
+.hook-row{
+  display:flex;align-items:stretch;
+  border-bottom:1px solid var(--border);
+  transition:background .2s;cursor:default;
+}
+.hook-row:last-child{border-bottom:none}
+.hook-row:hover{background:rgba(124,58,237,.04)}
+.hook-row-left{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:24px 20px;
+  border-right:1px solid var(--border);min-width:72px;
+}
+.hook-row-num{
+  font-family:var(--display);font-size:48px;font-weight:900;line-height:1;
+}
+.hook-row-num.n1{color:var(--purple2)}
+.hook-row-num.n2{color:var(--amber)}
+.hook-row-num.n3{color:var(--green)}
+.hook-row-num.n4{color:var(--purple3)}
+.hook-row-num.n5{color:var(--red)}
+.hook-row-type{
+  font-family:var(--mono);font-size:7px;letter-spacing:.12em;
+  text-transform:uppercase;margin-top:6px;
+}
+.hook-row-num.n1 + .hook-row-type{color:var(--purple3)}
+.hook-row-num.n2 + .hook-row-type{color:var(--amber)}
+.hook-row-num.n3 + .hook-row-type{color:var(--green)}
+.hook-row-num.n4 + .hook-row-type{color:var(--purple3)}
+.hook-row-num.n5 + .hook-row-type{color:var(--red)}
+.hook-row-right{padding:24px 28px;flex:1}
+.hook-row-text{font-size:16px;color:var(--white);line-height:1.55;margin-bottom:8px;font-weight:500}
+.hook-row-breakdown{font-size:12px;color:var(--t3);line-height:1.6;font-family:var(--mono);letter-spacing:.03em}
+.hook-bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+@media(max-width:640px){.hook-bottom-grid{grid-template-columns:1fr}}
+.hook-bottom-card{background:var(--surface);border:1px solid var(--border2);border-radius:2px;padding:20px 24px;position:relative;overflow:hidden}
+.hook-bottom-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.hook-bottom-card.green::before{background:var(--green)}
+.hook-bottom-card.amber::before{background:var(--amber)}
+.hook-bottom-card-label{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px}
+.hook-bottom-card.green .hook-bottom-card-label{color:var(--green)}
+.hook-bottom-card.amber .hook-bottom-card-label{color:var(--amber)}
+.hook-bottom-card-val{font-size:13px;color:var(--t2);line-height:1.7}
+
+/* ── HASHTAG TOOL OUTPUT ── */
+.ht-output-wrap{display:flex;flex-direction:column;gap:0}
+.ht-tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+@media(max-width:700px){.ht-tier-grid{grid-template-columns:1fr}}
+.ht-tier{border-radius:2px;padding:24px;position:relative;overflow:hidden}
+.ht-tier::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.ht-tier.broad{background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.2)}
+.ht-tier.broad::before{background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.ht-tier.mid{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2)}
+.ht-tier.mid::before{background:var(--amber)}
+.ht-tier.niche{background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.2)}
+.ht-tier.niche::before{background:var(--green)}
+.ht-tier-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:8px;letter-spacing:.15em;
+  text-transform:uppercase;margin-bottom:14px;
+  padding:5px 12px;border-radius:100px;
+}
+.ht-tier.broad .ht-tier-badge{background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);color:var(--purple3)}
+.ht-tier.mid .ht-tier-badge{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);color:var(--amber)}
+.ht-tier.niche .ht-tier-badge{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:var(--green)}
+.ht-tier-tags{font-size:14px;font-weight:600;line-height:1.9;margin-bottom:14px;word-break:break-word}
+.ht-tier.broad .ht-tier-tags{color:var(--purple3)}
+.ht-tier.mid .ht-tier-tags{color:var(--amber)}
+.ht-tier.niche .ht-tier-tags{color:var(--green)}
+.ht-tier-strategy{font-size:11px;color:var(--t3);line-height:1.65;padding-top:12px;border-top:1px solid rgba(255,255,255,.06)}
+.ht-bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+@media(max-width:640px){.ht-bottom-grid{grid-template-columns:1fr}}
+.ht-bottom-card{background:var(--surface);border:1px solid var(--border2);border-radius:2px;padding:20px 24px;position:relative;overflow:hidden}
+.ht-bottom-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.ht-bottom-card.amber::before{background:var(--amber)}
+.ht-bottom-card.red::before{background:var(--red)}
+.ht-bottom-card-label{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px}
+.ht-bottom-card.amber .ht-bottom-card-label{color:var(--amber)}
+.ht-bottom-card.red .ht-bottom-card-label{color:var(--red)}
+.ht-bottom-card-val{font-size:13px;color:var(--t2);line-height:1.7}
+
+/* shared */
 .rich-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-@media(max-width:640px){.rich-grid{grid-template-columns:1fr}}
-.rich-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:2px;padding:18px 20px;
-  position:relative;overflow:hidden;
-}
-.rich-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-}
+@media(max-width:540px){.rich-grid{grid-template-columns:1fr}}
+.rich-card{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:18px 20px;position:relative;overflow:hidden}
+.rich-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
 .rich-card.full{grid-column:1/-1}
 .rich-card.accent-purple::before{background:linear-gradient(90deg,var(--purple),var(--purple2))}
 .rich-card.accent-amber::before{background:var(--amber)}
 .rich-card.accent-green::before{background:var(--green)}
 .rich-card.accent-red::before{background:var(--red)}
-.rich-card-label{
-  font-family:var(--mono);font-size:8px;letter-spacing:.18em;
-  text-transform:uppercase;margin-bottom:10px;
-  display:inline-flex;align-items:center;gap:6px;
-}
-.rich-card-label::before{content:'';width:12px;height:1px;}
+.rich-card-label{font-family:var(--mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px}
 .rich-card-label.purple{color:var(--purple3)}
-.rich-card-label.purple::before{background:var(--purple2)}
 .rich-card-label.amber{color:var(--amber)}
-.rich-card-label.amber::before{background:var(--amber)}
 .rich-card-label.green{color:var(--green)}
-.rich-card-label.green::before{background:var(--green)}
 .rich-card-label.red{color:var(--red)}
-.rich-card-label.red::before{background:var(--red)}
 .rich-card-label.default{color:var(--t3)}
-.rich-card-label.default::before{background:var(--t3)}
 .rich-card-val{font-size:13px;color:var(--t2);line-height:1.7}
-
-/* Hooks */
-.rich-hooks-list{
-  background:var(--surface);border:1px solid var(--border2);
-  border-radius:2px;margin-bottom:12px;overflow:hidden;
-}
-.rich-hook-item{
-  padding:20px 24px;border-bottom:1px solid var(--border);
-  display:flex;gap:20px;align-items:flex-start;
-  transition:background .15s;
-}
-.rich-hook-item:last-child{border-bottom:none}
-.rich-hook-item:hover{background:rgba(124,58,237,.04)}
-.rich-hook-num{
-  font-family:var(--display);font-size:36px;font-weight:900;
-  line-height:1;min-width:32px;margin-top:2px;
-}
-.rich-hook-num.c1{color:var(--purple2)}
-.rich-hook-num.c2{color:var(--amber)}
-.rich-hook-num.c3{color:var(--green)}
-.rich-hook-num.c4{color:var(--purple3)}
-.rich-hook-num.c5{color:var(--red)}
-.rich-hook-content{flex:1}
-.rich-hook-text{font-size:15px;color:var(--t1);line-height:1.6;margin-bottom:6px;font-weight:500}
-.rich-hook-breakdown{font-size:11px;color:var(--t3);font-family:var(--mono);letter-spacing:.04em;line-height:1.6}
-
-/* Hashtag tiers */
-.rich-hashtag-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
-@media(max-width:700px){.rich-hashtag-tiers{grid-template-columns:1fr}}
 .rich-hashtag-tier{border-radius:2px;padding:20px;position:relative;overflow:hidden}
 .rich-hashtag-tier::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
 .rich-hashtag-tier.broad{background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.2)}
@@ -344,7 +412,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .rich-hashtag-tier.mid::before{background:var(--amber)}
 .rich-hashtag-tier.niche{background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2)}
 .rich-hashtag-tier.niche::before{background:var(--green)}
-.rich-hashtag-tier-label{font-family:var(--mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px}
+.rich-hashtag-tier-label{font-family:var(--mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px}
 .rich-hashtag-tier.broad .rich-hashtag-tier-label{color:var(--purple3)}
 .rich-hashtag-tier.mid .rich-hashtag-tier-label{color:var(--amber)}
 .rich-hashtag-tier.niche .rich-hashtag-tier-label{color:var(--green)}
@@ -352,7 +420,24 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .rich-hashtag-tier.broad .rich-hashtag-tags{color:var(--purple3)}
 .rich-hashtag-tier.mid .rich-hashtag-tags{color:var(--amber)}
 .rich-hashtag-tier.niche .rich-hashtag-tags{color:var(--green)}
-.rich-hashtag-strategy{font-size:11px;color:var(--t3);line-height:1.6;font-family:var(--mono);padding-top:10px;border-top:1px solid rgba(255,255,255,.05)}
+.rich-hashtag-strategy{font-size:11px;color:var(--t3);line-height:1.6;padding-top:10px;border-top:1px solid rgba(255,255,255,.05)}
+.rich-hashtag-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+@media(max-width:700px){.rich-hashtag-tiers{grid-template-columns:1fr}}
+.rich-hooks-list{border:1px solid var(--border2);border-radius:2px;overflow:hidden;margin-bottom:12px}
+.rich-hook-item{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;gap:20px;align-items:flex-start;transition:background .15s}
+.rich-hook-item:last-child{border-bottom:none}
+.rich-hook-item:hover{background:rgba(124,58,237,.04)}
+.rich-hook-num{font-family:var(--display);font-size:36px;font-weight:900;line-height:1;min-width:32px;margin-top:2px}
+.rich-hook-num.c1{color:var(--purple2)}
+.rich-hook-num.c2{color:var(--amber)}
+.rich-hook-num.c3{color:var(--green)}
+.rich-hook-num.c4{color:var(--purple3)}
+.rich-hook-num.c5{color:var(--red)}
+.rich-hook-content{flex:1}
+.rich-hook-text{font-size:15px;color:var(--t1);line-height:1.6;margin-bottom:6px;font-weight:500}
+.rich-hook-breakdown{font-size:11px;color:var(--t3);font-family:var(--mono);letter-spacing:.04em;line-height:1.6}
+.rich-caption-box{position:relative;background:var(--surface);border:1px solid var(--border2);border-radius:2px;padding:28px 32px;margin-bottom:16px;font-size:16px;color:var(--t1);line-height:1.9;white-space:pre-wrap;box-shadow:0 0 40px rgba(124,58,237,.08)}
+.rich-caption-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3));border-radius:2px 2px 0 0}
 </style>
 </head>
 <body>
@@ -1521,16 +1606,50 @@ function renderCaptionOutput(el, lines) {
   const tip = getSectionContent(lines, 'PERFORMANCE TIP:', allLabels.slice(4));
   const voice = getSectionContent(lines, 'CAPTION VOICE NOTE:', []);
 
+  // Extract time hint for action bar
+  const timeMatch = timing.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)?\s*(?:at\s*)?([0-9]+(?::[0-9]+)?\s*(?:AM|PM|am|pm))/i);
+  const timeTag = timeMatch ? (timeMatch[1] ? timeMatch[1] + ' ' : '') + timeMatch[2] : 'Best time inside';
+
+  // Extract first action from tip
+  const tipShort = tip.split('.')[0] || tip;
+
   el.innerHTML =
-    '<div class="rich-output">' +
-    '<div class="rich-caption-box">' + escH(caption) + '</div>' +
-    '<div class="rich-grid">' +
-      card('WHY THIS WORKS', why, 'purple', 'accent-purple') +
-      card('BEST TIME TO POST', timing, 'amber', 'accent-amber') +
-      card('PERFORMANCE TIP', tip, 'green', 'accent-green', true) +
-      card('CAPTION VOICE NOTE', voice, 'purple', 'accent-purple', true) +
-    '</div>' +
+    '<div class="cap-output-wrap">' +
+      '<div class="cap-hero">' +
+        '<div class="cap-hero-label">Your Caption</div>' +
+        '<div class="cap-hero-text">' + escH(caption) + '</div>' +
+      '</div>' +
+      '<div class="cap-action-bar">' +
+        '<span class="cap-action-tag time">🕐 Post: ' + escH(timeTag) + '</span>' +
+        '<span class="cap-action-tag tip">⚡ ' + escH(tipShort) + '</span>' +
+      '</div>' +
+      '<div class="cap-insight-grid">' +
+        '<div class="cap-insight-card">' +
+          '<div class="cap-insight-card-label purple">Why This Works</div>' +
+          '<div class="cap-insight-card-val">' + escH(why) + '</div>' +
+        '</div>' +
+        '<div class="cap-insight-card">' +
+          '<div class="cap-insight-card-label amber">Best Time to Post</div>' +
+          '<div class="cap-insight-card-val">' + escH(timing) + '</div>' +
+        '</div>' +
+        '<div class="cap-insight-card">' +
+          '<div class="cap-insight-card-label green">Performance Tip</div>' +
+          '<div class="cap-insight-card-val">' + escH(tip) + '</div>' +
+        '</div>' +
+        '<div class="cap-insight-card">' +
+          '<div class="cap-insight-card-label purple">Caption Voice Note</div>' +
+          '<div class="cap-insight-card-val">' + escH(voice) + '</div>' +
+        '</div>' +
+      '</div>' +
     '</div>';
+}
+
+function extractHookType(breakdown) {
+  const types = ['IDENTITY','CONTROVERSY','CURIOSITY','PATTERN INTERRUPT','STORY TEASE','SENSORY','HUMOR','EMOTIONAL','POV'];
+  for (const t of types) {
+    if (breakdown.toUpperCase().includes(t)) return t;
+  }
+  return 'HOOK';
 }
 
 function renderHookOutput(el, lines) {
@@ -1542,30 +1661,40 @@ function renderHookOutput(el, lines) {
 
   const hookLines = hooksRaw.split(/(?=\d+\.\s)/).map(h => h.trim()).filter(h => h);
   const breakdownLines = breakdownRaw.split(/(?=\d+\.\s)/).map(b => b.trim()).filter(b => b);
-  const colors = ['c1','c2','c3','c4','c5'];
+  const numClasses = ['n1','n2','n3','n4','n5'];
 
-  let hooksHtml = '<div class="rich-hooks-list">';
+  let listHtml = '<div class="hook-list">';
   const count = Math.max(hookLines.length, 1);
   for (let i = 0; i < count; i++) {
     const hookText = (hookLines[i] || '').replace(/^\d+\.\s*/, '').trim();
     const bdText = (breakdownLines[i] || '').replace(/^\d+\.\s*/, '').trim();
-    hooksHtml +=
-      '<div class="rich-hook-item">' +
-        '<div class="rich-hook-num ' + colors[i % colors.length] + '">' + (i + 1) + '</div>' +
-        '<div class="rich-hook-content">' +
-          '<div class="rich-hook-text">' + escH(hookText) + '</div>' +
-          (bdText ? '<div class="rich-hook-breakdown">' + escH(bdText) + '</div>' : '') +
+    const hookType = extractHookType(bdText);
+    listHtml +=
+      '<div class="hook-row">' +
+        '<div class="hook-row-left">' +
+          '<div class="hook-row-num ' + numClasses[i % 5] + '">' + (i + 1) + '</div>' +
+          '<div class="hook-row-type">' + escH(hookType) + '</div>' +
+        '</div>' +
+        '<div class="hook-row-right">' +
+          '<div class="hook-row-text">' + escH(hookText) + '</div>' +
+          (bdText ? '<div class="hook-row-breakdown">' + escH(bdText) + '</div>' : '') +
         '</div>' +
       '</div>';
   }
-  hooksHtml += '</div>';
+  listHtml += '</div>';
 
   el.innerHTML =
-    '<div class="rich-output">' +
-    hooksHtml +
-    '<div class="rich-grid">' +
-      card('BEST HOOK FOR REACH', best, 'green', 'accent-green', true) +
-      card('DELIVERY NOTE', delivery, 'amber', 'accent-amber', true) +
+    '<div class="hook-output-wrap">' +
+    listHtml +
+    '<div class="hook-bottom-grid">' +
+      '<div class="hook-bottom-card green">' +
+        '<div class="hook-bottom-card-label">Best Hook for Reach</div>' +
+        '<div class="hook-bottom-card-val">' + escH(best) + '</div>' +
+      '</div>' +
+      '<div class="hook-bottom-card amber">' +
+        '<div class="hook-bottom-card-label">Delivery Note</div>' +
+        '<div class="hook-bottom-card-val">' + escH(delivery) + '</div>' +
+      '</div>' +
     '</div>' +
     '</div>';
 }
@@ -1581,8 +1710,7 @@ function renderHashtagOutput(el, lines) {
     const chunkLines = chunk.split('\n').map(l => l.trim()).filter(l => l);
     let tags = '', strategy = '';
     chunkLines.forEach(l => {
-      const up = l.toUpperCase();
-      if (up.startsWith('STRATEGY:')) strategy = l.substring(9).trim();
+      if (l.toUpperCase().startsWith('STRATEGY:')) strategy = l.substring(9).trim();
       else if (l.includes('#')) tags += (tags ? ' ' : '') + l;
     });
     return { tags, strategy };
@@ -1595,16 +1723,24 @@ function renderHashtagOutput(el, lines) {
   const avoid = getSectionContent(lines, 'HASHTAGS TO AVOID:', []);
 
   el.innerHTML =
-    '<div class="rich-output">' +
-    '<div class="rich-hashtag-tiers">' +
-      hashTier('broad', 'BROAD — 1M to 5M', broad.tags, broad.strategy) +
-      hashTier('mid', 'MID-TIER — 50K to 500K', mid.tags, mid.strategy) +
-      hashTier('niche', 'NICHE — Under 50K', niche.tags, niche.strategy) +
+    '<div class="ht-output-wrap">' +
+    '<div class="ht-tier-grid">' +
+      htTier('broad', 'BROAD', '1M – 5M posts', broad.tags, broad.strategy) +
+      htTier('mid', 'MID-TIER', '50K – 500K posts', mid.tags, mid.strategy) +
+      htTier('niche', 'NICHE', 'Under 50K posts', niche.tags, niche.strategy) +
     '</div>' +
-    '<div class="rich-grid">' +
-      card('POSTING ORDER TIP', posting, 'amber', 'accent-amber', true) +
-      card('HASHTAGS TO AVOID', avoid, 'red', 'accent-red', true) +
+    '<div class="ht-bottom-grid">' +
+      '<div class="ht-bottom-card amber"><div class="ht-bottom-card-label">Posting Order Tip</div><div class="ht-bottom-card-val">' + escH(posting) + '</div></div>' +
+      '<div class="ht-bottom-card red"><div class="ht-bottom-card-label">Hashtags to Avoid</div><div class="ht-bottom-card-val">' + escH(avoid) + '</div></div>' +
     '</div>' +
+    '</div>';
+}
+
+function htTier(cls, label, sub, tags, strategy) {
+  return '<div class="ht-tier ' + cls + '">' +
+    '<div class="ht-tier-badge">' + escH(label) + ' · ' + escH(sub) + '</div>' +
+    (tags ? '<div class="ht-tier-tags">' + escH(tags) + '</div>' : '') +
+    (strategy ? '<div class="ht-tier-strategy">' + escH(strategy) + '</div>' : '') +
     '</div>';
 }
 
