@@ -969,38 +969,31 @@ function buildDayPrompt(inputs, dayNum, dayName, weekSummary) {
   const { niche, theme, currentF, goalF, goal, tp } = inputs;
   const gap = goalF > currentF ? goalF - currentF : 0;
 
-  // Rotate roles: day 1 starts Awareness, cycles through all three
-  const roleSequences = {
-    1: ['Awareness','Authority'],
-    2: ['Conversion','Awareness'],
-    3: ['Authority','Conversion'],
-    4: ['Awareness','Authority'],
-    5: ['Conversion','Awareness'],
-    6: ['Authority','Conversion'],
-    7: ['Awareness','Authority']
-  };
-  const roles = roleSequences[dayNum] || ['Awareness','Authority'];
-  const formats = { Awareness:'Reel', Authority:'Carousel', Conversion:'Story' };
+  const allRoles = ['Awareness','Authority','Conversion','Awareness','Authority','Conversion','Awareness'];
+  const role1 = allRoles[dayNum - 1] || 'Awareness';
+  const role2 = allRoles[dayNum] || 'Authority';
+  const fmt = { Awareness:'Reel', Authority:'Carousel', Conversion:'Story' };
+
+  const times = tp === 1 ? ['9:00 AM'] : tp === 2 ? ['9:00 AM','7:00 PM'] : ['9:00 AM','1:00 PM','7:00 PM'];
   const slots = tp === 1 ? ['Morning'] : tp === 2 ? ['Morning','Evening'] : ['Morning','Afternoon','Evening'];
+  const roles = tp === 1 ? [role1] : tp === 2 ? [role1, role2] : [role1, role2, allRoles[(dayNum+1)%3]];
 
-  const touchpointGuides = slots.slice(0, tp).map((slot, i) => {
-    const role = roles[i % roles.length];
-    return `Touchpoint ${i+1}: ${slot} | Format: ${formats[role]} | Role: ${role}`;
-  }).join('\n');
+  // Build touchpoints array as a plain string — no complex JS inside template literal
+  let tpArray = '[';
+  for (let i = 0; i < tp; i++) {
+    if (i > 0) tpArray += ',';
+    tpArray += `{"time":"${times[i]}","slot":"${slots[i]}","format":"${fmt[roles[i]] || 'Reel'}","role":"${roles[i]}","pillar":"Content Pillar","role_description":"brief role phrase","title":"Specific ${niche} title for ${theme} day ${dayNum}","hook_direction":"What the hook must achieve","visual_direction":"What to shoot and first frame","story_companion":"Story to post within 90 min","save_trigger":"Why viewer saves this","dm_prompt":"Comment or DM invite","execution_note":"What premium looks like","performance_signal":"Reach: 400 Saves: 8 Comments: 5 Followers: 2","confidence_score":85,"algorithm_note":"Posts role in algorithm","hashtag_focus":"3 hashtags for ${niche}","conversion_path":"Where to send attention after","red_flags":"What makes this fail","caption_starter":"Tone and opening line for ${niche}"}`;
+  }
+  tpArray += ']';
 
-  return `You are PURX, an elite Instagram content strategist. Generate day ${dayNum} (${dayName}) of a ${niche} content plan.
-
-CONTEXT: Theme: "${theme}" | ${currentF} followers → ${goalF} goal | Target: ${goal}
-WEEK ARC: ${weekSummary}
-
-TOUCHPOINTS FOR TODAY:
-${touchpointGuides}
-
-RULES: All values max 15 words. Specific to ${niche} and "${theme}". No generic content.
-
-Return ONLY this raw JSON (no markdown, no backticks):
-{"day_number":${dayNum},"day_name":"${dayName}","date_label":"DAY ${dayNum}","primary_objective":"1-3 words","secondary_objective":"1-3 words","target_outcome":"1 sentence on moving from ${currentF} toward ${goalF}","touchpoints":[${slots.slice(0,tp).map((slot,i)=>{const role=roles[i%roles.length];const fmt=formats[role];return `{"time":"${slot==='Morning'?'9:00 AM':slot==='Afternoon'?'1:00 PM':'7:00 PM'}","slot":"${slot}","format":"${fmt}","role":"${role}","pillar":"Content Pillar","role_description":"3-5 words","title":"Specific ${niche} post title","hook_direction":"What hook achieves in 12 words","visual_direction":"What to shoot, how first frame looks","story_companion":"Story to post within 90 min","save_trigger":"Why they save this","dm_prompt":"Comment or DM invite","execution_note":"What premium looks like here","performance_signal":"Reach: X Saves: Y Comments: Z Followers: W","confidence_score":85,"algorithm_note":"Posts role in algorithm","hashtag_focus":"3 hashtags for ${niche} theme","conversion_path":"Where to direct attention after","red_flags":"What makes this post fail","caption_starter":"[tone] opening line for ${niche}"}`}).join(',')}]}`;
+  return 'You are PURX, an elite Instagram content strategist. Generate day ' + dayNum + ' (' + dayName + ') of a ' + niche + ' content plan.' +
+    '\n\nCONTEXT: Theme: "' + theme + '" | ' + currentF + ' followers to ' + goalF + ' goal | Target: ' + goal +
+    '\nWEEK ARC: ' + weekSummary +
+    '\n\nRULES: Replace ALL placeholder values with specific, niche-relevant content for ' + niche + ' and "' + theme + '". Max 15 words per field. No generic filler.' +
+    '\n\nReturn ONLY this raw JSON with all placeholders replaced — no markdown, no backticks, no explanation:' +
+    '\n{"day_number":' + dayNum + ',"day_name":"' + dayName + '","date_label":"DAY ' + dayNum + '","primary_objective":"Reach","secondary_objective":"Visits","target_outcome":"Specific outcome for ' + niche + ' moving from ' + currentF + ' toward ' + goalF + '","touchpoints":' + tpArray + '}';
 }
+
 
 async function runPlanner() {
   const btn = document.getElementById('cal-btn');
