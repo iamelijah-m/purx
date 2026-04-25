@@ -83,25 +83,50 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .app-content{flex:1;max-width:1100px;width:100%;margin:0 auto;padding:48px 40px}
 
 /* ── DASHBOARD ── */
-.dash-hero{margin-bottom:48px}
+.dash-hero{margin-bottom:40px;animation:fadeUp .5s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .dash-greeting{font-family:var(--mono);font-size:10px;color:var(--purple3);letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px}
-.dash-headline{font-family:var(--display);font-size:clamp(42px,6vw,72px);font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;color:var(--white);margin-bottom:16px}
-.dash-sub{font-size:15px;color:var(--t2);line-height:1.65;max-width:500px}
-.dash-stats{display:flex;gap:16px;margin-top:32px;margin-bottom:40px}
+.dash-headline{font-family:var(--display);font-size:clamp(42px,6vw,80px);font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;color:var(--white);margin-bottom:16px}
+.dash-sub{font-size:15px;color:var(--t2);line-height:1.65;max-width:560px}
 .stat-card{background:var(--surface);border:1px solid var(--border);padding:20px 24px;border-radius:2px;flex:1}
 .stat-num{font-family:var(--display);font-size:36px;font-weight:900;color:var(--white);line-height:1}
 .stat-label{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase;margin-top:4px}
-.tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-@media(max-width:600px){.tool-grid{grid-template-columns:1fr}.dash-stats{flex-direction:column}}
-.tool-card{background:var(--surface);border:1px solid var(--border);padding:28px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;border-radius:2px}
-.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--purple2));opacity:0;transition:opacity .25s}
-.tool-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;animation:fadeUp .5s .15s ease both}
+@media(max-width:600px){.tool-grid{grid-template-columns:1fr}}
+.tool-card{
+  background:var(--surface);border:1px solid var(--border);
+  padding:32px;cursor:pointer;transition:all .3s;
+  position:relative;overflow:hidden;border-radius:2px;
+  animation:fadeUp .5s ease both;
+}
+.tool-card:nth-child(1){animation-delay:.05s}
+.tool-card:nth-child(2){animation-delay:.1s}
+.tool-card:nth-child(3){animation-delay:.15s}
+.tool-card:nth-child(4){animation-delay:.2s}
+.tool-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3));
+  opacity:0;transition:opacity .3s;
+}
+.tool-card::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at top left,rgba(124,58,237,.06),transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.tool-card:hover{border-color:rgba(124,58,237,.3);transform:translateY(-3px);box-shadow:0 20px 60px rgba(0,0,0,.5)}
 .tool-card:hover::before{opacity:1}
-.tool-num{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.2em;margin-bottom:20px}
-.tool-name{font-family:var(--display);font-size:26px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;color:var(--white);line-height:1;margin-bottom:8px}
-.tool-desc{font-size:13px;color:var(--t2);line-height:1.55}
-.tool-arrow{position:absolute;bottom:24px;right:24px;font-family:var(--mono);font-size:11px;color:var(--t3);transition:color .25s,transform .25s}
-.tool-card:hover .tool-arrow{color:var(--purple3);transform:translateX(3px)}
+.tool-card:hover::after{opacity:1}
+.tool-num{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.2em;margin-bottom:24px;display:block}
+.tool-name{font-family:var(--display);font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:.02em;color:var(--white);line-height:.95;margin-bottom:12px}
+.tool-desc{font-size:13px;color:var(--t2);line-height:1.6;max-width:280px}
+.tool-arrow{
+  position:absolute;bottom:28px;right:28px;
+  font-family:var(--mono);font-size:11px;color:var(--t3);
+  transition:color .3s,transform .3s;
+  width:32px;height:32px;border:1px solid var(--border);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+}
+.tool-card:hover .tool-arrow{color:var(--purple3);border-color:var(--purple2);transform:translateX(2px);background:rgba(124,58,237,.1)}
 
 /* ── TOOL PANEL ── */
 .tool-panel{display:none}
@@ -472,19 +497,38 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .ob-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 @media(max-width:480px){.ob-grid{grid-template-columns:1fr}}
 
-/* ── DASHBOARD REDESIGN ── */
-.dash-profile-bar{background:var(--surface);border:1px solid var(--border2);border-radius:2px;padding:20px 28px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden}
-.dash-profile-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3))}
-.dash-profile-left{display:flex;align-items:center;gap:16px}
-.dash-profile-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple2));display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:20px;font-weight:900;color:var(--white);flex-shrink:0}
-.dash-profile-info{}
-.dash-profile-name{font-family:var(--display);font-size:22px;font-weight:900;text-transform:uppercase;color:var(--white);line-height:1}
-.dash-profile-meta{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.08em;margin-top:3px}
-.dash-profile-right{display:flex;gap:24px}
-.dash-profile-stat{text-align:center}
-.dash-profile-stat-num{font-family:var(--display);font-size:28px;font-weight:900;color:var(--white);line-height:1}
-.dash-profile-stat-label{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
-@media(max-width:600px){.dash-profile-bar{flex-direction:column;gap:16px;text-align:center}.dash-profile-left{flex-direction:column}.dash-profile-right{justify-content:center}}
+/* ── DASHBOARD PROFILE BAR ── */
+.dash-profile-bar{
+  background:linear-gradient(135deg,rgba(124,58,237,.08) 0%,transparent 50%),var(--surface);
+  border:1px solid var(--border2);border-radius:2px;
+  padding:24px 32px;margin-bottom:32px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;
+  animation:fadeUp .4s ease both;
+}
+.dash-profile-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3))}
+.dash-profile-bar::after{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--purple),transparent)}
+.dash-profile-left{display:flex;align-items:center;gap:20px}
+.dash-profile-avatar{
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-size:24px;font-weight:900;color:var(--white);
+  flex-shrink:0;box-shadow:0 0 24px rgba(124,58,237,.3);
+}
+.dash-profile-name{font-family:var(--display);font-size:26px;font-weight:900;text-transform:uppercase;color:var(--white);line-height:1;letter-spacing:.02em}
+.dash-profile-meta{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.08em;margin-top:4px}
+.dash-profile-right{display:flex;gap:0;border-left:1px solid var(--border)}
+.dash-profile-stat{text-align:center;padding:0 28px;border-right:1px solid var(--border)}
+.dash-profile-stat:last-child{border-right:none}
+.dash-profile-stat-num{font-family:var(--display);font-size:32px;font-weight:900;color:var(--white);line-height:1}
+.dash-profile-stat-label{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase;margin-top:3px}
+@media(max-width:700px){
+  .dash-profile-bar{flex-direction:column;gap:20px;text-align:center}
+  .dash-profile-left{flex-direction:column}
+  .dash-profile-right{border-left:none;border-top:1px solid var(--border);padding-top:16px;width:100%;justify-content:center}
+  .dash-profile-stat{padding:0 20px}
+}
 </style>
 </head>
 <body>
@@ -552,25 +596,13 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
     <!-- DASHBOARD -->
     <section id="sec-dashboard">
       <div id="dash-profile-bar" class="dash-profile-bar" style="display:none"></div>
+
       <div class="dash-hero">
         <div class="dash-greeting" id="dash-greeting">Welcome back</div>
-        <div class="dash-headline">What are<br>we building<br>today?</div>
-        <div class="dash-sub">Four AI-powered tools built for creators who are serious about growth. Pick a tool and let's get to work.</div>
+        <div class="dash-headline" id="dash-headline">What are<br>we building<br>today?</div>
+        <div class="dash-sub" id="dash-sub">Four AI-powered tools built for creators who are serious about growth. Pick a tool and let's get to work.</div>
       </div>
-      <div class="dash-stats">
-        <div class="stat-card">
-          <div class="stat-num" id="stat-total">0</div>
-          <div class="stat-label">Total generations</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" id="stat-captions">0</div>
-          <div class="stat-label">Captions made</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" id="stat-hooks">0</div>
-          <div class="stat-label">Hooks written</div>
-        </div>
-      </div>
+
       <div class="tool-grid">
         <div class="tool-card" onclick="showSection('caption')">
           <div class="tool-num">01</div>
@@ -592,13 +624,12 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
         </div>
         <div class="tool-card" onclick="showSection('calendar')">
           <div class="tool-num">04</div>
-          <div class="tool-name">Content<br>Calendar</div>
+          <div class="tool-name">Content<br>Planner</div>
           <div class="tool-desc">Your full week mapped out — what to post, when, and why it works.</div>
           <div class="tool-arrow">→</div>
         </div>
       </div>
     </section>
-
     <!-- CAPTION TOOL -->
     <section id="sec-caption" class="tool-panel">
       <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
@@ -1065,9 +1096,19 @@ async function loadStats() {
     const total=data.length;
     const captions=data.filter(r=>r.tool==='caption').length;
     const hooks=data.filter(r=>r.tool==='hook').length;
-    document.getElementById('stat-total').textContent=total;
-    document.getElementById('stat-captions').textContent=captions;
-    document.getElementById('stat-hooks').textContent=hooks;
+    // Animate all stat elements
+    ['stat-total','stat-total-2'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) animateCount(el, total, 800);
+    });
+    ['stat-captions','stat-captions-2'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) animateCount(el, captions, 800);
+    });
+    ['stat-hooks','stat-hooks-2'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) animateCount(el, hooks, 800);
+    });
     document.getElementById('usage-badge').textContent=`${total} generations`;
   } catch(e){console.warn(e);}
 }
@@ -1966,6 +2007,25 @@ function applyProfile(p) {
   const greetEl = document.getElementById('dash-greeting');
   if (greetEl) greetEl.textContent = name ? timeGreet + ', ' + name : timeGreet;
 
+  // Personalized headline based on goal
+  const headlineEl = document.getElementById('dash-headline');
+  const subEl = document.getElementById('dash-sub');
+  if (headlineEl && p.goal) {
+    const headlines = {
+      'grow followers fast': 'Time to grow<br>your audience<br>today.',
+      'build a personal brand': 'Time to build<br>your brand<br>today.',
+      'monetize my audience': 'Time to make<br>your content<br>pay.',
+      'go viral': 'Time to make<br>something<br>go viral.',
+      'drive traffic to my business': 'Time to drive<br>real traffic<br>today.',
+      'build an engaged community': 'Time to build<br>your community<br>today.'
+    };
+    headlineEl.innerHTML = headlines[p.goal] || 'What are<br>we building<br>today?';
+  }
+  if (subEl && p.niches && p.niches.length > 0) {
+    const niche = p.niches[0];
+    subEl.textContent = 'Four AI tools built for serious ' + niche + ' creators. Every output is personalized to you.';
+  }
+
   // Profile bar
   renderProfileBar(p);
 
@@ -1988,21 +2048,36 @@ function applyProfile(p) {
   }
 }
 
+function animateCount(el, target, duration) {
+  if (!el) return;
+  const start = 0;
+  const step = target / (duration / 16);
+  let current = start;
+  const timer = setInterval(() => {
+    current = Math.min(current + step, target);
+    el.textContent = Math.round(current);
+    if (current >= target) clearInterval(timer);
+  }, 16);
+}
+
 function renderProfileBar(p) {
   const bar = document.getElementById('dash-profile-bar');
   if (!bar) return;
   const name = p.name || 'Creator';
   const initial = name.charAt(0).toUpperCase();
-  const niches = (p.niches || []).join(' · ');
+  const niches = (p.niches || []).slice(0,3).join(' · ');
   const location = [p.city, p.state].filter(Boolean).join(', ');
-  const meta = [niches, location, p.creator_level ? p.creator_level + ' creator' : ''].filter(Boolean).join(' — ');
+  const levelMap = {micro:'Micro Creator', growing:'Growing Creator', established:'Established Creator'};
+  const levelStr = levelMap[p.creator_level] || '';
+  const meta = [niches, location, levelStr].filter(Boolean).join(' — ');
+  const followers = p.current_followers ? p.current_followers.toLocaleString() + ' followers' : '';
 
   bar.innerHTML =
     '<div class="dash-profile-left">' +
       '<div class="dash-profile-avatar">' + initial + '</div>' +
       '<div class="dash-profile-info">' +
         '<div class="dash-profile-name">' + escH(name) + '</div>' +
-        '<div class="dash-profile-meta">' + escH(meta) + '</div>' +
+        '<div class="dash-profile-meta">' + escH(meta) + (followers ? ' — ' + escH(followers) : '') + '</div>' +
       '</div>' +
     '</div>' +
     '<div class="dash-profile-right">' +
