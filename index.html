@@ -1189,13 +1189,19 @@ WHY THIS WORKS:
 [The specific psychological trigger this caption uses and why it earns attention from a ${niche} audience right now — be specific, not generic]
 
 POSTING SCHEDULE:
-[Give a full week posting schedule — which days and exact times perform best for ${niche} content and WHY. Format: Day — Time — Reason. Cover at least 4 days. Base this on what drives the most reach and saves for this type of content.]
+[Give a full week posting schedule. Put EACH DAY ON ITS OWN LINE. Format exactly like this, one per line:
+Monday — 7:00 PM EST — [reason]
+Tuesday — [time] — [reason]
+Cover at least 4 days. Be specific to ${niche} content and the creator's location.]
 
 PERFORMANCE TIP:
 [One specific action to take within the first 30 minutes of posting to signal engagement to the algorithm — be tactical and specific to ${niche}]
 
 ACTION SEQUENCE:
-[3 numbered steps to execute right now: 1) what to do immediately before posting, 2) what to do within 30 minutes of posting, 3) what to do that evening to compound the reach]
+[3 steps, each on its own line:
+1) What to do immediately before posting
+2) What to do within 30 minutes of posting
+3) What to do that evening to compound reach]
 
 CAPTION VOICE NOTE:
 [The one phrase or line in this caption that makes it sound human and real — protect this when editing, it is the soul of the caption]
@@ -1237,7 +1243,10 @@ BEST HOOK FOR REACH:
 [Which number, why it will outperform the others for a ${niche} creator specifically, and what type of audience it attracts]
 
 POSTING SCHEDULE:
-[Full week posting schedule for Reels in the ${niche} niche — which days, what times, and why those windows work. Format: Day — Time — Why. Cover at least 4 days. Think about when this specific audience is most active and most likely to share.]
+[Full week Reel posting schedule. Put EACH DAY ON ITS OWN LINE. Format exactly:
+Monday — 7:00 PM EST — [reason]
+Tuesday — [time] — [reason]
+Cover at least 4 days. Specific to ${niche} audience behavior.]
 
 DELIVERY NOTE:
 [Exactly how to deliver this hook on camera or as text — pace, placement, energy, timing — to maximize the first 2 seconds]
@@ -1269,7 +1278,10 @@ NICHE (under 50K posts):
 STRATEGY: [The specific type of follower who lives in these tags, why they convert to loyal followers at a higher rate, and why this tier protects your account from bot engagement]
 
 POSTING SCHEDULE:
-[Best days and times to post ${niche} content for maximum hashtag discovery — which days have the most active browsers in these tags and why. Format: Day — Time — Why. Cover at least 4 days.]
+[Best days and times for hashtag discovery. Put EACH DAY ON ITS OWN LINE. Format exactly:
+Monday — 7:00 PM EST — [reason]
+Tuesday — [time] — [reason]
+Cover at least 4 days. Specific to ${niche} content discovery patterns.]
 
 POSTING ORDER TIP:
 [Caption vs first comment — what works best for ${niche} content right now and exactly why it matters for reach]
@@ -1802,6 +1814,37 @@ function renderRichOutput(textId, rawText) {
   }
 }
 
+function formatSchedule(raw) {
+  if (!raw) return '';
+  var NL = String.fromCharCode(10);
+  var text = String(raw);
+  var dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  dayNames.forEach(function(day) {
+    var parts = text.split(day);
+    if (parts.length > 1) {
+      for (var i = 1; i < parts.length; i++) {
+        var prev = parts[i-1];
+        if (prev.length > 0 && prev[prev.length-1] !== NL) {
+          parts[i-1] = prev + NL;
+        }
+      }
+      text = parts.join(day);
+    }
+  });
+  var steps = ['1) ','2) ','3) ','1. ','2. ','3. '];
+  steps.forEach(function(step) {
+    var parts = text.split(' ' + step);
+    if (parts.length > 1) {
+      text = parts[0];
+      for (var i = 1; i < parts.length; i++) {
+        text += NL + step + parts[i];
+      }
+    }
+  });
+  return text.split(NL).map(function(l){ return l.trim(); }).filter(function(l){ return l.length > 0; }).join(NL);
+}
+
+
 function getSectionContent(lines, label, nextLabels) {
   let start = -1;
   for (let i = 0; i < lines.length; i++) {
@@ -1857,11 +1900,11 @@ function renderCaptionOutput(el, lines) {
         '</div>' +
         '<div class="cap-insight-card" style="grid-column:1/-1">' +
           '<div class="cap-insight-card-label green">Posting Schedule</div>' +
-          '<div class="cap-insight-card-val" style="white-space:pre-line">' + escH(schedule) + '</div>' +
+          '<div class="cap-insight-card-val" style="white-space:pre-line">' + escH(formatSchedule(schedule)) + '</div>' +
         '</div>' +
         '<div class="cap-insight-card" style="grid-column:1/-1">' +
           '<div class="cap-insight-card-label purple">Action Sequence — Do This Now</div>' +
-          '<div class="cap-insight-card-val" style="white-space:pre-line">' + escH(action) + '</div>' +
+          '<div class="cap-insight-card-val" style="white-space:pre-line">' + escH(formatSchedule(action)) + '</div>' +
         '</div>' +
         '<div class="cap-insight-card" style="grid-column:1/-1">' +
           '<div class="cap-insight-card-label default">Caption Voice Note</div>' +
@@ -1926,11 +1969,11 @@ function renderHookOutput(el, lines) {
       '</div>' +
       '<div class="hook-bottom-card green" style="grid-column:1/-1">' +
         '<div class="hook-bottom-card-label">Reel Posting Schedule</div>' +
-        '<div class="hook-bottom-card-val" style="white-space:pre-line">' + escH(schedule) + '</div>' +
+        '<div class="hook-bottom-card-val" style="white-space:pre-line">' + escH(formatSchedule(schedule)) + '</div>' +
       '</div>' +
       '<div class="hook-bottom-card amber" style="grid-column:1/-1">' +
         '<div class="hook-bottom-card-label">Action Sequence — Do This Now</div>' +
-        '<div class="hook-bottom-card-val" style="white-space:pre-line">' + escH(action) + '</div>' +
+        '<div class="hook-bottom-card-val" style="white-space:pre-line">' + escH(formatSchedule(action)) + '</div>' +
       '</div>' +
     '</div>' +
     '</div>';
@@ -1970,10 +2013,10 @@ function renderHashtagOutput(el, lines) {
       htTier('niche', 'NICHE', 'Under 50K posts', niche.tags, niche.strategy) +
     '</div>' +
     '<div class="ht-bottom-grid">' +
-      '<div class="ht-bottom-card amber" style="grid-column:1/-1"><div class="ht-bottom-card-label">Posting Schedule</div><div class="ht-bottom-card-val" style="white-space:pre-line">' + escH(schedule) + '</div></div>' +
+      '<div class="ht-bottom-card amber" style="grid-column:1/-1"><div class="ht-bottom-card-label">Posting Schedule</div><div class="ht-bottom-card-val" style="white-space:pre-line">' + escH(formatSchedule(schedule)) + '</div></div>' +
       '<div class="ht-bottom-card amber"><div class="ht-bottom-card-label">Posting Order Tip</div><div class="ht-bottom-card-val">' + escH(posting) + '</div></div>' +
       '<div class="ht-bottom-card red"><div class="ht-bottom-card-label">Hashtags to Avoid</div><div class="ht-bottom-card-val">' + escH(avoid) + '</div></div>' +
-      '<div class="ht-bottom-card amber" style="grid-column:1/-1"><div class="ht-bottom-card-label">Action Sequence — Do This Now</div><div class="ht-bottom-card-val" style="white-space:pre-line">' + escH(action) + '</div></div>' +
+      '<div class="ht-bottom-card amber" style="grid-column:1/-1"><div class="ht-bottom-card-label">Action Sequence — Do This Now</div><div class="ht-bottom-card-val" style="white-space:pre-line">' + escH(formatSchedule(action)) + '</div></div>' +
     '</div>' +
     '</div>';
 }
