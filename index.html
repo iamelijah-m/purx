@@ -546,10 +546,17 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
         <button class="gen-btn" id="cal-btn" onclick="runPlanner()">Build My Calendar →</button>
       </div>
 
-      <div class="loading" id="cal-loading">
-        <div class="ld-label">Building your content operating system</div>
-        <div class="ld-bar"><div class="ld-fill"></div></div>
-        <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+      <div id="cal-loading" style="display:none;margin-top:16px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:28px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div id="planner-progress-label" style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3)">Initializing...</div>
+            <div id="planner-progress-pct" style="font-family:var(--mono);font-size:11px;color:var(--purple3);letter-spacing:.08em">0%</div>
+          </div>
+          <div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:16px">
+            <div id="planner-progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3));border-radius:2px;transition:width .6s ease"></div>
+          </div>
+          <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+        </div>
       </div>
 
       <div id="cal-output" style="display:none;margin-top:24px">
@@ -958,125 +965,228 @@ function getPlannerInputs() {
   return { niche, theme, currentF, goalF, goal, tp, dur };
 }
 
-function buildPlannerPrompt(inputs) {
-  const { niche, theme, currentF, goalF, goal, tp, dur } = inputs;
+function buildDayPrompt(inputs, dayNum, dayName, weekSummary) {
+  const { niche, theme, currentF, goalF, goal, tp } = inputs;
   const gap = goalF > currentF ? goalF - currentF : 0;
-  const gapNote = gap > 0 ? `The creator has ${currentF} followers and wants to reach ${goalF} — a gap of ${gap} followers.` : `The creator currently has ${currentF} followers.`;
 
-  return `You are PURX — an elite Instagram content strategist building a full content operating system for a serious creator. This is not a generic planner. Every output must justify itself strategically. If a post idea is generic, do not include it.
+  // Rotate roles: day 1 starts Awareness, cycles through all three
+  const roleSequences = {
+    1: ['Awareness','Authority'],
+    2: ['Conversion','Awareness'],
+    3: ['Authority','Conversion'],
+    4: ['Awareness','Authority'],
+    5: ['Conversion','Awareness'],
+    6: ['Authority','Conversion'],
+    7: ['Awareness','Authority']
+  };
+  const roles = roleSequences[dayNum] || ['Awareness','Authority'];
+  const formats = { Awareness:'Reel', Authority:'Carousel', Conversion:'Story' };
+  const slots = tp === 1 ? ['Morning'] : tp === 2 ? ['Morning','Evening'] : ['Morning','Afternoon','Evening'];
 
-CREATOR BRIEF:
-- Niche: ${niche}
-- Weekly theme: "${theme}"
-- ${gapNote}
-- Weekly target: ${goal}
-- Touchpoints per day: ${tp}
-- Calendar duration: ${dur} days
+  const touchpointGuides = slots.slice(0, tp).map((slot, i) => {
+    const role = roles[i % roles.length];
+    return `Touchpoint ${i+1}: ${slot} | Format: ${formats[role]} | Role: ${role}`;
+  }).join('\n');
 
-YOUR JOB:
-Build a ${dur}-day content operating system. Each day has exactly ${tp} touchpoint(s). Each touchpoint is a fully detailed post plan — not a suggestion, a complete strategic brief.
+  return `You are PURX, an elite Instagram content strategist. Generate day ${dayNum} (${dayName}) of a ${niche} content plan.
 
-Touchpoint roles to rotate through (use all three across the week in sequence):
-- AWARENESS: reach-focused, hooks new viewers, Reels preferred
-- AUTHORITY: depth content, builds trust and saves, Carousels preferred  
-- CONVERSION: moves passive attention to active behavior, Stories or CTAs
+CONTEXT: Theme: "${theme}" | ${currentF} followers → ${goalF} goal | Target: ${goal}
+WEEK ARC: ${weekSummary}
 
-Week logic rule: Start Monday with awareness/reach. Build authority mid-week. Compound into conversion and trust by the end. The week should tell a story, not just list posts.
+TOUCHPOINTS FOR TODAY:
+${touchpointGuides}
 
-Return ONLY a valid raw JSON object with this exact structure (no markdown, no backticks, no explanation):
+RULES: All values max 15 words. Specific to ${niche} and "${theme}". No generic content.
 
-{
-  "week_summary": {
-    "goal_gap": ${gap},
-    "weekly_theme": "${theme}",
-    "touchpoints_per_day": ${tp},
-    "week_logic": "one sharp paragraph explaining the strategic arc of the full week",
-    "posting_model": "one sentence on why this touchpoint cadence serves the goal",
-    "personalization": "one sentence showing this is shaped by their specific follower count, goal, and theme",
-    "paid_value": "one sentence on what makes this more valuable than a free generic planner",
-    "priority": "Every post must create reach, trust, or conversion. If it does none of the three it should not be in the calendar."
-  },
-  "days": [
-    {
-      "day_number": 1,
-      "day_name": "Monday",
-      "date_label": "DAY 1",
-      "primary_objective": "one word or short phrase",
-      "secondary_objective": "one word or short phrase",
-      "target_outcome": "one sentence specific to their follower gap and weekly goal",
-      "touchpoints": [
-        {
-          "time": "9:15 AM",
-          "slot": "Morning",
-          "format": "Reel",
-          "role": "Awareness",
-          "pillar": "Identity Content",
-          "role_description": "one short phrase: what this touchpoint achieves",
-          "title": "specific content title, not generic",
-          "hook_direction": "one sentence: what the hook must accomplish and how",
-          "visual_direction": "one sentence: exactly what to shoot and how the first frame should look",
-          "story_companion": "one sentence: what story content to post after, within 90 minutes",
-          "save_trigger": "one sentence: why someone would save this",
-          "dm_prompt": "one sentence: what question to ask or what to invite in comments/DMs",
-          "execution_note": "two sentences: what premium execution looks like for this specific post",
-          "performance_signal": "Projected reach X · Saves target Y · Comment target Z · Follower conversion target W",
-          "confidence_score": 85,
-          "algorithm_note": "one sentence: this post's role in the algorithm and why the timing works",
-          "hashtag_focus": "Primary: 3 specific hashtags · Support: niche-specific + discovery + authority tags",
-          "conversion_path": "one sentence: where to direct attention after this post",
-          "red_flags": "one sentence: what would make this post fail",
-          "caption_starter": "one sentence: tone direction plus an actual opening line they can use or adapt"
-        }
-      ]
-    }
-  ]
-}
-
-Generate all ${dur} days with exactly ${tp} touchpoints each. Make every title, hook direction, visual direction, and caption starter specific to the ${niche} niche and the theme "${theme}". No generic filler. Output ONLY the raw JSON.`;
+Return ONLY this raw JSON (no markdown, no backticks):
+{"day_number":${dayNum},"day_name":"${dayName}","date_label":"DAY ${dayNum}","primary_objective":"1-3 words","secondary_objective":"1-3 words","target_outcome":"1 sentence on moving from ${currentF} toward ${goalF}","touchpoints":[${slots.slice(0,tp).map((slot,i)=>{const role=roles[i%roles.length];const fmt=formats[role];return `{"time":"${slot==='Morning'?'9:00 AM':slot==='Afternoon'?'1:00 PM':'7:00 PM'}","slot":"${slot}","format":"${fmt}","role":"${role}","pillar":"Content Pillar","role_description":"3-5 words","title":"Specific ${niche} post title","hook_direction":"What hook achieves in 12 words","visual_direction":"What to shoot, how first frame looks","story_companion":"Story to post within 90 min","save_trigger":"Why they save this","dm_prompt":"Comment or DM invite","execution_note":"What premium looks like here","performance_signal":"Reach: X Saves: Y Comments: Z Followers: W","confidence_score":85,"algorithm_note":"Posts role in algorithm","hashtag_focus":"3 hashtags for ${niche} theme","conversion_path":"Where to direct attention after","red_flags":"What makes this post fail","caption_starter":"[tone] opening line for ${niche}"}`}).join(',')}]}`;
 }
 
 async function runPlanner() {
   const btn = document.getElementById('cal-btn');
   const loading = document.getElementById('cal-loading');
   const output = document.getElementById('cal-output');
+  const progressBar = document.getElementById('planner-progress-bar');
+  const progressLabel = document.getElementById('planner-progress-label');
+  const progressPct = document.getElementById('planner-progress-pct');
 
   const inputs = getPlannerInputs();
+  const { niche, theme, currentF, goalF, goal, tp, dur } = inputs;
+  const gap = goalF > currentF ? goalF - currentF : 0;
+
+  const dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday','Day 8','Day 9','Day 10','Day 11','Day 12','Day 13','Day 14'];
 
   btn.disabled = true;
-  loading.classList.add('show');
+  loading.style.display = 'block';
   output.style.display = 'none';
+  document.getElementById('planner-summary').innerHTML = '';
+  document.getElementById('planner-days').innerHTML = '';
 
-  try {
-    const prompt = buildPlannerPrompt(inputs);
-    const raw = await callWorker(prompt);
-    const cleaned = raw.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
-    const data = JSON.parse(cleaned);
+  // Set progress to 0
+  progressBar.style.width = '0%';
+  progressPct.textContent = '0%';
+  progressLabel.textContent = 'Building your content system...';
 
-    if (!data.week_summary || !Array.isArray(data.days)) throw new Error('Invalid planner structure');
+  const weekSummary = `Start with reach on day 1, build authority mid-week, compound into conversion by end. Theme: ${theme}. Goal: ${goal}.`;
 
-    lastPlannerData = data;
-    renderPlanner(data);
-    output.style.display = 'block';
+  // Build week summary card immediately
+  const ws = {
+    goal_gap: gap,
+    weekly_theme: theme,
+    touchpoints_per_day: tp,
+    week_logic: weekSummary,
+    posting_model: `${tp} touchpoint${tp>1?'s':''} per day sequenced by role: reach first, then depth, then conversion.`,
+    personalization: `Shaped by ${currentF} followers, goal of ${goalF}, and theme: ${theme}.`,
+    paid_value: 'Every post includes hook direction, caption starter, visual brief, save trigger, and red flags.',
+    priority: 'Every post must create reach, trust, or conversion.'
+  };
 
-    // Save to history
-    await saveGeneration('calendar', JSON.stringify(data), {
-      niche: inputs.niche,
-      theme: inputs.theme,
-      currentF: inputs.currentF,
-      goalF: inputs.goalF,
-      goal: inputs.goal,
-      tp: inputs.tp,
-      dur: inputs.dur
-    });
-    loadStats();
+  const summaryEl = document.getElementById('planner-summary');
+  summaryEl.innerHTML = `
+    <div class="planner-summary">
+      <div class="planner-summary-label">PURX Legendary Planner</div>
+      <div class="planner-summary-title">Planner Mode · ${escH(theme)}</div>
+      <div style="margin:12px 0">
+        <span class="planner-goal-gap">Goal gap: ${gap > 0 ? gap.toLocaleString() + ' followers' : 'Growth focused'}</span>
+      </div>
+      <div class="planner-summary-logic">${escH(weekSummary)}</div>
+      <div class="planner-meta-grid">
+        <div class="planner-meta-card"><div class="planner-meta-label">Posting Model</div><div class="planner-meta-val">${escH(ws.posting_model)}</div></div>
+        <div class="planner-meta-card"><div class="planner-meta-label">Personalization</div><div class="planner-meta-val">${escH(ws.personalization)}</div></div>
+        <div class="planner-meta-card"><div class="planner-meta-label">Paid Value</div><div class="planner-meta-val">${escH(ws.paid_value)}</div></div>
+        <div class="planner-meta-card"><div class="planner-meta-label">Priority</div><div class="planner-meta-val">${escH(ws.priority)}</div></div>
+      </div>
+    </div>
+  `;
 
-  } catch(e) {
-    showToast('Error building calendar — please try again.');
-    console.error('Planner error:', e);
+  const allDays = [];
+  let hadError = false;
+
+  for (let i = 0; i < dur; i++) {
+    const dayNum = i + 1;
+    const dayName = dayNames[i] || `Day ${dayNum}`;
+    const pct = Math.round((i / dur) * 100);
+
+    progressBar.style.width = pct + '%';
+    progressPct.textContent = pct + '%';
+    progressLabel.textContent = `Building ${dayName}...`;
+
+    try {
+      const prompt = buildDayPrompt(inputs, dayNum, dayName, weekSummary);
+      const raw = await callWorker(prompt);
+      const cleaned = raw.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+      const dayData = JSON.parse(cleaned);
+
+      allDays.push(dayData);
+      renderDay(dayData, document.getElementById('planner-days'));
+
+    } catch(e) {
+      console.error(`Day ${dayNum} error:`, e);
+      hadError = true;
+      // Render a placeholder so the user sees progress continued
+      const daysEl = document.getElementById('planner-days');
+      const errEl = document.createElement('div');
+      errEl.style.cssText = 'background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);padding:20px 24px;margin-bottom:8px;border-radius:2px;font-family:var(--mono);font-size:10px;color:var(--t3)';
+      errEl.textContent = `${dayName} — could not generate, please regenerate`;
+      daysEl.appendChild(errEl);
+    }
   }
 
-  loading.classList.remove('show');
+  // Complete
+  progressBar.style.width = '100%';
+  progressPct.textContent = '100%';
+  progressLabel.textContent = hadError ? 'Done — some days had errors' : 'Calendar complete';
+
+  setTimeout(() => {
+    loading.style.display = 'none';
+    output.style.display = 'block';
+  }, 600);
+
+  lastPlannerData = { week_summary: ws, days: allDays };
+
+  // Save to history
+  try {
+    await saveGeneration('calendar', JSON.stringify(lastPlannerData), {
+      niche, theme, currentF, goalF, goal, tp, dur
+    });
+    loadStats();
+  } catch(e) { console.warn(e); }
+
   btn.disabled = false;
+}
+
+
+function renderDay(day, container) {
+  const dayEl = document.createElement('div');
+  dayEl.className = 'planner-day';
+  const tpCount = day.touchpoints ? day.touchpoints.length : 0;
+  dayEl.innerHTML = `
+    <div class="planner-day-header">
+      <div class="planner-day-left">
+        <div class="planner-day-num">${day.day_number}</div>
+        <div class="planner-day-info">
+          <div class="planner-day-date">${escH(day.date_label || day.day_name)}</div>
+          <div class="planner-day-name">${escH(day.day_name || '')}</div>
+        </div>
+      </div>
+      <div class="planner-day-objectives">
+        <div class="planner-day-obj-primary">Primary: ${escH(day.primary_objective || '')}</div>
+        <div class="planner-day-obj-primary" style="color:var(--t3)">Secondary: ${escH(day.secondary_objective || '')}</div>
+        <div class="planner-day-tp-badge">${tpCount} planned touchpoint${tpCount !== 1 ? 's' : ''}</div>
+      </div>
+    </div>
+    <div class="planner-day-outcome">${escH(day.target_outcome || '')}</div>
+    <div class="planner-touchpoints" id="tp-day-${day.day_number}"></div>
+  `;
+  container.appendChild(dayEl);
+
+  const tpContainer = document.getElementById('tp-day-' + day.day_number);
+  (day.touchpoints || []).forEach(tp => {
+    const role = (tp.role || '').toLowerCase();
+    const slot = (tp.slot || '').toLowerCase();
+    const tpEl = document.createElement('div');
+    tpEl.className = 'planner-tp';
+    tpEl.innerHTML = `
+      <div class="planner-tp-accent ${role}"></div>
+      <div class="planner-tp-inner">
+        <div class="planner-tp-header">
+          <div class="planner-tp-meta">
+            <span class="planner-tp-time">${escH(tp.time)}</span>
+            <span class="planner-tp-format">${escH(tp.format)}</span>
+            <span class="planner-tp-slot ${slot}">${escH(tp.slot)}</span>
+            <span class="planner-tp-role-badge">${escH(tp.role)}</span>
+          </div>
+          <div class="planner-tp-confidence">${tp.confidence_score ? tp.confidence_score + '/100' : ''}</div>
+        </div>
+        <div class="planner-tp-title">${escH(tp.title)}</div>
+        <div class="planner-tp-pills">
+          <span class="planner-tp-pill">Pillar · ${escH(tp.pillar)}</span>
+          <span class="planner-tp-pill">Role · ${escH(tp.role_description)}</span>
+        </div>
+        <div class="planner-tp-hook">${escH(tp.hook_direction)}</div>
+        <div class="planner-tp-caption-starter">
+          <div class="planner-tp-caption-label">Caption Starter</div>
+          ${escH(tp.caption_starter)}
+        </div>
+        <div class="planner-detail-grid">
+          <div class="planner-detail-card"><div class="planner-detail-label">Visual Direction</div><div class="planner-detail-val">${escH(tp.visual_direction)}</div></div>
+          <div class="planner-detail-card"><div class="planner-detail-label">Story Companion</div><div class="planner-detail-val">${escH(tp.story_companion)}</div></div>
+          <div class="planner-detail-card"><div class="planner-detail-label" style="color:var(--amber)">Save Trigger</div><div class="planner-detail-val">${escH(tp.save_trigger)}</div></div>
+          <div class="planner-detail-card"><div class="planner-detail-label" style="color:var(--purple3)">DM Prompt</div><div class="planner-detail-val">${escH(tp.dm_prompt)}</div></div>
+          <div class="planner-detail-card"><div class="planner-detail-label">Execution Note</div><div class="planner-detail-val">${escH(tp.execution_note)}</div></div>
+          <div class="planner-detail-card"><div class="planner-detail-label">Hashtag Focus</div><div class="planner-detail-val">${escH(tp.hashtag_focus)}</div></div>
+          <div class="planner-detail-card"><div class="planner-detail-label">Conversion Path</div><div class="planner-detail-val">${escH(tp.conversion_path)}</div></div>
+          <div class="planner-detail-card"><div class="planner-detail-label">Algorithm Note</div><div class="planner-detail-val">${escH(tp.algorithm_note)}</div></div>
+        </div>
+        <div class="planner-bottom-grid">
+          <div class="planner-perf-card"><div class="planner-perf-label perf">Performance Signal</div><div class="planner-perf-val">${escH(tp.performance_signal)}</div></div>
+          <div class="planner-perf-card"><div class="planner-perf-label algo">Algorithm Note</div><div class="planner-perf-val">${escH(tp.algorithm_note)}</div></div>
+          <div class="planner-perf-card"><div class="planner-perf-label redflag">Red Flags</div><div class="planner-perf-val">${escH(tp.red_flags)}</div></div>
+        </div>
+      </div>
+    `;
+    tpContainer.appendChild(tpEl);
+  });
 }
 
 function renderPlanner(data) {
