@@ -258,17 +258,34 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .planner-perf-val{font-family:var(--mono);font-size:11px;color:var(--t2);line-height:1.6}
 
 /* ── RICH OUTPUT ── */
-.rich-output{font-size:14px;color:var(--t1);line-height:1.75}
-.rich-output .section-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--purple3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
-.rich-output .section-label::before{content:'';width:16px;height:1px;background:var(--purple2)}
-.rich-output .section-label:first-child{margin-top:0}
-.rich-output .section-body{color:var(--t1);white-space:pre-wrap;line-height:1.75}
-.rich-output .section-note{font-size:12px;color:var(--t2);line-height:1.65;padding:12px 16px;background:var(--bg2);border-left:2px solid var(--purple);margin-top:6px;border-radius:0 2px 2px 0}
-.rich-output .hook-item{padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:12px}
-.rich-output .hook-item:last-child{border-bottom:none}
-.rich-output .hook-num{font-family:var(--mono);font-size:9px;color:var(--t3);min-width:16px;margin-top:2px}
-.rich-output .hook-text{color:var(--t1);font-size:14px;line-height:1.6}
-.rich-output .hook-breakdown{font-size:12px;color:var(--t3);margin-top:4px;font-style:italic}
+.rich-output{display:flex;flex-direction:column;gap:0}
+.rich-caption-box{background:var(--bg2);border:1px solid var(--border2);padding:20px 24px;border-radius:2px;margin-bottom:16px;font-size:14px;color:var(--t1);line-height:1.8;white-space:pre-wrap}
+.rich-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+@media(max-width:540px){.rich-grid{grid-template-columns:1fr}}
+.rich-card{background:var(--bg2);border:1px solid var(--border);padding:14px 16px;border-radius:2px}
+.rich-card.full{grid-column:1/-1}
+.rich-card.accent-purple{border-left:2px solid var(--purple2)}
+.rich-card.accent-amber{border-left:2px solid var(--amber)}
+.rich-card.accent-green{border-left:2px solid var(--green)}
+.rich-card.accent-red{border-left:2px solid var(--red)}
+.rich-card-label{font-family:var(--mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px}
+.rich-card-label.purple{color:var(--purple3)}
+.rich-card-label.amber{color:var(--amber)}
+.rich-card-label.green{color:var(--green)}
+.rich-card-label.red{color:var(--red)}
+.rich-card-label.default{color:var(--t3)}
+.rich-card-val{font-size:12px;color:var(--t2);line-height:1.6}
+.rich-hooks-list{display:flex;flex-direction:column;gap:0;margin-bottom:10px}
+.rich-hook-item{padding:14px 0;border-bottom:1px solid var(--border);display:flex;gap:14px}
+.rich-hook-item:last-child{border-bottom:none;padding-bottom:0}
+.rich-hook-num{font-family:var(--display);font-size:22px;font-weight:900;color:var(--t4);line-height:1;min-width:24px}
+.rich-hook-content{}
+.rich-hook-text{font-size:14px;color:var(--t1);line-height:1.6;margin-bottom:4px}
+.rich-hook-breakdown{font-size:11px;color:var(--purple3);font-family:var(--mono);letter-spacing:.04em}
+.rich-hashtag-tier{background:var(--bg2);border:1px solid var(--border2);border-radius:2px;padding:18px 20px;margin-bottom:10px}
+.rich-hashtag-tier-label{font-family:var(--mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.rich-hashtag-tags{font-size:13px;color:var(--purple3);line-height:1.7;margin-bottom:10px;font-weight:500}
+.rich-hashtag-strategy{font-size:12px;color:var(--t2);line-height:1.6;padding:10px 14px;background:var(--bg);border-left:2px solid var(--purple);border-radius:0 2px 2px 0}
 </style>
 </head>
 <body>
@@ -1379,54 +1396,166 @@ function copyPlannerText() {
   navigator.clipboard.writeText(out).then(() => showToast('Calendar copied'));
 }
 
+function stripMd(str) {
+  // Remove markdown bold/italic, headers, dividers
+  return (str || '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/^#+\s*/gm, '')
+    .replace(/^---+$/gm, '')
+    .trim();
+}
+
 function renderRichOutput(textId, rawText) {
   const el = document.getElementById(textId);
-  const labels = [
-    'CAPTION:','WHY THIS WORKS:','BEST TIME TO POST:','PERFORMANCE TIP:','CAPTION VOICE NOTE:',
-    'HOOKS:','HOOK BREAKDOWN:','BEST HOOK FOR REACH:','DELIVERY NOTE:',
-    'BROAD (1M–5M posts):','MID-TIER (50K–500K posts):','NICHE (under 50K posts):',
-    'STRATEGY:','POSTING ORDER TIP:','HASHTAGS TO AVOID:'
-  ];
-  let html = '<div class="rich-output">';
-  const lines = rawText.split('\n');
-  let currentLabel = null;
-  let currentBody = [];
+  const text = stripMd(rawText);
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
-  function flushSection() {
-    if (!currentLabel && currentBody.length === 0) return;
-    if (currentLabel) {
-      html += '<div class="section-label">' + escapeHtml(currentLabel.replace(':','')) + '</div>';
+  // Detect tool type by looking for key section labels
+  const isCap = text.includes('CAPTION:') || text.includes('WHY THIS WORKS:');
+  const isHook = text.includes('HOOKS:') || text.includes('HOOK BREAKDOWN:');
+  const isHash = text.includes('BROAD') && text.includes('MID-TIER');
+
+  if (isCap) renderCaptionOutput(el, lines);
+  else if (isHook) renderHookOutput(el, lines);
+  else if (isHash) renderHashtagOutput(el, lines);
+  else {
+    // Fallback: plain text
+    el.innerHTML = '<div style="font-size:14px;color:var(--t1);line-height:1.75;white-space:pre-wrap">' + escH(text) + '</div>';
+  }
+}
+
+function getSectionContent(lines, label, nextLabels) {
+  let start = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].toUpperCase().startsWith(label.toUpperCase())) {
+      start = i;
+      break;
     }
-    const bodyText = currentBody.join('\n').trim();
-    if (bodyText) {
-      const isNote = currentLabel && (
-        currentLabel.includes('STRATEGY') || currentLabel.includes('TIP') ||
-        currentLabel.includes('NOTE') || currentLabel.includes('WHY') ||
-        currentLabel.includes('BEST') || currentLabel.includes('DELIVERY') ||
-        currentLabel.includes('AVOID') || currentLabel.includes('VOICE')
-      );
-      html += isNote
-        ? '<div class="section-note">' + escapeHtml(bodyText) + '</div>'
-        : '<div class="section-body">' + escapeHtml(bodyText) + '</div>';
-    }
-    currentBody = [];
+  }
+  if (start === -1) return '';
+  let body = [];
+  // Check if content is on same line after label
+  const firstLine = lines[start].substring(label.length).trim();
+  if (firstLine) body.push(firstLine);
+  for (let i = start + 1; i < lines.length; i++) {
+    const upper = lines[i].toUpperCase();
+    if (nextLabels.some(nl => upper.startsWith(nl.toUpperCase()))) break;
+    body.push(lines[i]);
+  }
+  return body.join(' ').trim();
+}
+
+function renderCaptionOutput(el, lines) {
+  const allLabels = ['CAPTION:','WHY THIS WORKS:','BEST TIME TO POST:','PERFORMANCE TIP:','CAPTION VOICE NOTE:'];
+  const caption = getSectionContent(lines, 'CAPTION:', allLabels.slice(1));
+  const why = getSectionContent(lines, 'WHY THIS WORKS:', allLabels.slice(2));
+  const timing = getSectionContent(lines, 'BEST TIME TO POST:', allLabels.slice(3));
+  const tip = getSectionContent(lines, 'PERFORMANCE TIP:', allLabels.slice(4));
+  const voice = getSectionContent(lines, 'CAPTION VOICE NOTE:', []);
+
+  el.innerHTML =
+    '<div class="rich-output">' +
+    '<div class="rich-caption-box">' + escH(caption) + '</div>' +
+    '<div class="rich-grid">' +
+      card('WHY THIS WORKS', why, 'purple', 'accent-purple') +
+      card('BEST TIME TO POST', timing, 'amber', 'accent-amber') +
+      card('PERFORMANCE TIP', tip, 'green', 'accent-green', true) +
+      card('CAPTION VOICE NOTE', voice, 'purple', 'accent-purple', true) +
+    '</div>' +
+    '</div>';
+}
+
+function renderHookOutput(el, lines) {
+  const allLabels = ['HOOKS:','HOOK BREAKDOWN:','BEST HOOK FOR REACH:','DELIVERY NOTE:'];
+  const hooksRaw = getSectionContent(lines, 'HOOKS:', allLabels.slice(1));
+  const breakdownRaw = getSectionContent(lines, 'HOOK BREAKDOWN:', allLabels.slice(2));
+  const best = getSectionContent(lines, 'BEST HOOK FOR REACH:', allLabels.slice(3));
+  const delivery = getSectionContent(lines, 'DELIVERY NOTE:', []);
+
+  // Parse individual hooks (numbered 1-5)
+  const hookLines = hooksRaw.split(/(?=\d+\.\s)/).filter(h => h.trim());
+  const breakdownLines = breakdownRaw.split(/(?=\d+\.\s)/).filter(b => b.trim());
+
+  let hooksHtml = '<div class="rich-hooks-list">';
+  for (let i = 0; i < Math.max(hookLines.length, 1); i++) {
+    const hookText = (hookLines[i] || '').replace(/^\d+\.\s*/, '').trim();
+    const bdText = (breakdownLines[i] || '').replace(/^\d+\.\s*/, '').trim();
+    hooksHtml +=
+      '<div class="rich-hook-item">' +
+        '<div class="rich-hook-num">' + (i + 1) + '</div>' +
+        '<div class="rich-hook-content">' +
+          '<div class="rich-hook-text">' + escH(hookText) + '</div>' +
+          (bdText ? '<div class="rich-hook-breakdown">' + escH(bdText) + '</div>' : '') +
+        '</div>' +
+      '</div>';
+  }
+  hooksHtml += '</div>';
+
+  el.innerHTML =
+    '<div class="rich-output">' +
+    hooksHtml +
+    '<div class="rich-grid">' +
+      card('BEST HOOK FOR REACH', best, 'green', 'accent-green', true) +
+      card('DELIVERY NOTE', delivery, 'amber', 'accent-amber', true) +
+    '</div>' +
+    '</div>';
+}
+
+function renderHashtagOutput(el, lines) {
+  const text = lines.join('\n');
+  
+  function getTier(label, nextLabel) {
+    const idx = text.toUpperCase().indexOf(label.toUpperCase());
+    if (idx === -1) return { tags: '', strategy: '' };
+    const nextIdx = nextLabel ? text.toUpperCase().indexOf(nextLabel.toUpperCase()) : text.length;
+    const chunk = text.substring(idx + label.length, nextIdx > idx ? nextIdx : text.length);
+    const chunkLines = chunk.split('\n').map(l => l.trim()).filter(l => l);
+    let tags = '', strategy = '';
+    chunkLines.forEach(l => {
+      if (l.toUpperCase().startsWith('STRATEGY:')) strategy = l.substring(9).trim();
+      else if (l.startsWith('#')) tags += (tags ? ' ' : '') + l;
+      else if (!strategy && !l.toUpperCase().startsWith('POSTING') && !l.toUpperCase().startsWith('HASHTAGS')) {
+        // might be tags on this line
+        if (l.includes('#')) tags += (tags ? ' ' : '') + l;
+      }
+    });
+    return { tags, strategy };
   }
 
-  lines.forEach(function(line) {
-    const trimmed = line.trim();
-    const matchedLabel = labels.find(function(l){ return trimmed === l || trimmed.startsWith(l); });
-    if (matchedLabel) {
-      flushSection();
-      currentLabel = matchedLabel;
-      const rest = trimmed.slice(matchedLabel.length).trim();
-      if (rest) currentBody.push(rest);
-    } else {
-      currentBody.push(line);
-    }
-  });
-  flushSection();
-  html += '</div>';
-  el.innerHTML = html;
+  const broad = getTier('BROAD', 'MID-TIER');
+  const mid = getTier('MID-TIER', 'NICHE');
+  const niche = getTier('NICHE (under 50K posts):', 'POSTING ORDER');
+
+  const posting = getSectionContent(lines, 'POSTING ORDER TIP:', ['HASHTAGS TO AVOID:']);
+  const avoid = getSectionContent(lines, 'HASHTAGS TO AVOID:', []);
+
+  el.innerHTML =
+    '<div class="rich-output">' +
+    hashTier('BROAD — 1M to 5M posts', broad.tags, broad.strategy) +
+    hashTier('MID-TIER — 50K to 500K posts', mid.tags, mid.strategy) +
+    hashTier('NICHE — Under 50K posts', niche.tags, niche.strategy) +
+    '<div class="rich-grid">' +
+      card('POSTING ORDER TIP', posting, 'amber', 'accent-amber', true) +
+      card('HASHTAGS TO AVOID', avoid, 'red', 'accent-red', true) +
+    '</div>' +
+    '</div>';
+}
+
+function card(label, val, color, accent, full) {
+  if (!val) return '';
+  return '<div class="rich-card' + (accent ? ' ' + accent : '') + (full ? ' full' : '') + '">' +
+    '<div class="rich-card-label ' + (color || 'default') + '">' + escH(label) + '</div>' +
+    '<div class="rich-card-val">' + escH(val) + '</div>' +
+    '</div>';
+}
+
+function hashTier(label, tags, strategy) {
+  return '<div class="rich-hashtag-tier">' +
+    '<div class="rich-hashtag-tier-label">' + escH(label) + '</div>' +
+    (tags ? '<div class="rich-hashtag-tags">' + escH(tags) + '</div>' : '') +
+    (strategy ? '<div class="rich-hashtag-strategy">' + escH(strategy) + '</div>' : '') +
+    '</div>';
 }
 
 function escapeHtml(str) {
@@ -1436,6 +1565,7 @@ function escapeHtml(str) {
     .replace(/>/g,'&gt;')
     .replace(/\n/g,'<br>');
 }
+
 
 function copyOutput(id) {
   const text=document.getElementById(id).textContent;
