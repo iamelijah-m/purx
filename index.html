@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PURX — Creator Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,800;0,900;1,900&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060606;
+  --bg2:#0c0c0c;
+  --surface:#111111;
+  --surface2:#181818;
+  --border:#222222;
+  --border2:#2e2e2e;
+  --purple:#7c3aed;
+  --purple2:#9d5cf6;
+  --purple3:#c4b5fd;
+  --purple-glow:rgba(124,58,237,0.15);
+  --green:#10b981;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  --white:#ffffff;
+  --t1:#f0f0f0;
+  --t2:#a0a0a0;
+  --t3:#555555;
+  --t4:#2a2a2a;
+  --font:'DM Sans',sans-serif;
+  --display:'Barlow Condensed',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex}
+
+/* ── AUTH SCREEN ── */
+#auth-screen{align-items:center;justify-content:center;position:relative;overflow:hidden}
+.auth-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(124,58,237,0.12) 0%,transparent 65%);pointer-events:none}
+.auth-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,black,transparent);pointer-events:none}
+.auth-card{position:relative;z-index:2;width:100%;max-width:420px;padding:0 24px}
+.auth-logo{font-family:var(--display);font-weight:900;font-size:52px;letter-spacing:-.02em;color:var(--white);text-transform:uppercase;line-height:1;margin-bottom:4px}
+.auth-tagline{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:.2em;text-transform:uppercase;margin-bottom:48px}
+.auth-tabs{display:flex;gap:0;margin-bottom:32px;border-bottom:1px solid var(--border)}
+.auth-tab{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);background:none;border:none;padding:12px 20px 12px 0;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.auth-tab.on{color:var(--white);border-bottom-color:var(--purple2)}
+.auth-form{display:flex;flex-direction:column;gap:14px}
+.auth-form.hidden{display:none}
+.field-label{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px}
+.field-wrap{display:flex;flex-direction:column}
+.auth-input{background:var(--surface);border:1px solid var(--border2);color:var(--t1);font-family:var(--font);font-size:14px;padding:14px 16px;outline:none;border-radius:2px;transition:border-color .2s,box-shadow .2s}
+.auth-input:focus{border-color:var(--purple2);box-shadow:0 0 0 3px rgba(124,58,237,.15)}
+.auth-input::placeholder{color:var(--t3)}
+.auth-btn{font-family:var(--display);font-size:14px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;background:var(--white);color:var(--bg);border:none;padding:16px;cursor:pointer;border-radius:2px;margin-top:8px;transition:background .2s,transform .1s}
+.auth-btn:hover{background:#e8e8e8}
+.auth-btn:active{transform:scale(.99)}
+.auth-btn:disabled{opacity:.5;cursor:not-allowed}
+.auth-msg{font-family:var(--mono);font-size:10px;letter-spacing:.05em;margin-top:8px;min-height:16px}
+.auth-msg.err{color:var(--red)}
+.auth-msg.ok{color:var(--green)}
+
+/* ── APP LAYOUT ── */
+#app-screen{flex-direction:column}
+.app-header{position:sticky;top:0;z-index:100;background:rgba(6,6,6,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:60px}
+.header-logo{font-family:var(--display);font-weight:900;font-size:20px;letter-spacing:.12em;color:var(--white);text-transform:uppercase}
+.header-right{display:flex;align-items:center;gap:24px}
+.header-user{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:.08em}
+.usage-badge{font-family:var(--mono);font-size:9px;letter-spacing:.08em;padding:5px 12px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);color:var(--purple3);border-radius:100px}
+.signout-btn{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);background:none;border:1px solid var(--border2);padding:7px 14px;cursor:pointer;border-radius:2px;transition:all .2s}
+.signout-btn:hover{color:var(--t1);border-color:var(--t3)}
+
+/* ── NAV ── */
+.app-nav{display:flex;gap:0;padding:0 32px;border-bottom:1px solid var(--border);background:var(--bg2);overflow-x:auto}
+.nav-btn{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);background:none;border:none;border-bottom:2px solid transparent;padding:16px 20px;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-1px}
+.nav-btn.on{color:var(--white);border-bottom-color:var(--purple2)}
+.nav-btn:hover:not(.on){color:var(--t2)}
+
+/* ── CONTENT AREA ── */
+.app-content{flex:1;max-width:820px;width:100%;margin:0 auto;padding:48px 32px}
+
+/* ── DASHBOARD ── */
+.dash-hero{margin-bottom:48px}
+.dash-greeting{font-family:var(--mono);font-size:10px;color:var(--purple3);letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px}
+.dash-headline{font-family:var(--display);font-size:clamp(42px,6vw,72px);font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;color:var(--white);margin-bottom:16px}
+.dash-sub{font-size:15px;color:var(--t2);line-height:1.65;max-width:500px}
+.dash-stats{display:flex;gap:16px;margin-top:32px;margin-bottom:40px}
+.stat-card{background:var(--surface);border:1px solid var(--border);padding:20px 24px;border-radius:2px;flex:1}
+.stat-num{font-family:var(--display);font-size:36px;font-weight:900;color:var(--white);line-height:1}
+.stat-label{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase;margin-top:4px}
+.tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:600px){.tool-grid{grid-template-columns:1fr}.dash-stats{flex-direction:column}}
+.tool-card{background:var(--surface);border:1px solid var(--border);padding:28px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;border-radius:2px}
+.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--purple2));opacity:0;transition:opacity .25s}
+.tool-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.tool-card:hover::before{opacity:1}
+.tool-num{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.2em;margin-bottom:20px}
+.tool-name{font-family:var(--display);font-size:26px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;color:var(--white);line-height:1;margin-bottom:8px}
+.tool-desc{font-size:13px;color:var(--t2);line-height:1.55}
+.tool-arrow{position:absolute;bottom:24px;right:24px;font-family:var(--mono);font-size:11px;color:var(--t3);transition:color .25s,transform .25s}
+.tool-card:hover .tool-arrow{color:var(--purple3);transform:translateX(3px)}
+
+/* ── TOOL PANEL ── */
+.tool-panel{display:none}
+.tool-panel.active{display:block}
+.panel-back{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);background:none;border:none;padding:0;cursor:pointer;margin-bottom:32px;display:flex;align-items:center;gap:8px;transition:color .2s}
+.panel-back:hover{color:var(--t1)}
+.panel-title{font-family:var(--display);font-size:clamp(36px,5vw,60px);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:.9;color:var(--white);margin-bottom:8px}
+.panel-sub{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:.1em;margin-bottom:40px}
+
+/* ── FORM ── */
+.form-section{background:var(--surface);border:1px solid var(--border);padding:32px;border-radius:2px}
+.form-label{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:8px;margin-top:24px}
+.form-label:first-child{margin-top:0}
+.form-input,.form-select,.form-textarea{background:var(--bg);border:1px solid var(--border2);color:var(--t1);font-family:var(--font);font-size:14px;padding:13px 16px;outline:none;width:100%;border-radius:2px;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--purple2);box-shadow:0 0 0 3px rgba(124,58,237,.12)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--t3)}
+.form-textarea{min-height:100px;resize:vertical;line-height:1.6}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.pill{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;background:transparent;border:1px solid var(--border2);color:var(--t3);cursor:pointer;border-radius:100px;transition:all .2s}
+.pill.on,.pill:hover{background:rgba(124,58,237,.12);border-color:var(--purple2);color:var(--purple3)}
+.gen-btn{font-family:var(--display);font-size:14px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;background:var(--white);color:var(--bg);border:none;padding:18px;cursor:pointer;width:100%;margin-top:24px;border-radius:2px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.gen-btn:hover{background:#e8e8e8}
+.gen-btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* ── OUTPUT ── */
+.output-wrap{margin-top:16px;display:none}
+.output-wrap.show{display:block}
+.output-card{background:var(--surface);border:1px solid var(--border2);padding:28px;border-radius:2px}
+.output-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--purple3);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.output-label::before{content:'';width:20px;height:1px;background:var(--purple2)}
+.output-text{font-size:14px;color:var(--t1);line-height:1.75;white-space:pre-wrap}
+.output-actions{display:flex;gap:10px;margin-top:20px}
+.copy-btn,.regen-btn{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:10px 20px;border-radius:2px;cursor:pointer;transition:all .2s}
+.copy-btn{background:var(--white);color:var(--bg);border:none}
+.copy-btn:hover{background:#e8e8e8}
+.regen-btn{background:transparent;color:var(--t2);border:1px solid var(--border2)}
+.regen-btn:hover{border-color:var(--t2);color:var(--t1)}
+
+/* ── LOADING ── */
+.loading{display:none;padding:28px;background:var(--surface);border:1px solid var(--border);border-radius:2px;margin-top:16px}
+.loading.show{display:block}
+.ld-label{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);margin-bottom:12px}
+.ld-bar{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin-bottom:12px}
+.ld-fill{height:100%;width:35%;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3));animation:ldslide 1.6s ease-in-out infinite;border-radius:1px}
+@keyframes ldslide{0%{margin-left:-35%}100%{margin-left:100%}}
+.ld-dots{display:flex;gap:6px}
+.ld-dot{width:4px;height:4px;border-radius:50%;animation:lddot 1.2s ease-in-out infinite}
+.ld-dot:nth-child(1){background:var(--green);animation-delay:0s}
+.ld-dot:nth-child(2){background:var(--purple2);animation-delay:.2s}
+.ld-dot:nth-child(3){background:var(--purple3);animation-delay:.4s}
+@keyframes lddot{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+
+/* ── CALENDAR ── */
+.cal-grid{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.cal-day{background:var(--surface);border:1px solid var(--border);padding:20px 24px;border-radius:2px;border-left:3px solid var(--purple)}
+.cal-day-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-day-name{font-family:var(--display);font-size:16px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--white)}
+.cal-day-time{font-family:var(--mono);font-size:9px;color:var(--purple3);letter-spacing:.1em}
+.cal-day-type{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.25);color:var(--purple3);border-radius:100px}
+.cal-day-content{font-size:13px;color:var(--t2);line-height:1.6}
+.cal-day-why{font-size:12px;color:var(--t3);margin-top:8px;font-style:italic}
+.cal-copy-row{margin-top:16px}
+
+/* ── HISTORY PANEL ── */
+.history-list{display:flex;flex-direction:column;gap:12px;margin-top:24px}
+.history-item{background:var(--surface);border:1px solid var(--border);padding:20px 24px;border-radius:2px;cursor:pointer;transition:border-color .2s}
+.history-item:hover{border-color:var(--border2)}
+.history-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.history-tool{font-family:var(--mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;padding:4px 10px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);color:var(--purple3);border-radius:100px}
+.history-date{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.05em}
+.history-preview{font-size:13px;color:var(--t2);line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.history-empty{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:.1em;text-align:center;padding:48px 0}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border:1px solid var(--border2);padding:32px;max-width:560px;width:calc(100% - 48px);border-radius:2px;position:relative;max-height:80vh;overflow-y:auto}
+.modal-close{position:absolute;top:20px;right:20px;font-family:var(--mono);font-size:10px;color:var(--t3);background:none;border:none;cursor:pointer;letter-spacing:.1em}
+.modal-close:hover{color:var(--t1)}
+.modal-tool{font-family:var(--mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--purple3);margin-bottom:12px}
+.modal-text{font-size:14px;color:var(--t1);line-height:1.75;white-space:pre-wrap}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--surface2);border:1px solid var(--border2);color:var(--t1);font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:12px 24px;border-radius:2px;opacity:0;transition:all .3s;pointer-events:none;z-index:9999;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:640px){
+  .app-content{padding:32px 20px}
+  .app-header{padding:0 20px}
+  .app-nav{padding:0 20px}
+  .form-section{padding:24px}
+  .usage-badge{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen" class="screen active">
+  <div class="auth-bg"></div>
+  <div class="auth-grid"></div>
+  <div class="auth-card">
+    <div class="auth-logo">PURX</div>
+    <div class="auth-tagline">Creator Intelligence</div>
+    <div class="auth-tabs">
+      <button class="auth-tab on" onclick="switchTab('login')">Sign in</button>
+      <button class="auth-tab" onclick="switchTab('signup')">Create account</button>
+    </div>
+    <div id="login-form" class="auth-form">
+      <div class="field-wrap">
+        <div class="field-label">Email</div>
+        <input class="auth-input" id="login-email" type="email" placeholder="you@email.com" autocomplete="email">
+      </div>
+      <div class="field-wrap">
+        <div class="field-label">Password</div>
+        <input class="auth-input" id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="auth-btn" id="login-btn" onclick="handleLogin()">Sign in →</button>
+      <div class="auth-msg" id="login-msg"></div>
+    </div>
+    <div id="signup-form" class="auth-form hidden">
+      <div class="field-wrap">
+        <div class="field-label">Email</div>
+        <input class="auth-input" id="signup-email" type="email" placeholder="you@email.com" autocomplete="email">
+      </div>
+      <div class="field-wrap">
+        <div class="field-label">Password</div>
+        <input class="auth-input" id="signup-pass" type="password" placeholder="Min 6 characters" autocomplete="new-password">
+      </div>
+      <button class="auth-btn" id="signup-btn" onclick="handleSignup()">Create account →</button>
+      <div class="auth-msg" id="signup-msg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP SCREEN -->
+<div id="app-screen" class="screen">
+  <header class="app-header">
+    <div class="header-logo">PURX</div>
+    <div class="header-right">
+      <div class="usage-badge" id="usage-badge">— generations</div>
+      <div class="header-user" id="user-email-display"></div>
+      <button class="signout-btn" onclick="handleSignout()">Sign out</button>
+    </div>
+  </header>
+
+  <nav class="app-nav">
+    <button class="nav-btn on" onclick="showSection('dashboard')">Dashboard</button>
+    <button class="nav-btn" onclick="showSection('caption')">Captions</button>
+    <button class="nav-btn" onclick="showSection('hook')">Hooks</button>
+    <button class="nav-btn" onclick="showSection('hashtag')">Hashtags</button>
+    <button class="nav-btn" onclick="showSection('calendar')">Calendar</button>
+    <button class="nav-btn" onclick="showSection('history')">History</button>
+  </nav>
+
+  <main class="app-content">
+
+    <!-- DASHBOARD -->
+    <section id="sec-dashboard">
+      <div class="dash-hero">
+        <div class="dash-greeting" id="dash-greeting">Welcome back</div>
+        <div class="dash-headline">What are<br>we building<br>today?</div>
+        <div class="dash-sub">Four AI-powered tools built for creators who are serious about growth. Pick a tool and let's get to work.</div>
+      </div>
+      <div class="dash-stats">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-total">0</div>
+          <div class="stat-label">Total generations</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-captions">0</div>
+          <div class="stat-label">Captions made</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-hooks">0</div>
+          <div class="stat-label">Hooks written</div>
+        </div>
+      </div>
+      <div class="tool-grid">
+        <div class="tool-card" onclick="showSection('caption')">
+          <div class="tool-num">01</div>
+          <div class="tool-name">Caption<br>Generator</div>
+          <div class="tool-desc">AI captions built around your niche, goal, and content — never generic.</div>
+          <div class="tool-arrow">→</div>
+        </div>
+        <div class="tool-card" onclick="showSection('hook')">
+          <div class="tool-num">02</div>
+          <div class="tool-name">Hook<br>Generator</div>
+          <div class="tool-desc">5 scroll-stopping opening lines for your next reel. Made to hold attention.</div>
+          <div class="tool-arrow">→</div>
+        </div>
+        <div class="tool-card" onclick="showSection('hashtag')">
+          <div class="tool-num">03</div>
+          <div class="tool-name">Hashtag<br>Strategy</div>
+          <div class="tool-desc">15 hashtags across broad, mid-tier, and niche — strategically tiered for reach.</div>
+          <div class="tool-arrow">→</div>
+        </div>
+        <div class="tool-card" onclick="showSection('calendar')">
+          <div class="tool-num">04</div>
+          <div class="tool-name">Content<br>Calendar</div>
+          <div class="tool-desc">Your full week mapped out — what to post, when, and why it works.</div>
+          <div class="tool-arrow">→</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CAPTION TOOL -->
+    <section id="sec-caption" class="tool-panel">
+      <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
+      <div class="panel-title">Caption<br>Generator</div>
+      <div class="panel-sub">01 — AI captions built for your niche</div>
+      <div class="form-section">
+        <label class="form-label">Your niche</label>
+        <div class="pill-row" id="cap-niche-pills">
+          <button class="pill on" data-val="lifestyle">Lifestyle</button>
+          <button class="pill" data-val="fashion">Fashion</button>
+          <button class="pill" data-val="cars">Cars</button>
+          <button class="pill" data-val="motivation">Motivation</button>
+          <button class="pill" data-val="fitness">Fitness</button>
+          <button class="pill" data-val="business">Business</button>
+        </div>
+        <label class="form-label">Your goal</label>
+        <div class="pill-row" id="cap-goal-pills">
+          <button class="pill on" data-val="grow followers">Grow followers</button>
+          <button class="pill" data-val="drive engagement">Drive engagement</button>
+          <button class="pill" data-val="build personal brand">Build brand</button>
+          <button class="pill" data-val="go viral">Go viral</button>
+        </div>
+        <label class="form-label">Describe your post (optional)</label>
+        <textarea class="form-textarea" id="cap-brief" placeholder="e.g. Me leaning on my C8 at sunset, going for a clean luxury vibe..."></textarea>
+        <button class="gen-btn" id="cap-btn" onclick="runTool('caption')">Generate Caption →</button>
+      </div>
+      <div class="loading" id="cap-loading">
+        <div class="ld-label">Generating your caption</div>
+        <div class="ld-bar"><div class="ld-fill"></div></div>
+        <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+      </div>
+      <div class="output-wrap" id="cap-output">
+        <div class="output-card">
+          <div class="output-label">Your caption</div>
+          <div class="output-text" id="cap-text"></div>
+          <div class="output-actions">
+            <button class="copy-btn" onclick="copyOutput('cap-text')">Copy</button>
+            <button class="regen-btn" onclick="runTool('caption')">Regenerate</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOOK TOOL -->
+    <section id="sec-hook" class="tool-panel">
+      <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
+      <div class="panel-title">Hook<br>Generator</div>
+      <div class="panel-sub">02 — 5 scroll-stopping opening lines</div>
+      <div class="form-section">
+        <label class="form-label">Your niche</label>
+        <div class="pill-row" id="hook-niche-pills">
+          <button class="pill on" data-val="lifestyle">Lifestyle</button>
+          <button class="pill" data-val="fashion">Fashion</button>
+          <button class="pill" data-val="cars">Cars</button>
+          <button class="pill" data-val="motivation">Motivation</button>
+          <button class="pill" data-val="fitness">Fitness</button>
+          <button class="pill" data-val="business">Business</button>
+        </div>
+        <label class="form-label">Reel concept</label>
+        <textarea class="form-textarea" id="hook-brief" placeholder="e.g. Showing my morning routine before work, want it to feel aspirational but real..."></textarea>
+        <label class="form-label">Hook style</label>
+        <div class="pill-row" id="hook-style-pills">
+          <button class="pill on" data-val="bold statement">Bold statement</button>
+          <button class="pill" data-val="question">Question</button>
+          <button class="pill" data-val="controversial">Controversial</button>
+          <button class="pill" data-val="storytime">Storytime</button>
+        </div>
+        <button class="gen-btn" id="hook-btn" onclick="runTool('hook')">Generate 5 Hooks →</button>
+      </div>
+      <div class="loading" id="hook-loading">
+        <div class="ld-label">Writing your hooks</div>
+        <div class="ld-bar"><div class="ld-fill"></div></div>
+        <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+      </div>
+      <div class="output-wrap" id="hook-output">
+        <div class="output-card">
+          <div class="output-label">Your hooks</div>
+          <div class="output-text" id="hook-text"></div>
+          <div class="output-actions">
+            <button class="copy-btn" onclick="copyOutput('hook-text')">Copy all</button>
+            <button class="regen-btn" onclick="runTool('hook')">Regenerate</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HASHTAG TOOL -->
+    <section id="sec-hashtag" class="tool-panel">
+      <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
+      <div class="panel-title">Hashtag<br>Strategy</div>
+      <div class="panel-sub">03 — 15 tags, strategically tiered</div>
+      <div class="form-section">
+        <label class="form-label">Your niche</label>
+        <div class="pill-row" id="ht-niche-pills">
+          <button class="pill on" data-val="lifestyle">Lifestyle</button>
+          <button class="pill" data-val="fashion">Fashion</button>
+          <button class="pill" data-val="cars">Cars</button>
+          <button class="pill" data-val="motivation">Motivation</button>
+          <button class="pill" data-val="fitness">Fitness</button>
+          <button class="pill" data-val="business">Business</button>
+        </div>
+        <label class="form-label">Post description</label>
+        <textarea class="form-textarea" id="ht-brief" placeholder="e.g. Outfit post at a car meet, mixing streetwear with luxury..."></textarea>
+        <button class="gen-btn" id="ht-btn" onclick="runTool('hashtag')">Generate Strategy →</button>
+      </div>
+      <div class="loading" id="ht-loading">
+        <div class="ld-label">Building your hashtag strategy</div>
+        <div class="ld-bar"><div class="ld-fill"></div></div>
+        <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+      </div>
+      <div class="output-wrap" id="ht-output">
+        <div class="output-card">
+          <div class="output-label">Your strategy</div>
+          <div class="output-text" id="ht-text"></div>
+          <div class="output-actions">
+            <button class="copy-btn" onclick="copyOutput('ht-text')">Copy all</button>
+            <button class="regen-btn" onclick="runTool('hashtag')">Regenerate</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDAR TOOL -->
+    <section id="sec-calendar" class="tool-panel">
+      <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
+      <div class="panel-title">Content<br>Calendar</div>
+      <div class="panel-sub">04 — Your full week mapped out</div>
+      <div class="form-section">
+        <label class="form-label">Your niche</label>
+        <div class="pill-row" id="cal-niche-pills">
+          <button class="pill on" data-val="lifestyle">Lifestyle</button>
+          <button class="pill" data-val="fashion">Fashion</button>
+          <button class="pill" data-val="cars">Cars</button>
+          <button class="pill" data-val="motivation">Motivation</button>
+          <button class="pill" data-val="fitness">Fitness</button>
+          <button class="pill" data-val="business">Business</button>
+        </div>
+        <label class="form-label">Weekly goal</label>
+        <div class="pill-row" id="cal-goal-pills">
+          <button class="pill on" data-val="grow reach and followers">Grow reach</button>
+          <button class="pill" data-val="maximize engagement">Max engagement</button>
+          <button class="pill" data-val="build brand authority">Build authority</button>
+          <button class="pill" data-val="go viral">Go viral</button>
+        </div>
+        <label class="form-label">Content theme or upcoming ideas (optional)</label>
+        <textarea class="form-textarea" id="cal-brief" placeholder="e.g. Want to mix car content, outfit videos, and a motivational reel this week..."></textarea>
+        <button class="gen-btn" id="cal-btn" onclick="runTool('calendar')">Build My Week →</button>
+      </div>
+      <div class="loading" id="cal-loading">
+        <div class="ld-label">Building your content calendar</div>
+        <div class="ld-bar"><div class="ld-fill"></div></div>
+        <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+      </div>
+      <div class="output-wrap" id="cal-output">
+        <div class="cal-grid" id="cal-days"></div>
+        <div class="cal-copy-row" id="cal-copy-row" style="display:none">
+          <button class="copy-btn" onclick="copyCalendar()">Copy full calendar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="sec-history" class="tool-panel">
+      <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
+      <div class="panel-title">History</div>
+      <div class="panel-sub">Your past generations</div>
+      <div class="history-list" id="history-list">
+        <div class="history-empty">No generations yet. Start creating!</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- HISTORY MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕ close</button>
+    <div class="modal-tool" id="modal-tool"></div>
+    <div class="modal-text" id="modal-text"></div>
+    <div class="modal-actions">
+      <button class="copy-btn" onclick="copyModal()">Copy</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── CONFIG ──
+// Replace with your deployed Cloudflare Worker URL
+const WORKER_URL = 'https://purx-api.elijahfisher51.workers.dev';
+
+// ── SUPABASE ──
+const { createClient } = supabase;
+const sb = createClient(
+  'https://osdhqvvlzngdcmmhyubh.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zZGhxdnZsem5nZGNtbWh5dWJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MDg2MDAsImV4cCI6MjA5MjQ4NDYwMH0.FvHxJeNCZ7DA6So_3veiAzzAPbBSPTEEtMM7-tdcACQ'
+);
+
+// ── STATE ──
+let currentUser = null;
+let generationsCache = [];
+
+// ── AUTH STATE ──
+sb.auth.onAuthStateChange((event, session) => {
+  currentUser = session?.user ?? null;
+  if (currentUser) showApp();
+  else showAuth();
+});
+
+sb.auth.getSession().then(({ data: { session } }) => {
+  currentUser = session?.user ?? null;
+  if (currentUser) showApp(); else showAuth();
+});
+
+function showApp() {
+  document.getElementById('auth-screen').classList.remove('active');
+  document.getElementById('app-screen').classList.add('active');
+  document.getElementById('user-email-display').textContent = currentUser?.email || '';
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('dash-greeting').textContent = greeting;
+  showSection('dashboard');
+  loadStats();
+}
+
+function showAuth() {
+  document.getElementById('app-screen').classList.remove('active');
+  document.getElementById('auth-screen').classList.add('active');
+}
+
+// ── AUTH ──
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('on',(i===0&&tab==='login')||(i===1&&tab==='signup')));
+  document.getElementById('login-form').classList.toggle('hidden', tab!=='login');
+  document.getElementById('signup-form').classList.toggle('hidden', tab!=='signup');
+}
+
+async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const btn = document.getElementById('login-btn');
+  const msg = document.getElementById('login-msg');
+  if (!email||!pass){msg.className='auth-msg err';msg.textContent='Enter email and password.';return;}
+  btn.disabled=true;btn.textContent='Signing in...';
+  const {error} = await sb.auth.signInWithPassword({email,password:pass});
+  if(error){msg.className='auth-msg err';msg.textContent=error.message;btn.disabled=false;btn.textContent='Sign in →';}
+  else{msg.className='auth-msg ok';msg.textContent='Signed in!';}
+}
+
+async function handleSignup() {
+  const email = document.getElementById('signup-email').value.trim();
+  const pass = document.getElementById('signup-pass').value;
+  const btn = document.getElementById('signup-btn');
+  const msg = document.getElementById('signup-msg');
+  if(!email||!pass){msg.className='auth-msg err';msg.textContent='Enter email and password.';return;}
+  if(pass.length<6){msg.className='auth-msg err';msg.textContent='Password must be 6+ characters.';return;}
+  btn.disabled=true;btn.textContent='Creating account...';
+  const {error} = await sb.auth.signUp({email,password:pass});
+  if(error){msg.className='auth-msg err';msg.textContent=error.message;btn.disabled=false;btn.textContent='Create account →';}
+  else{msg.className='auth-msg ok';msg.textContent='Check your email to confirm, then sign in.';btn.textContent='Done ✓';}
+}
+
+async function handleSignout() {
+  await sb.auth.signOut();
+}
+
+document.addEventListener('keydown', e => {
+  if(e.key==='Enter'){
+    const lf=document.getElementById('login-form');
+    const sf=document.getElementById('signup-form');
+    if(!lf.classList.contains('hidden'))handleLogin();
+    else if(!sf.classList.contains('hidden'))handleSignup();
+  }
+});
+
+// ── NAV ──
+function showSection(id) {
+  document.querySelectorAll('.app-content section').forEach(s=>s.style.display='none');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
+  const sections=['dashboard','caption','hook','hashtag','calendar','history'];
+  const idx=sections.indexOf(id);
+  const sec=document.getElementById('sec-'+id);
+  if(sec)sec.style.display='block';
+  const navBtns=document.querySelectorAll('.nav-btn');
+  if(navBtns[idx])navBtns[idx].classList.add('on');
+  window.scrollTo(0,0);
+  if(id==='history')loadHistory();
+}
+
+// ── PILLS ──
+document.querySelectorAll('.pill-row').forEach(row=>{
+  row.addEventListener('click',e=>{
+    const pill=e.target.closest('.pill');
+    if(!pill)return;
+    row.querySelectorAll('.pill').forEach(p=>p.classList.remove('on'));
+    pill.classList.add('on');
+  });
+});
+
+function getPillVal(rowId){
+  const on=document.querySelector('#'+rowId+' .pill.on');
+  return on?on.dataset.val:'';
+}
+
+// ── SUPABASE HISTORY ──
+async function saveGeneration(tool, content, meta={}) {
+  if(!currentUser)return;
+  try {
+    await sb.from('generations').insert({
+      user_id: currentUser.id,
+      tool,
+      content,
+      meta,
+      created_at: new Date().toISOString()
+    });
+  } catch(e){
+    // Fail silently — don't break the UX if DB write fails
+    console.warn('Could not save generation:', e);
+  }
+}
+
+async function loadStats() {
+  if(!currentUser)return;
+  try {
+    const {data,error} = await sb.from('generations').select('tool').eq('user_id',currentUser.id);
+    if(error||!data)return;
+    generationsCache = data;
+    const total=data.length;
+    const captions=data.filter(r=>r.tool==='caption').length;
+    const hooks=data.filter(r=>r.tool==='hook').length;
+    document.getElementById('stat-total').textContent=total;
+    document.getElementById('stat-captions').textContent=captions;
+    document.getElementById('stat-hooks').textContent=hooks;
+    document.getElementById('usage-badge').textContent=`${total} generations`;
+  } catch(e){console.warn(e);}
+}
+
+async function loadHistory() {
+  if(!currentUser)return;
+  const list=document.getElementById('history-list');
+  list.innerHTML='<div class="history-empty">Loading...</div>';
+  try {
+    const {data,error}=await sb.from('generations')
+      .select('*')
+      .eq('user_id',currentUser.id)
+      .order('created_at',{ascending:false})
+      .limit(50);
+    if(error||!data||data.length===0){
+      list.innerHTML='<div class="history-empty">No generations yet. Start creating!</div>';
+      return;
+    }
+    list.innerHTML='';
+    data.forEach(item=>{
+      const el=document.createElement('div');
+      el.className='history-item';
+      const date=new Date(item.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      const preview=item.content?.substring(0,140)||'';
+      el.innerHTML=`
+        <div class="history-meta">
+          <div class="history-tool">${item.tool}</div>
+          <div class="history-date">${date}</div>
+        </div>
+        <div class="history-preview">${preview}...</div>
+      `;
+      el.onclick=()=>openModal(item.tool,item.content);
+      list.appendChild(el);
+    });
+  } catch(e){
+    list.innerHTML='<div class="history-empty">Could not load history.</div>';
+  }
+}
+
+// ── MODAL ──
+function openModal(tool,text){
+  document.getElementById('modal-tool').textContent=tool;
+  document.getElementById('modal-text').textContent=text;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e){
+  if(!e||e.target.id==='modal-overlay'||e.target.classList.contains('modal-close')){
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+}
+
+function copyModal(){
+  const text=document.getElementById('modal-text').textContent;
+  navigator.clipboard.writeText(text).then(()=>showToast('Copied to clipboard'));
+}
+
+// ── AI TOOLS ──
+const PROMPTS = {
+  caption:(niche,goal,brief)=>
+    `You are PURX, a premium Instagram growth platform. Generate ONE Instagram caption for a ${niche} creator. Goal: ${goal}. Post: "${brief||'premium lifestyle content'}". Style: lowercase, effortless, understated luxury. 1-2 short punchy sentences. Include 3-5 sharp hashtags at the end. Output ONLY the caption — no quotes, no explanation.`,
+  hook:(niche,brief,style)=>
+    `You are PURX. Generate exactly 5 high-retention Reel opening hooks for a ${niche} creator. Style: ${style}. Reel: "${brief||'premium lifestyle content'}". Each hook: punchy, 1-2 sentences max. Number them 1-5. Output hooks only — no intro, no explanation.`,
+  hashtag:(niche,brief)=>
+    `You are PURX. Generate a strategic 15-hashtag set for a ${niche} creator. Post: "${brief||'premium lifestyle content'}". Organize into exactly 3 groups: BROAD (5 tags, 1M+ posts), MID-TIER (5 tags, 100K–1M), NICHE (5 tags, under 100K). Each group on its own line with the label. Output hashtags only.`,
+  calendar:(niche,goal,brief)=>
+    `You are PURX. Build a 7-day Instagram content calendar for a ${niche} creator. Goal: ${goal}. Theme: "${brief||'lifestyle and growth content'}". Return ONLY a JSON array with exactly 7 objects. Each object: "day", "type" (Reel/Carousel/Story), "concept" (1-sentence idea), "time" (e.g. "7:00 PM"), "why" (1-sentence reason). Output ONLY raw JSON — no markdown, no backticks.`
+};
+
+async function callWorker(prompt) {
+  const res = await fetch(WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })
+  });
+  if(!res.ok) throw new Error('Worker error '+res.status);
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error||'Unknown error');
+  return data.text||'';
+}
+
+async function runTool(tool) {
+  const configs = {
+    caption:{
+      getNiche:()=>getPillVal('cap-niche-pills'),
+      getGoal:()=>getPillVal('cap-goal-pills'),
+      getBrief:()=>document.getElementById('cap-brief').value.trim(),
+      getPrompt:(n,g,b)=>PROMPTS.caption(n,g,b),
+      btnId:'cap-btn',loadId:'cap-loading',outId:'cap-output',textId:'cap-text',isCalendar:false
+    },
+    hook:{
+      getNiche:()=>getPillVal('hook-niche-pills'),
+      getGoal:()=>getPillVal('hook-style-pills'),
+      getBrief:()=>document.getElementById('hook-brief').value.trim(),
+      getPrompt:(n,g,b)=>PROMPTS.hook(n,b,g),
+      btnId:'hook-btn',loadId:'hook-loading',outId:'hook-output',textId:'hook-text',isCalendar:false
+    },
+    hashtag:{
+      getNiche:()=>getPillVal('ht-niche-pills'),
+      getGoal:()=>'',
+      getBrief:()=>document.getElementById('ht-brief').value.trim(),
+      getPrompt:(n,g,b)=>PROMPTS.hashtag(n,b),
+      btnId:'ht-btn',loadId:'ht-loading',outId:'ht-output',textId:'ht-text',isCalendar:false
+    },
+    calendar:{
+      getNiche:()=>getPillVal('cal-niche-pills'),
+      getGoal:()=>getPillVal('cal-goal-pills'),
+      getBrief:()=>document.getElementById('cal-brief').value.trim(),
+      getPrompt:(n,g,b)=>PROMPTS.calendar(n,g,b),
+      btnId:'cal-btn',loadId:'cal-loading',outId:'cal-output',textId:null,isCalendar:true
+    }
+  };
+
+  const cfg=configs[tool];
+  const btn=document.getElementById(cfg.btnId);
+  const loading=document.getElementById(cfg.loadId);
+  const output=document.getElementById(cfg.outId);
+
+  btn.disabled=true;
+  loading.classList.add('show');
+  output.classList.remove('show');
+
+  try {
+    const niche=cfg.getNiche();
+    const goal=cfg.getGoal();
+    const brief=cfg.getBrief();
+    const prompt=cfg.getPrompt(niche,goal,brief);
+    const result=await callWorker(prompt);
+
+    if(cfg.isCalendar){
+      renderCalendar(result);
+    } else {
+      document.getElementById(cfg.textId).textContent=result;
+    }
+
+    output.classList.add('show');
+
+    // Save to Supabase
+    await saveGeneration(tool, result, {niche, goal, brief});
+    loadStats();
+
+  } catch(e){
+    showToast('Error generating — check your Worker is deployed.');
+    console.error(e);
+  }
+
+  loading.classList.remove('show');
+  btn.disabled=false;
+}
+
+let lastCalendarData = [];
+
+function renderCalendar(raw) {
+  const container=document.getElementById('cal-days');
+  const copyRow=document.getElementById('cal-copy-row');
+  container.innerHTML='';
+  try {
+    const days=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    lastCalendarData=days;
+    days.forEach(day=>{
+      const el=document.createElement('div');
+      el.className='cal-day';
+      el.innerHTML=`
+        <div class="cal-day-header">
+          <div class="cal-day-name">${day.day}</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="cal-day-time">${day.time}</div>
+            <div class="cal-day-type">${day.type}</div>
+          </div>
+        </div>
+        <div class="cal-day-content">${day.concept}</div>
+        <div class="cal-day-why">${day.why}</div>
+      `;
+      container.appendChild(el);
+    });
+    copyRow.style.display='block';
+  } catch {
+    container.innerHTML=`<div class="output-card"><div class="output-text">${raw}</div></div>`;
+  }
+}
+
+function copyCalendar() {
+  if(!lastCalendarData.length)return;
+  const text=lastCalendarData.map(d=>`${d.day} — ${d.time} — ${d.type}\n${d.concept}\n(${d.why})`).join('\n\n');
+  navigator.clipboard.writeText(text).then(()=>showToast('Calendar copied'));
+}
+
+function copyOutput(id) {
+  const text=document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(()=>showToast('Copied to clipboard'));
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// Init
+showSection('dashboard');
+</script>
+</body>
+</html>
