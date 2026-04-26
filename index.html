@@ -6,6 +6,12 @@
 <title>PURX — Creator Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,800;0,900;1,900&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#060606">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PURX">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -767,6 +773,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
       </div>
       <button class="auth-btn" id="login-btn" onclick="handleLogin()">Sign in →</button>
       <div class="auth-msg" id="login-msg"></div>
+      <button onclick="switchTab('forgot')" style="background:none;border:none;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.1em;cursor:pointer;padding:4px 0;text-align:left;transition:color .2s" onmouseover="this.style.color='var(--t2)'" onmouseout="this.style.color='var(--t3)'">Forgot password?</button>
     </div>
     <div id="signup-form" class="auth-form hidden">
       <div class="field-wrap">
@@ -779,6 +786,15 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
       </div>
       <button class="auth-btn" id="signup-btn" onclick="handleSignup()">Create account →</button>
       <div class="auth-msg" id="signup-msg"></div>
+    </div>
+    <div id="forgot-form" class="auth-form hidden">
+      <div class="field-wrap">
+        <div class="field-label">Email</div>
+        <input class="auth-input" id="forgot-email" type="email" placeholder="you@email.com" autocomplete="email">
+      </div>
+      <button class="auth-btn" id="forgot-btn" onclick="handleForgotPassword()">Send reset link →</button>
+      <div class="auth-msg" id="forgot-msg"></div>
+      <button onclick="switchTab('login')" style="background:none;border:none;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.1em;cursor:pointer;padding:4px 0;transition:color .2s" onmouseover="this.style.color='var(--t2)'" onmouseout="this.style.color='var(--t3)'">← Back to sign in</button>
     </div>
   </div>
 </div>
@@ -802,6 +818,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
     <button class="nav-btn" onclick="showSection('calendar')">Calendar</button>
     <button class="nav-btn" onclick="showSection('history')">History</button>
     <button class="nav-btn nav-checker-btn" onclick="showSection('checker')">Post Checker</button>
+    <button class="nav-btn" onclick="showSection('settings')" style="margin-left:auto">Settings</button>
   </nav>
 
   <main class="app-content">
@@ -1237,13 +1254,58 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
       <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
       <div class="panel-title">History</div>
       <div class="panel-sub">Your past generations</div>
-      <div class="history-list" id="history-list">
-        <div class="history-empty" style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:64px 0">
-          <div style="font-family:var(--display);font-size:48px;font-weight:900;color:var(--t4);letter-spacing:-.02em">0</div>
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3)">No generations yet</div>
-          <div style="font-size:13px;color:var(--t3);text-align:center;max-width:280px;line-height:1.65">Pick any tool from the dashboard and start creating. Everything you generate gets saved here.</div>
-          <button class="copy-btn" style="margin-top:8px;font-size:9px;padding:10px 20px;letter-spacing:.12em" onclick="showSection('dashboard')">Go to Dashboard →</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="history-filters">
+          <button class="pill on" data-tool="all" onclick="filterHistory('all')">All</button>
+          <button class="pill" data-tool="caption" onclick="filterHistory('caption')">Captions</button>
+          <button class="pill" data-tool="hook" onclick="filterHistory('hook')">Hooks</button>
+          <button class="pill" data-tool="hashtag" onclick="filterHistory('hashtag')">Hashtags</button>
+          <button class="pill" data-tool="calendar" onclick="filterHistory('calendar')">Planner</button>
+          <button class="pill" data-tool="checker" onclick="filterHistory('checker')">Checker</button>
         </div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.08em" id="history-count"></div>
+      </div>
+      <div class="history-list" id="history-list">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.1em;text-align:center;padding:48px 0">Loading...</div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="sec-settings" class="tool-panel">
+      <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
+      <div class="panel-title">Settings</div>
+      <div class="panel-sub">Your account and profile</div>
+
+      <div class="form-section" style="margin-bottom:16px">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)">Profile</div>
+        <label class="form-label" style="margin-top:0">Display name</label>
+        <input class="form-input" id="settings-name" placeholder="Your name">
+        <label class="form-label">Instagram handle</label>
+        <input class="form-input" id="settings-handle" placeholder="@yourhandle">
+        <label class="form-label">City</label>
+        <input class="form-input" id="settings-city" placeholder="Tampa">
+        <label class="form-label">State</label>
+        <input class="form-input" id="settings-state" placeholder="Florida">
+        <label class="form-label">Current followers</label>
+        <input class="form-input" id="settings-followers" type="number" placeholder="0">
+        <button class="gen-btn" onclick="saveSettings()" style="margin-top:24px">Save Profile →</button>
+        <div style="font-family:var(--mono);font-size:10px;margin-top:8px;min-height:16px" id="settings-msg"></div>
+      </div>
+
+      <div class="form-section" style="margin-bottom:16px">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)">Change Password</div>
+        <label class="form-label" style="margin-top:0">New password</label>
+        <input class="form-input" id="settings-new-pass" type="password" placeholder="Min 6 characters">
+        <label class="form-label">Confirm new password</label>
+        <input class="form-input" id="settings-confirm-pass" type="password" placeholder="Repeat password">
+        <button class="gen-btn" onclick="changePassword()" style="margin-top:24px">Update Password →</button>
+        <div style="font-family:var(--mono);font-size:10px;margin-top:8px;min-height:16px" id="settings-pass-msg"></div>
+      </div>
+
+      <div class="form-section">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)">Account</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:.06em;margin-bottom:16px" id="settings-email-display"></div>
+        <button onclick="handleSignout()" style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);background:none;border:1px solid rgba(239,68,68,.3);padding:10px 20px;border-radius:2px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='rgba(239,68,68,.3)'">Sign out of PURX</button>
       </div>
     </section>
 
@@ -1415,9 +1477,16 @@ function showAuth() {
 
 // ── AUTH ──
 function switchTab(tab) {
-  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('on',(i===0&&tab==='login')||(i===1&&tab==='signup')));
+  document.querySelectorAll('.auth-tab').forEach((t,i) => {
+    t.classList.toggle('on', (i===0&&tab==='login')||(i===1&&tab==='signup'));
+  });
   document.getElementById('login-form').classList.toggle('hidden', tab!=='login');
   document.getElementById('signup-form').classList.toggle('hidden', tab!=='signup');
+  const ff = document.getElementById('forgot-form');
+  if(ff) ff.classList.toggle('hidden', tab!=='forgot');
+  // Update tagline for forgot flow
+  const tagline = document.querySelector('.auth-tagline');
+  if(tagline) tagline.textContent = tab==='forgot' ? 'Reset your password' : 'Creator Intelligence';
 }
 
 async function handleLogin() {
@@ -1449,6 +1518,90 @@ async function handleSignout() {
   await sb.auth.signOut();
 }
 
+async function saveSettings() {
+  if(!currentUser) return;
+  const btn = event.target;
+  const msg = document.getElementById('settings-msg');
+  const name = document.getElementById('settings-name').value.trim();
+  const handle = document.getElementById('settings-handle').value.trim().replace('@','');
+  const city = document.getElementById('settings-city').value.trim();
+  const state = document.getElementById('settings-state').value.trim();
+  const followers = parseInt(document.getElementById('settings-followers').value) || 0;
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    const {error} = await sb.from('profiles').upsert({
+      user_id: currentUser.id,
+      name, handle, city, state,
+      current_followers: followers,
+      updated_at: new Date().toISOString()
+    }, {onConflict: 'user_id'});
+    if(error) throw error;
+    if(userProfile) Object.assign(userProfile, {name, handle, city, state, current_followers: followers});
+    msg.style.color = 'var(--green)'; msg.textContent = 'Profile saved ✓';
+    applyProfile(userProfile);
+  } catch(e) {
+    msg.style.color = 'var(--red)'; msg.textContent = 'Could not save — try again.';
+  }
+  btn.disabled = false; btn.textContent = 'Save Profile →';
+  setTimeout(() => { msg.textContent = ''; }, 3000);
+}
+
+async function changePassword() {
+  const newPass = document.getElementById('settings-new-pass').value;
+  const confirmPass = document.getElementById('settings-confirm-pass').value;
+  const msg = document.getElementById('settings-pass-msg');
+  const btn = event.target;
+  if(!newPass || newPass.length < 6) { msg.style.color='var(--red)'; msg.textContent='Password must be 6+ characters.'; return; }
+  if(newPass !== confirmPass) { msg.style.color='var(--red)'; msg.textContent='Passwords do not match.'; return; }
+  btn.disabled=true; btn.textContent='Updating...';
+  const {error} = await sb.auth.updateUser({password: newPass});
+  if(error) { msg.style.color='var(--red)'; msg.textContent=error.message; }
+  else {
+    msg.style.color='var(--green)'; msg.textContent='Password updated ✓';
+    document.getElementById('settings-new-pass').value='';
+    document.getElementById('settings-confirm-pass').value='';
+  }
+  btn.disabled=false; btn.textContent='Update Password →';
+  setTimeout(() => { msg.textContent=''; }, 3000);
+}
+
+function loadSettingsForm() {
+  if(!userProfile) return;
+  const fields = {
+    'settings-name': userProfile.name || '',
+    'settings-handle': userProfile.handle || '',
+    'settings-city': userProfile.city || '',
+    'settings-state': userProfile.state || '',
+    'settings-followers': userProfile.current_followers || '',
+  };
+  Object.entries(fields).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if(el) el.value = val;
+  });
+  const emailEl = document.getElementById('settings-email-display');
+  if(emailEl && currentUser) emailEl.textContent = 'Signed in as ' + currentUser.email;
+}
+
+async function handleForgotPassword() {
+  const email = document.getElementById('forgot-email').value.trim();
+  const btn = document.getElementById('forgot-btn');
+  const msg = document.getElementById('forgot-msg');
+  if(!email){ msg.className='auth-msg err'; msg.textContent='Enter your email address.'; return; }
+  btn.disabled=true; btn.textContent='Sending...';
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://purx.live/reset-password'
+  });
+  if(error){
+    msg.className='auth-msg err';
+    msg.textContent = error.message;
+    btn.disabled=false; btn.textContent='Send reset link →';
+  } else {
+    msg.className='auth-msg ok';
+    msg.textContent='Check your email — reset link sent.';
+    btn.textContent='Sent ✓';
+  }
+}
+
 document.addEventListener('keydown', e => {
   if(e.key==='Enter'){
     const lf=document.getElementById('login-form');
@@ -1462,7 +1615,7 @@ document.addEventListener('keydown', e => {
 function showSection(id) {
   document.querySelectorAll('.app-content section').forEach(s=>s.style.display='none');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
-  const sections=['dashboard','caption','hook','hashtag','calendar','history','checker'];
+  const sections=['dashboard','caption','hook','hashtag','calendar','history','checker','settings'];
   const idx=sections.indexOf(id);
   const sec=document.getElementById('sec-'+id);
   if(sec)sec.style.display='block';
@@ -1470,6 +1623,7 @@ function showSection(id) {
   if(navBtns[idx])navBtns[idx].classList.add('on');
   window.scrollTo(0,0);
   if(id==='history')loadHistory();
+  if(id==='settings')loadSettingsForm();
 }
 
 // ── PILLS ──
@@ -1709,38 +1863,109 @@ function handleNextMove() {
   showSection(window._nextMoveTarget || 'caption');
 }
 
+var historyData = [];
+var historyFilter = 'all';
+
 async function loadHistory() {
-  if(!currentUser)return;
-  const list=document.getElementById('history-list');
-  list.innerHTML='<div class="history-empty">Loading...</div>';
+  if(!currentUser) return;
+  const list = document.getElementById('history-list');
+  list.innerHTML = '<div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.1em;text-align:center;padding:48px 0">Loading...</div>';
   try {
-    const {data,error}=await sb.from('generations')
+    const {data, error} = await sb.from('generations')
       .select('*')
-      .eq('user_id',currentUser.id)
-      .order('created_at',{ascending:false})
-      .limit(50);
-    if(error||!data||data.length===0){
-      list.innerHTML='<div class="history-empty">No generations yet. Start creating!</div>';
-      return;
-    }
-    list.innerHTML='';
-    data.forEach(item=>{
-      const el=document.createElement('div');
-      el.className='history-item';
-      const date=new Date(item.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-      const preview=item.content?.substring(0,140)||'';
-      el.innerHTML=`
-        <div class="history-meta">
-          <div class="history-tool">${item.tool}</div>
-          <div class="history-date">${date}</div>
-        </div>
-        <div class="history-preview">${preview}...</div>
-      `;
-      el.onclick=()=>openModal(item.tool,item.content);
-      list.appendChild(el);
-    });
-  } catch(e){
-    list.innerHTML='<div class="history-empty">Could not load history.</div>';
+      .eq('user_id', currentUser.id)
+      .order('created_at', {ascending: false})
+      .limit(100);
+    if(error) throw error;
+    historyData = data || [];
+    renderHistory();
+  } catch(e) {
+    list.innerHTML = '<div style="font-family:var(--mono);font-size:10px;color:var(--t3);text-align:center;padding:48px 0">Could not load history. Try refreshing.</div>';
+  }
+}
+
+function filterHistory(tool) {
+  historyFilter = tool;
+  // Update pill states
+  document.querySelectorAll('#history-filters .pill').forEach(p => {
+    p.classList.toggle('on', p.dataset.tool === tool);
+  });
+  renderHistory();
+}
+
+function renderHistory() {
+  const list = document.getElementById('history-list');
+  const countEl = document.getElementById('history-count');
+  const filtered = historyFilter === 'all' ? historyData : historyData.filter(r => r.tool === historyFilter);
+
+  if(countEl) countEl.textContent = filtered.length + ' item' + (filtered.length !== 1 ? 's' : '');
+
+  if(!filtered.length) {
+    list.innerHTML =
+      '<div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:64px 0">' +
+      '<div style="font-family:var(--display);font-size:48px;font-weight:900;color:var(--t4)">0</div>' +
+      '<div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3)">' +
+      (historyFilter === 'all' ? 'No generations yet' : 'No ' + historyFilter + ' generations') + '</div>' +
+      (historyFilter === 'all' ? '<button class="copy-btn" style="font-size:9px;padding:10px 20px" onclick="showSection(&apos;dashboard&apos;)">Go to Dashboard →</button>' : '') +
+      '</div>';
+    return;
+  }
+
+  list.innerHTML = '';
+  filtered.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'history-item';
+    el.style.cssText = 'position:relative';
+    const date = new Date(item.created_at).toLocaleDateString('en-US', {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    const preview = (item.content || '').substring(0, 120);
+    const toolLabels = {caption:'Caption',hook:'Hook',hashtag:'Hashtags',calendar:'Planner',checker:'Checker'};
+    // Build history item using DOM to avoid quote nesting issues
+    var metaDiv = document.createElement('div');
+    metaDiv.className = 'history-meta';
+    var toolDiv = document.createElement('div');
+    toolDiv.className = 'history-tool';
+    toolDiv.textContent = toolLabels[item.tool] || item.tool;
+    toolDiv.style.cursor = 'pointer';
+    toolDiv.onclick = (function(t,c){ return function(){ openModal(t,c); }; })(item.tool, item.content);
+    var rightDiv = document.createElement('div');
+    rightDiv.style.cssText = 'display:flex;align-items:center;gap:12px';
+    var dateDiv = document.createElement('div');
+    dateDiv.className = 'history-date';
+    dateDiv.textContent = date;
+    var delBtn = document.createElement('button');
+    delBtn.textContent = '✕';
+    delBtn.style.cssText = 'font-family:var(--mono);font-size:8px;color:var(--t3);background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:2px;transition:color .2s';
+    delBtn.onmouseover = function(){ this.style.color='var(--red)'; };
+    delBtn.onmouseout = function(){ this.style.color='var(--t3)'; };
+    delBtn.onclick = (function(id){ return function(){ deleteGeneration(id, this); }; })(item.id);
+    rightDiv.appendChild(dateDiv);
+    rightDiv.appendChild(delBtn);
+    metaDiv.appendChild(toolDiv);
+    metaDiv.appendChild(rightDiv);
+    var previewDiv = document.createElement('div');
+    previewDiv.className = 'history-preview';
+    previewDiv.style.cursor = 'pointer';
+    previewDiv.textContent = preview + (item.content && item.content.length > 120 ? '...' : '');
+    previewDiv.onclick = (function(t,c){ return function(){ openModal(t,c); }; })(item.tool, item.content);
+    el.appendChild(metaDiv);
+    el.appendChild(previewDiv);
+    list.appendChild(el);
+  });
+}
+
+async function deleteGeneration(id, btn) {
+  if(!confirm('Delete this generation?')) return;
+  btn.textContent = '...';
+  try {
+    const {error} = await sb.from('generations').delete().eq('id', id).eq('user_id', currentUser.id);
+    if(error) throw error;
+    historyData = historyData.filter(r => r.id !== id);
+    renderHistory();
+    loadStats();
+    showToast('Deleted');
+  } catch(e) {
+    btn.textContent = '✕';
+    showToast('Could not delete — try again');
   }
 }
 
@@ -1891,7 +2116,35 @@ ACTION SEQUENCE:
 Every hashtag must be real, active, and directly relevant to ${niche} and this specific post. Output only the formatted sections above.`
 };
 
-async function callWorker(prompt) {
+// ── GLOBAL ERROR HANDLER ──
+window.addEventListener('unhandledrejection', function(e) {
+  console.error('Unhandled promise rejection:', e.reason);
+  // Don't show toast for every background error, just log
+});
+
+async function callWorker(prompt, images) {
+  const body = { prompt };
+  if(images && images.length) body.images = images;
+  let res;
+  try {
+    res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  } catch(e) {
+    throw new Error('Network error — check your connection and try again.');
+  }
+  if(!res.ok) {
+    const errText = await res.text().catch(() => 'Unknown error');
+    throw new Error('Server error ' + res.status + ' — ' + errText.substring(0, 100));
+  }
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error || 'Generation failed — please try again.');
+  return data.text || '';
+}
+
+async function callWorker_OLD(prompt) {
   const res = await fetch(WORKER_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -3122,22 +3375,11 @@ async function runChecker() {
     var prompt = buildCheckerPrompt(contentType, goal, profileCtx, niches);
     var b64Images = await Promise.all(checkerFiles.map(function(f){ return fileToBase64(f); }));
 
-    var res = await fetch('https://purx-api.elijahfisher51.workers.dev', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        prompt: prompt,
-        images: b64Images.map(function(b64, i) {
-          return { data: b64, media_type: checkerFiles[i].type || 'image/jpeg' };
-        })
-      })
+    var images = b64Images.map(function(b64, i) {
+      return { data: b64, media_type: checkerFiles[i].type || 'image/jpeg' };
     });
-
-    if (!res.ok) throw new Error('Worker error ' + res.status);
-    var data = await res.json();
-    if (!data.ok) throw new Error(data.error || 'Unknown error');
-
-    renderCheckerOutput(data.text || '', output);
+    var resultText = await callWorker(prompt, images);
+    renderCheckerOutput(resultText, output);
     output.style.display = 'block';
     setTimeout(function(){ output.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
     await saveGeneration('checker', data.text || '', { contentType: contentType, goal: goal });
