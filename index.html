@@ -917,13 +917,13 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
           <button class="pill" data-val="Carousel">Carousel</button>
           <button class="pill" data-val="Story">Story</button>
         </div>
-        <label class="form-label">Upload your content screenshots (up to 3)</label>
+        <label class="form-label">Upload your content screenshots</label>
         <div id="chk-drop-zone" class="chk-drop-zone" onclick="document.getElementById('chk-file-input').click()">
           <div class="chk-drop-icon">↑</div>
           <div class="chk-drop-text">Click to upload screenshots</div>
-          <div class="chk-drop-sub">PNG or JPG — up to 3 images</div>
+          <div class="chk-drop-sub">PNG or JPG — unlimited images supported</div>
         </div>
-        <input type="file" id="chk-file-input" accept="image/png,image/jpeg,image/jpg" multiple style="display:none" onchange="handleCheckerFiles(this.files)">
+        <input type="file" id="chk-file-input" accept="image/*" multiple style="display:none" onchange="handleCheckerFiles(this.files)">
         <div id="chk-previews" class="chk-previews"></div>
         <label class="form-label">What are you trying to achieve? (optional)</label>
         <textarea class="form-textarea" id="chk-goal" placeholder="e.g. Grow reach, drive profile visits, get saves..."></textarea>
@@ -2470,7 +2470,7 @@ function getProfileContext() {
 var checkerFiles = [];
 
 function handleCheckerFiles(files) {
-  var arr = Array.from(files).slice(0, 3);
+  var arr = Array.from(files);
   checkerFiles = arr;
   var previews = document.getElementById('chk-previews');
   var dropZone = document.getElementById('chk-drop-zone');
@@ -2608,13 +2608,21 @@ async function runChecker() {
 
 function renderCheckerOutput(raw, container) {
   var lines = raw.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
-  var grade = getSectionContent(lines, 'GRADE:', ['VERDICT:','SUMMARY:']);
-  var verdict = getSectionContent(lines, 'VERDICT:', ['SUMMARY:','WHAT IS WORKING:']);
-  var summary = getSectionContent(lines, 'SUMMARY:', ['WHAT IS WORKING:','WHAT IS WEAK:']);
-  var working = getSectionContent(lines, 'WHAT IS WORKING:', ['WHAT IS WEAK:','HOW TO BOOST YOUR GRADE:']);
-  var weak = getSectionContent(lines, 'WHAT IS WEAK:', ['HOW TO BOOST YOUR GRADE:','POST READINESS:']);
-  var boost = getSectionContent(lines, 'HOW TO BOOST YOUR GRADE:', ['POST READINESS:']);
-  var readiness = getSectionContent(lines, 'POST READINESS:', []);
+  // Flexible label matching - handles variations in Claude output
+  function flexGet(labels, nextGroups) {
+    for (var li = 0; li < labels.length; li++) {
+      var val = getSectionContent(lines, labels[li], nextGroups);
+      if (val && val.trim()) return val.trim();
+    }
+    return '';
+  }
+  var grade = flexGet(['GRADE:','**GRADE:**','Grade:'], ['VERDICT:','SUMMARY:','**VERDICT']);
+  var verdict = flexGet(['VERDICT:','**VERDICT:**','Verdict:'], ['SUMMARY:','WHAT IS WORKING:','**SUMMARY']);
+  var summary = flexGet(['SUMMARY:','**SUMMARY:**','Summary:'], ['WHAT IS WORKING:','WHAT IS WEAK:']);
+  var working = flexGet(['WHAT IS WORKING:','**WHAT IS WORKING:**','What Is Working:'], ['WHAT IS WEAK:','HOW TO BOOST']);
+  var weak = flexGet(['WHAT IS WEAK:','**WHAT IS WEAK:**','What Is Weak:'], ['HOW TO BOOST','POST READINESS:']);
+  var boost = flexGet(['HOW TO BOOST YOUR GRADE:','**HOW TO BOOST','How to Boost'], ['POST READINESS:','**POST READINESS']);
+  var readiness = flexGet(['POST READINESS:','**POST READINESS:**','Post Readiness:'], []);
 
   grade = grade.replace(/[^A-Fa-f]/g, '').toUpperCase().charAt(0) || 'C';
   var gradeClass = 'grade-' + grade.toLowerCase();
