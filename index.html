@@ -589,6 +589,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
     <button class="nav-btn" onclick="showSection('hashtag')">Hashtags</button>
     <button class="nav-btn" onclick="showSection('calendar')">Calendar</button>
     <button class="nav-btn" onclick="showSection('history')">History</button>
+    <button class="nav-btn" onclick="showSection('checker')">Post Checker</button>
   </nav>
 
   <main class="app-content">
@@ -626,6 +627,12 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
           <div class="tool-num">04</div>
           <div class="tool-name">Content<br>Planner</div>
           <div class="tool-desc">Your full week mapped out — what to post, when, and why it works.</div>
+          <div class="tool-arrow">→</div>
+        </div>
+        <div class="tool-card" onclick="showSection('checker')" style="grid-column:1/-1">
+          <div class="tool-num">05</div>
+          <div class="tool-name">Pre-Post<br>Checker</div>
+          <div class="tool-desc">Upload your content before posting. Get a grade, a breakdown, and exactly what to fix to maximize reach before you hit publish.</div>
           <div class="tool-arrow">→</div>
         </div>
       </div>
@@ -827,6 +834,39 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
           <button class="copy-btn" onclick="copyPlannerText()">Copy full calendar</button>
         </div>
       </div>
+    </section>
+
+    <!-- CHECKER TOOL -->
+    <section id="sec-checker" class="tool-panel">
+      <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
+      <div class="panel-title">Pre-Post<br>Checker</div>
+      <div class="panel-sub">05 — Grade your content before you post it</div>
+      <div class="form-section">
+        <label class="form-label">Content type</label>
+        <div class="pill-row" id="chk-type-pills">
+          <button class="pill on" data-val="Reel">Reel</button>
+          <button class="pill" data-val="Post">Post / Photo</button>
+          <button class="pill" data-val="Carousel">Carousel</button>
+          <button class="pill" data-val="Story">Story</button>
+        </div>
+        <label class="form-label">Upload your content (1-3 screenshots)</label>
+        <div id="chk-drop-zone" class="chk-drop-zone" onclick="document.getElementById('chk-file-input').click()">
+          <div class="chk-drop-icon">↑</div>
+          <div class="chk-drop-text">Click to upload screenshots</div>
+          <div class="chk-drop-sub">PNG, JPG — up to 3 images</div>
+        </div>
+        <input type="file" id="chk-file-input" accept="image/*" multiple style="display:none" onchange="handleCheckerFiles(this.files)">
+        <div id="chk-previews" class="chk-previews"></div>
+        <label class="form-label">What are you trying to achieve with this post? (optional)</label>
+        <textarea class="form-textarea" id="chk-goal" placeholder="e.g. Grow reach, drive profile visits, get saves, promote my service..."></textarea>
+        <button class="gen-btn" id="chk-btn" onclick="runChecker()">Grade My Content →</button>
+      </div>
+      <div class="loading" id="chk-loading">
+        <div class="ld-label">Analyzing your content</div>
+        <div class="ld-bar"><div class="ld-fill"></div></div>
+        <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+      </div>
+      <div id="chk-output" style="display:none;margin-top:16px"></div>
     </section>
 
     <!-- HISTORY -->
@@ -1045,7 +1085,7 @@ document.addEventListener('keydown', e => {
 function showSection(id) {
   document.querySelectorAll('.app-content section').forEach(s=>s.style.display='none');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
-  const sections=['dashboard','caption','hook','hashtag','calendar','history'];
+  const sections=['dashboard','caption','hook','hashtag','calendar','history','checker'];
   const idx=sections.indexOf(id);
   const sec=document.getElementById('sec-'+id);
   if(sec)sec.style.display='block';
@@ -2370,6 +2410,181 @@ function getProfileContext() {
   if (level) ctx += 'Creator level: ' + level + '. ';
   if (followers) ctx += 'Current followers: ' + followers.toLocaleString() + '. ';
   return ctx;
+}
+
+
+// ── PRE-POST CHECKER ──
+var checkerFiles = [];
+
+function handleCheckerFiles(files) {
+  var arr = Array.from(files).slice(0, 3);
+  checkerFiles = arr;
+  var previews = document.getElementById('chk-previews');
+  var dropZone = document.getElementById('chk-drop-zone');
+  previews.innerHTML = '';
+  arr.forEach(function(file, i) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var item = document.createElement('div');
+      item.className = 'chk-preview-item';
+      item.innerHTML = '<img src="' + e.target.result + '"><button class="chk-preview-remove" onclick="removeCheckerFile(' + i + ')">x</button>';
+      previews.appendChild(item);
+    };
+    reader.readAsDataURL(file);
+  });
+  if (arr.length > 0) dropZone.classList.add('has-files');
+}
+
+function removeCheckerFile(idx) {
+  checkerFiles.splice(idx, 1);
+  handleCheckerFiles(checkerFiles);
+}
+
+async function fileToBase64(file) {
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function(e) { resolve(e.target.result.split(',')[1]); };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function buildCheckerPrompt(contentType, goal, profileCtx, niches) {
+  var lines = [
+    "You are PURX, an elite Instagram content strategist and visual analyst. Grade this content BEFORE the creator posts it.",
+    "",
+    "CREATOR PROFILE: " + (profileCtx || "A serious Instagram creator"),
+    "CONTENT TYPE: " + contentType,
+    goal ? "POSTING GOAL: " + goal : "",
+    "",
+    "Analyze the attached screenshot(s) and grade this " + contentType + " on:",
+    "- Hook strength: Does the first frame stop the scroll?",
+    "- Visual quality: Lighting, composition, clarity, aesthetic",
+    "- Text and overlays: Readable, well-placed, compelling?",
+    "- Niche alignment: Authentic to the " + niches + " space?",
+    "- Algorithmic signals: Will this earn saves, shares, or comments?",
+    "- Overall post readiness",
+    "",
+    "Respond with EXACTLY these labeled sections:",
+    "",
+    "GRADE: [A, B, C, D, or F]",
+    "",
+    "VERDICT: [One punchy sentence on whether this is ready]",
+    "",
+    "SUMMARY: [2-3 sentences honest overall assessment]",
+    "",
+    "WHAT IS WORKING:",
+    "[3-5 specific things done well based on what you see]",
+    "",
+    "WHAT IS WEAK:",
+    "[3-5 specific issues holding this back - be direct]",
+    "",
+    "HOW TO BOOST YOUR GRADE:",
+    "[5 specific actionable fixes ranked by impact, each on its own line starting with a number]",
+    "",
+    "POST READINESS: [READY TO POST / NEEDS MINOR FIXES / DO NOT POST YET]",
+    "",
+    "Be honest. A paying creator needs real feedback, not encouragement."
+  ];
+  return lines.filter(function(l){ return l !== null; }).join("\n");
+}
+
+async function runChecker() {
+  if (checkerFiles.length === 0) {
+    showToast('Upload at least one screenshot first');
+    return;
+  }
+
+  var btn = document.getElementById('chk-btn');
+  var loading = document.getElementById('chk-loading');
+  var output = document.getElementById('chk-output');
+  var contentType = getPillVal('chk-type-pills') || 'Post';
+  var goal = document.getElementById('chk-goal').value.trim();
+
+  btn.disabled = true;
+  loading.classList.add('show');
+  output.style.display = 'none';
+  output.innerHTML = '';
+
+  try {
+    var profileCtx = getProfileContext();
+    var niches = userProfile ? (userProfile.niches || []).join(' and ') : 'lifestyle';
+    var prompt = buildCheckerPrompt(contentType, goal, profileCtx, niches);
+
+    var b64Images = await Promise.all(checkerFiles.map(function(f){ return fileToBase64(f); }));
+
+    var res = await fetch('https://purx-api.elijahfisher51.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: prompt,
+        images: b64Images.map(function(b64, i) {
+          return { data: b64, media_type: checkerFiles[i].type || 'image/jpeg' };
+        })
+      })
+    });
+
+    if (!res.ok) throw new Error('Worker error ' + res.status);
+    var data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Unknown error');
+
+    renderCheckerOutput(data.text || '', output);
+    output.style.display = 'block';
+
+    await saveGeneration('checker', data.text || '', { contentType: contentType, goal: goal });
+    loadStats();
+
+  } catch(e) {
+    showToast('Error analyzing content - please try again');
+    console.error('Checker error:', e);
+  }
+
+  loading.classList.remove('show');
+  btn.disabled = false;
+}
+
+function renderCheckerOutput(raw, container) {
+  var lines = raw.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
+
+  var grade = getSectionContent(lines, 'GRADE:', ['VERDICT:','SUMMARY:','WHAT IS WORKING:']);
+  var verdict = getSectionContent(lines, 'VERDICT:', ['SUMMARY:','WHAT IS WORKING:']);
+  var summary = getSectionContent(lines, 'SUMMARY:', ['WHAT IS WORKING:','WHAT IS WEAK:']);
+  var working = getSectionContent(lines, 'WHAT IS WORKING:', ['WHAT IS WEAK:','HOW TO BOOST YOUR GRADE:']);
+  var weak = getSectionContent(lines, 'WHAT IS WEAK:', ['HOW TO BOOST YOUR GRADE:','POST READINESS:']);
+  var boost = getSectionContent(lines, 'HOW TO BOOST YOUR GRADE:', ['POST READINESS:']);
+  var readiness = getSectionContent(lines, 'POST READINESS:', []);
+
+  grade = grade.replace(/[^A-Fa-f]/g, '').toUpperCase().charAt(0) || 'C';
+  var gradeClass = 'grade-' + grade.toLowerCase();
+
+  var readinessColor = 'amber';
+  var readUp = readiness.toUpperCase();
+  if (readUp.indexOf('READY TO POST') === 0 || readUp === 'READY TO POST') readinessColor = 'green';
+  if (readUp.indexOf('DO NOT POST') !== -1) readinessColor = 'red';
+
+  container.innerHTML =
+    '<div class="chk-grade-hero">' +
+      '<div class="chk-grade-circle ' + gradeClass + '">' +
+        '<div class="chk-grade-letter">' + escH(grade) + '</div>' +
+        '<div class="chk-grade-sub">Grade</div>' +
+      '</div>' +
+      '<div class="chk-grade-right">' +
+        '<div class="chk-grade-verdict">' + escH(verdict) + '</div>' +
+        '<div class="chk-grade-summary">' + escH(summary) + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="chk-section-grid">' +
+      '<div class="chk-card green"><div class="chk-card-label">What Is Working</div><div class="chk-card-val">' + escH(working) + '</div></div>' +
+      '<div class="chk-card red"><div class="chk-card-label">What Is Weak</div><div class="chk-card-val">' + escH(weak) + '</div></div>' +
+    '</div>' +
+    '<div class="chk-boost">' +
+      '<div class="chk-boost-label">How to Boost Your Grade</div>' +
+      '<div class="chk-boost-val">' + escH(formatSchedule(boost)) + '</div>' +
+    '</div>' +
+    '<div class="chk-card ' + readinessColor + '" style="margin-bottom:16px">' +
+      '<div class="chk-card-label">Post Readiness</div>' +
+      '<div class="chk-card-val">' + escH(readiness) + '</div>' +
+    '</div>';
 }
 
 // Init
