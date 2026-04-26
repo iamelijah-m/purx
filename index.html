@@ -2033,8 +2033,17 @@ async function runPlanner() {
 
     } catch(e) {
       console.error(`Day ${dayNum} error:`, e);
+      // Auto-retry once
+      try {
+        const prompt2 = buildDayPrompt(inputs, dayNum, dayName, weekSummary);
+        const raw2 = await callWorker(prompt2);
+        const cleaned2 = raw2.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+        const dayData2 = JSON.parse(cleaned2);
+        allDays.push(dayData2);
+        renderDay(dayData2, document.getElementById('planner-days'));
+        continue;
+      } catch(e2) { /* fall through to error display */ }
       hadError = true;
-      // Render a placeholder so the user sees progress continued
       const daysEl = document.getElementById('planner-days');
       const errEl = document.createElement('div');
       errEl.style.cssText = 'background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);padding:20px 24px;margin-bottom:8px;border-radius:2px;font-family:var(--mono);font-size:10px;color:var(--t3)';
@@ -2408,7 +2417,16 @@ function getSectionContent(lines, label, nextLabels) {
 
 function renderCaptionOutput(el, lines) {
   const allLabels = ['CAPTION:','WHY THIS WORKS:','POSTING SCHEDULE:','PERFORMANCE TIP:','ACTION SEQUENCE:','CAPTION VOICE NOTE:'];
-  const caption = getSectionContent(lines, 'CAPTION:', allLabels.slice(1));
+  // Caption is either after CAPTION: label OR everything before WHY THIS WORKS:
+  let caption = getSectionContent(lines, 'CAPTION:', allLabels.slice(1));
+  if (!caption) {
+    // Claude outputs caption raw (no label) then sections — grab lines before first section label
+    const firstSectionIdx = lines.findIndex(l =>
+      ['WHY THIS WORKS:','POSTING SCHEDULE:','PERFORMANCE TIP:','ACTION SEQUENCE:','CAPTION VOICE NOTE:']
+      .some(lbl => l.toUpperCase().startsWith(lbl))
+    );
+    caption = firstSectionIdx > 0 ? lines.slice(0, firstSectionIdx).join('\n').trim() : '';
+  }
   const why = getSectionContent(lines, 'WHY THIS WORKS:', allLabels.slice(2));
   const schedule = getSectionContent(lines, 'POSTING SCHEDULE:', allLabels.slice(3));
   const tip = getSectionContent(lines, 'PERFORMANCE TIP:', allLabels.slice(4));
