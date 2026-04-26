@@ -45,6 +45,8 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .auth-card{position:relative;z-index:2;width:100%;max-width:420px;padding:0 24px}
 .auth-logo{font-family:var(--display);font-weight:900;font-size:52px;letter-spacing:-.02em;color:var(--white);text-transform:uppercase;line-height:1;margin-bottom:4px}
 .auth-tagline{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:.2em;text-transform:uppercase;margin-bottom:48px}
+.auth-logo-mark{display:inline-block;width:6px;height:6px;background:var(--purple2);border-radius:50%;margin-right:12px;animation:pulse-dot 2s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
 .auth-tabs{display:flex;gap:0;margin-bottom:32px;border-bottom:1px solid var(--border)}
 .auth-tab{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);background:none;border:none;padding:12px 20px 12px 0;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
 .auth-tab.on{color:var(--white);border-bottom-color:var(--purple2)}
@@ -78,6 +80,8 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .nav-btn{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);background:none;border:none;border-bottom:2px solid transparent;padding:16px 20px;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-1px}
 .nav-btn.on{color:var(--white);border-bottom-color:var(--purple2)}
 .nav-btn:hover:not(.on){color:var(--t2)}
+.nav-checker-btn:not(.on){color:var(--purple3)!important;opacity:.7}
+.nav-checker-btn.on{color:var(--white);border-bottom-color:var(--purple2)}
 
 /* ── CONTENT AREA ── */
 .app-content{flex:1;max-width:1100px;width:100%;margin:0 auto;padding:48px 40px}
@@ -127,35 +131,38 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
   border-radius:50%;display:flex;align-items:center;justify-content:center;
 }
 .tool-card:hover .tool-arrow{color:var(--purple3);border-color:var(--purple2);transform:translateX(2px);background:rgba(124,58,237,.1)}
+.checker-hero-card{background:linear-gradient(135deg,rgba(124,58,237,.05) 0%,var(--surface) 60%)!important;border-color:rgba(124,58,237,.2)!important;margin-top:8px}
+.checker-hero-card:hover{border-color:rgba(124,58,237,.45)!important}
 
 /* ── TOOL PANEL ── */
-.tool-panel{display:none}
+.tool-panel{display:none;animation:fadeUp .35s ease both}
 .tool-panel.active{display:block}
-.panel-back{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);background:none;border:none;padding:0;cursor:pointer;margin-bottom:32px;display:flex;align-items:center;gap:8px;transition:color .2s}
-.panel-back:hover{color:var(--t1)}
+.panel-back{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);background:none;border:1px solid var(--border);padding:8px 16px;cursor:pointer;margin-bottom:32px;display:inline-flex;align-items:center;gap:8px;transition:all .2s;border-radius:2px}
+.panel-back:hover{color:var(--t1);border-color:var(--border2)}
 .panel-title{font-family:var(--display);font-size:clamp(36px,5vw,60px);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:.9;color:var(--white);margin-bottom:8px}
 .panel-sub{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:.1em;margin-bottom:40px}
 
 /* ── FORM ── */
 .form-section{background:var(--surface);border:1px solid var(--border);padding:32px;border-radius:2px}
-.form-label{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:8px;margin-top:24px}
+.form-label{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:8px;margin-top:28px}
 .form-label:first-child{margin-top:0}
 .form-input,.form-select,.form-textarea{background:var(--bg);border:1px solid var(--border2);color:var(--t1);font-family:var(--font);font-size:14px;padding:13px 16px;outline:none;width:100%;border-radius:2px;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--purple2);box-shadow:0 0 0 3px rgba(124,58,237,.12)}
 .form-input::placeholder,.form-textarea::placeholder{color:var(--t3)}
-.form-textarea{min-height:100px;resize:vertical;line-height:1.6}
-.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.form-textarea{min-height:96px;resize:vertical;line-height:1.65;transition:border-color .2s,box-shadow .2s}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .pill{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;background:transparent;border:1px solid var(--border2);color:var(--t3);cursor:pointer;border-radius:100px;transition:all .2s}
 .pill.on,.pill:hover{background:rgba(124,58,237,.12);border-color:var(--purple2);color:var(--purple3)}
 .gen-btn{font-family:var(--display);font-size:14px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;background:var(--white);color:var(--bg);border:none;padding:18px;cursor:pointer;width:100%;margin-top:24px;border-radius:2px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
-.gen-btn:hover{background:#e8e8e8}
+.gen-btn:hover{background:#eaeaea;letter-spacing:.22em}
+.gen-btn:active{transform:scale(.995)}
 .gen-btn:disabled{opacity:.45;cursor:not-allowed}
 
 /* ── OUTPUT ── */
 .output-wrap{margin-top:16px;display:none}
 .output-wrap.show{display:block}
 .output-card{background:var(--surface);border:1px solid var(--border2);padding:28px;border-radius:2px}
-.output-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--purple3);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.output-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--purple3);margin-bottom:20px;display:flex;align-items:center;gap:10px;padding-bottom:16px;border-bottom:1px solid rgba(124,58,237,.15)}
 .output-label::before{content:'';width:20px;height:1px;background:var(--purple2)}
 .output-text{font-size:14px;color:var(--t1);line-height:1.75;white-space:pre-wrap}
 .output-actions{display:flex;gap:10px;margin-top:20px}
@@ -166,7 +173,9 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .regen-btn:hover{border-color:var(--t2);color:var(--t1)}
 
 /* ── LOADING ── */
-.loading{display:none;padding:28px;background:var(--surface);border:1px solid var(--border);border-radius:2px;margin-top:16px}
+.loading{display:none;padding:28px;background:var(--surface);border:1px solid var(--border);border-radius:2px;margin-top:16px;position:relative;overflow:hidden}
+.loading::after{content:'';position:absolute;top:-100%;left:0;right:0;height:40%;background:linear-gradient(180deg,transparent,rgba(124,58,237,.04),transparent);animation:scanline 2.4s ease-in-out infinite;pointer-events:none}
+@keyframes scanline{0%{top:-40%}100%{top:140%}}
 .loading.show{display:block}
 .ld-label{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);margin-bottom:12px}
 .ld-bar{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin-bottom:12px}
@@ -211,7 +220,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .modal-actions{display:flex;gap:10px;margin-top:20px}
 
 /* ── TOAST ── */
-#toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--surface2);border:1px solid var(--border2);color:var(--t1);font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:12px 24px;border-radius:2px;opacity:0;transition:all .3s;pointer-events:none;z-index:9999;white-space:nowrap}
+#toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--surface2);border:1px solid var(--border2);box-shadow:0 8px 32px rgba(0,0,0,.5);color:var(--t1);font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:12px 28px;border-radius:2px;opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;z-index:9999;white-space:nowrap}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @media(max-width:640px){
@@ -220,6 +229,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
   .app-nav{padding:0 20px}
   .form-section{padding:24px}
   .usage-badge{display:none}
+  .chk-how-grid{grid-template-columns:1fr!important}
 }
 
 /* ── PLANNER STYLES ── */
@@ -560,7 +570,12 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
   background:var(--surface);border:1px solid var(--border2);border-radius:2px;
   padding:36px;margin-bottom:12px;display:flex;align-items:center;gap:36px;
   position:relative;overflow:hidden;
+  transition:border-color .3s;
 }
+.chk-grade-hero.grade-a-hero{border-color:rgba(16,185,129,.3);background:linear-gradient(135deg,rgba(16,185,129,.04) 0%,var(--surface) 50%)}
+.chk-grade-hero.grade-b-hero{border-color:rgba(124,58,237,.3);background:linear-gradient(135deg,rgba(124,58,237,.04) 0%,var(--surface) 50%)}
+.chk-grade-hero.grade-c-hero{border-color:rgba(245,158,11,.3);background:linear-gradient(135deg,rgba(245,158,11,.04) 0%,var(--surface) 50%)}
+.chk-grade-hero.grade-d-hero,.chk-grade-hero.grade-f-hero{border-color:rgba(239,68,68,.3);background:linear-gradient(135deg,rgba(239,68,68,.04) 0%,var(--surface) 50%)}
 .chk-grade-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
   background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3))}
 .chk-grade-circle{
@@ -587,7 +602,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .chk-card.red::before{background:var(--red)}
 .chk-card.amber::before{background:var(--amber)}
 .chk-card.purple::before{background:var(--purple2)}
-.chk-card-label{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px}
+.chk-card-label{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
 .chk-card.green .chk-card-label{color:var(--green)}
 .chk-card.red .chk-card-label{color:var(--red)}
 .chk-card.amber .chk-card-label{color:var(--amber)}
@@ -595,7 +610,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .chk-card-val{font-size:13px;color:var(--t2);line-height:1.7;white-space:pre-line}
 .chk-boost{background:var(--surface);border:1px solid var(--border2);border-radius:2px;padding:24px;margin-bottom:12px;position:relative;overflow:hidden}
 .chk-boost::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--purple2))}
-.chk-boost-label{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--purple3);margin-bottom:12px}
+.chk-boost-label{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--purple3);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(124,58,237,.2)}
 .chk-boost-val{font-size:13px;color:var(--t2);line-height:1.75;white-space:pre-line}
 </style>
 </head>
@@ -606,7 +621,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
   <div class="auth-bg"></div>
   <div class="auth-grid"></div>
   <div class="auth-card">
-    <div class="auth-logo">PURX</div>
+    <div class="auth-logo"><span class="auth-logo-mark"></span>PURX</div>
     <div class="auth-tagline">Creator Intelligence</div>
     <div class="auth-tabs">
       <button class="auth-tab on" onclick="switchTab('login')">Sign in</button>
@@ -642,7 +657,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 <!-- APP SCREEN -->
 <div id="app-screen" class="screen">
   <header class="app-header">
-    <div class="header-logo">PURX</div>
+    <div class="header-logo" onclick="showSection('dashboard')" style="cursor:pointer;user-select:none">PURX</div>
     <div class="header-right">
       <div class="usage-badge" id="usage-badge">— generations</div>
       <div class="header-user" id="user-email-display"></div>
@@ -657,7 +672,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
     <button class="nav-btn" onclick="showSection('hashtag')">Hashtags</button>
     <button class="nav-btn" onclick="showSection('calendar')">Calendar</button>
     <button class="nav-btn" onclick="showSection('history')">History</button>
-    <button class="nav-btn" onclick="showSection('checker')">Post Checker</button>
+    <button class="nav-btn nav-checker-btn" onclick="showSection('checker')">Post Checker</button>
   </nav>
 
   <main class="app-content">
@@ -697,10 +712,19 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
           <div class="tool-desc">Your full week mapped out — what to post, when, and why it works.</div>
           <div class="tool-arrow">→</div>
         </div>
-        <div class="tool-card" onclick="showSection('checker')" style="grid-column:1/-1">
+        <div class="tool-card checker-hero-card" onclick="showSection('checker')" style="grid-column:1/-1">
           <div class="tool-num">05</div>
-          <div class="tool-name">Pre-Post<br>Checker</div>
-          <div class="tool-desc">Upload your content before posting. Get a grade, a breakdown, and exactly what to fix to maximize reach before you hit publish.</div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px">
+            <div>
+              <div class="tool-name" style="font-size:clamp(28px,4vw,48px)">Pre-Post<br>Checker</div>
+              <div class="tool-desc" style="max-width:480px;margin-top:12px">Upload your content before posting. Get an AI grade, a full breakdown, and exactly what to fix to maximize reach before you hit publish.</div>
+            </div>
+            <div style="display:flex;gap:10px;flex-shrink:0">
+              <div style="font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--green);border-radius:100px">A–F Grade</div>
+              <div style="font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);color:var(--purple3);border-radius:100px">Visual Analysis</div>
+              <div style="font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--amber);border-radius:100px">Boost Tips</div>
+            </div>
+          </div>
           <div class="tool-arrow">→</div>
         </div>
       </div>
@@ -909,6 +933,29 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
       <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
       <div class="panel-title">Pre-Post<br>Checker</div>
       <div class="panel-sub">05 — Grade your content before you post it</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px" class="chk-how-grid">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:16px 20px;display:flex;align-items:flex-start;gap:12px">
+          <span style="font-family:var(--display);font-size:22px;font-weight:900;color:var(--purple2);line-height:1;flex-shrink:0">1</span>
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:4px">Upload</div>
+            <div style="font-size:12px;color:var(--t2);line-height:1.5">Screenshot your reel, post, or carousel</div>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:16px 20px;display:flex;align-items:flex-start;gap:12px">
+          <span style="font-family:var(--display);font-size:22px;font-weight:900;color:var(--purple2);line-height:1;flex-shrink:0">2</span>
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:4px">Analyze</div>
+            <div style="font-size:12px;color:var(--t2);line-height:1.5">AI grades hook strength, visual quality, and algorithm signals</div>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:16px 20px;display:flex;align-items:flex-start;gap:12px">
+          <span style="font-family:var(--display);font-size:22px;font-weight:900;color:var(--purple2);line-height:1;flex-shrink:0">3</span>
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:4px">Fix & Post</div>
+            <div style="font-size:12px;color:var(--t2);line-height:1.5">Get specific fixes ranked by impact before you hit publish</div>
+          </div>
+        </div>
+      </div>
       <div class="form-section">
         <label class="form-label">Content type</label>
         <div class="pill-row" id="chk-type-pills">
@@ -919,7 +966,12 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
         </div>
         <label class="form-label">Upload your content screenshots</label>
         <div id="chk-drop-zone" class="chk-drop-zone" onclick="document.getElementById('chk-file-input').click()">
-          <div class="chk-drop-icon">↑</div>
+          <div class="chk-drop-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 13V3M10 3L6 7M10 3L14 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 14v1a2 2 0 002 2h10a2 2 0 002-2v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
           <div class="chk-drop-text">Click to upload screenshots</div>
           <div class="chk-drop-sub">PNG or JPG — unlimited images supported</div>
         </div>
@@ -927,10 +979,13 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
         <div id="chk-previews" class="chk-previews"></div>
         <label class="form-label">What are you trying to achieve? (optional)</label>
         <textarea class="form-textarea" id="chk-goal" placeholder="e.g. Grow reach, drive profile visits, get saves..."></textarea>
-        <button class="gen-btn" id="chk-btn" onclick="runChecker()">Grade My Content →</button>
+        <div style="display:flex;gap:12px;margin-top:24px">
+          <button class="gen-btn" id="chk-btn" onclick="runChecker()" style="margin-top:0;flex:1">Grade My Content →</button>
+          <button onclick="resetChecker()" style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:transparent;color:var(--t3);border:1px solid var(--border2);padding:0 20px;border-radius:2px;cursor:pointer;transition:all .2s;flex-shrink:0" onmouseover="this.style.color='var(--t1)'" onmouseout="this.style.color='var(--t3)'">Reset</button>
+        </div>
       </div>
-      <div class="loading" id="chk-loading">
-        <div class="ld-label">Analyzing your content</div>
+      <div class="loading chk-specific-loading" id="chk-loading">
+        <div class="ld-label" id="chk-loading-label">Analyzing your content</div>
         <div class="ld-bar"><div class="ld-fill"></div></div>
         <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
       </div>
@@ -943,7 +998,12 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
       <div class="panel-title">History</div>
       <div class="panel-sub">Your past generations</div>
       <div class="history-list" id="history-list">
-        <div class="history-empty">No generations yet. Start creating!</div>
+        <div class="history-empty" style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:64px 0">
+          <div style="font-family:var(--display);font-size:48px;font-weight:900;color:var(--t4);letter-spacing:-.02em">0</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3)">No generations yet</div>
+          <div style="font-size:13px;color:var(--t3);text-align:center;max-width:280px;line-height:1.65">Pick any tool from the dashboard and start creating. Everything you generate gets saved here.</div>
+          <button class="copy-btn" style="margin-top:8px;font-size:9px;padding:10px 20px;letter-spacing:.12em" onclick="showSection('dashboard')">Go to Dashboard →</button>
+        </div>
       </div>
     </section>
 
@@ -1061,6 +1121,12 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 </div>
 
 <div id="toast"></div>
+<footer style="border-top:1px solid var(--border);padding:20px 40px;display:none" id="app-footer">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-family:var(--display);font-size:13px;font-weight:900;letter-spacing:.12em;color:var(--t4);text-transform:uppercase">PURX</div>
+    <div style="font-family:var(--mono);font-size:8px;color:var(--t4);letter-spacing:.1em">Creator Intelligence · All rights reserved</div>
+  </div>
+</footer>
 
 <script>
 // ── CONFIG ──
@@ -1091,6 +1157,8 @@ sb.auth.getSession().then(({ data: { session } }) => {
 });
 
 function showApp() {
+  var footer = document.getElementById('app-footer');
+  if (footer) footer.style.display = 'block';
   document.getElementById('auth-screen').classList.remove('active');
   document.getElementById('app-screen').classList.add('active');
   document.getElementById('user-email-display').textContent = currentUser?.email || '';
@@ -1971,7 +2039,7 @@ function getSectionContent(lines, label, nextLabels) {
     if (nextLabels.some(nl => upper.startsWith(nl.toUpperCase()))) break;
     body.push(lines[i]);
   }
-  return body.join(' ').trim();
+  return body.join('\n').trim();
 }
 
 function renderCaptionOutput(el, lines) {
@@ -2469,6 +2537,19 @@ function getProfileContext() {
 // ── PRE-POST CHECKER ──
 var checkerFiles = [];
 
+// Drag-and-drop for checker
+document.addEventListener('DOMContentLoaded', function() {
+  var dz = document.getElementById('chk-drop-zone');
+  if (!dz) return;
+  dz.addEventListener('dragover', function(e){ e.preventDefault(); dz.classList.add('has-files'); });
+  dz.addEventListener('dragleave', function(){ if (checkerFiles.length === 0) dz.classList.remove('has-files'); });
+  dz.addEventListener('drop', function(e){
+    e.preventDefault();
+    var files = e.dataTransfer.files;
+    if (files && files.length) handleCheckerFiles(files);
+  });
+});
+
 function handleCheckerFiles(files) {
   var arr = Array.from(files);
   checkerFiles = arr;
@@ -2494,10 +2575,12 @@ function handleCheckerFiles(files) {
   });
   if (arr.length > 0) {
     dropZone.classList.add('has-files');
-    dropZone.querySelector('.chk-drop-text').textContent = arr.length + ' image' + (arr.length > 1 ? 's' : '') + ' selected';
+    dropZone.querySelector('.chk-drop-text').textContent = arr.length + ' image' + (arr.length > 1 ? 's' : '') + ' ready';
+    dropZone.querySelector('.chk-drop-sub').textContent = 'Click to change · Drag to add more';
   } else {
     dropZone.classList.remove('has-files');
     dropZone.querySelector('.chk-drop-text').textContent = 'Click to upload screenshots';
+    dropZone.querySelector('.chk-drop-sub').textContent = 'PNG or JPG — unlimited images supported';
   }
 }
 
@@ -2507,6 +2590,25 @@ function removeCheckerFile(idx) {
   checkerFiles.forEach(function(f){ dt.items.add(f); });
   document.getElementById('chk-file-input').files = dt.files;
   handleCheckerFiles(checkerFiles);
+}
+
+function resetChecker() {
+  checkerFiles = [];
+  var previews = document.getElementById('chk-previews');
+  if (previews) previews.innerHTML = '';
+  var input = document.getElementById('chk-file-input');
+  if (input) input.value = '';
+  var dz = document.getElementById('chk-drop-zone');
+  if (dz) {
+    dz.classList.remove('has-files');
+    var dt = dz.querySelector('.chk-drop-text');
+    if (dt) dt.textContent = 'Click to upload screenshots';
+  }
+  var goal = document.getElementById('chk-goal');
+  if (goal) goal.value = '';
+  var output = document.getElementById('chk-output');
+  if (output) { output.style.display = 'none'; output.innerHTML = ''; }
+  showToast('Checker reset');
 }
 
 function fileToBase64(file) {
@@ -2571,6 +2673,14 @@ async function runChecker() {
   loading.classList.add('show');
   output.style.display = 'none';
   output.innerHTML = '';
+  // Cycle loading messages
+  var chkMsgs = ['Analyzing visual quality...','Grading hook strength...','Checking algorithm signals...','Building your report...'];
+  var chkMsgIdx = 0;
+  var chkMsgEl = document.getElementById('chk-loading-label');
+  var chkMsgTimer = chkMsgEl ? setInterval(function(){
+    chkMsgIdx = (chkMsgIdx + 1) % chkMsgs.length;
+    chkMsgEl.textContent = chkMsgs[chkMsgIdx];
+  }, 2200) : null;
 
   try {
     var profileCtx = getProfileContext();
@@ -2595,6 +2705,7 @@ async function runChecker() {
 
     renderCheckerOutput(data.text || '', output);
     output.style.display = 'block';
+    setTimeout(function(){ output.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
     await saveGeneration('checker', data.text || '', { contentType: contentType, goal: goal });
     loadStats();
 
@@ -2604,11 +2715,19 @@ async function runChecker() {
   }
   loading.classList.remove('show');
   btn.disabled = false;
+  if (typeof chkMsgTimer !== 'undefined' && chkMsgTimer) clearInterval(chkMsgTimer);
 }
 
 function renderCheckerOutput(raw, container) {
-  var lines = raw.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
-  // Flexible label matching - handles variations in Claude output
+  // Strip markdown formatting Claude may add
+  var cleaned = raw
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/^#+\s*/gm, '')
+    .replace(/^---+$/gm, '');
+
+  var lines = cleaned.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
+
   function flexGet(labels, nextGroups) {
     for (var li = 0; li < labels.length; li++) {
       var val = getSectionContent(lines, labels[li], nextGroups);
@@ -2616,36 +2735,93 @@ function renderCheckerOutput(raw, container) {
     }
     return '';
   }
-  var grade = flexGet(['GRADE:','**GRADE:**','Grade:'], ['VERDICT:','SUMMARY:','**VERDICT']);
-  var verdict = flexGet(['VERDICT:','**VERDICT:**','Verdict:'], ['SUMMARY:','WHAT IS WORKING:','**SUMMARY']);
-  var summary = flexGet(['SUMMARY:','**SUMMARY:**','Summary:'], ['WHAT IS WORKING:','WHAT IS WEAK:']);
-  var working = flexGet(['WHAT IS WORKING:','**WHAT IS WORKING:**','What Is Working:'], ['WHAT IS WEAK:','HOW TO BOOST']);
-  var weak = flexGet(['WHAT IS WEAK:','**WHAT IS WEAK:**','What Is Weak:'], ['HOW TO BOOST','POST READINESS:']);
-  var boost = flexGet(['HOW TO BOOST YOUR GRADE:','**HOW TO BOOST','How to Boost'], ['POST READINESS:','**POST READINESS']);
-  var readiness = flexGet(['POST READINESS:','**POST READINESS:**','Post Readiness:'], []);
 
-  grade = grade.replace(/[^A-Fa-f]/g, '').toUpperCase().charAt(0) || 'C';
-  var gradeClass = 'grade-' + grade.toLowerCase();
-  var readinessColor = readiness.toUpperCase().indexOf('DO NOT POST') !== -1 ? 'red' :
-    readiness.toUpperCase().indexOf('READY TO POST') !== -1 ? 'green' : 'amber';
+  var grade    = flexGet(['GRADE:','Grade:'], ['VERDICT:','SUMMARY:']);
+  var verdict  = flexGet(['VERDICT:','Verdict:'], ['SUMMARY:','WHAT IS WORKING:']);
+  var summary  = flexGet(['SUMMARY:','Summary:'], ['WHAT IS WORKING:','WHAT IS WEAK:']);
+  var working  = flexGet(['WHAT IS WORKING:','What Is Working:'], ['WHAT IS WEAK:','HOW TO BOOST']);
+  var weak     = flexGet(['WHAT IS WEAK:','What Is Weak:'], ['HOW TO BOOST','POST READINESS:']);
+  var boost    = flexGet(['HOW TO BOOST YOUR GRADE:','HOW TO BOOST:','How to Boost'], ['POST READINESS:']);
+  var readiness= flexGet(['POST READINESS:','Post Readiness:'], []);
 
+  var gradeLetter = ((grade.match(/[A-F]/) || ['C'])[0] || 'C').toUpperCase();
+  var gradeClass = 'grade-' + gradeLetter.toLowerCase();
+  var readinessUpper = readiness.toUpperCase();
+  var readinessColor = readinessUpper.indexOf('DO NOT POST') !== -1 ? 'red' :
+    readinessUpper.indexOf('READY TO POST') !== -1 ? 'green' : 'amber';
+
+  function renderBullets(text) {
+    if (!text) return '<span style="color:var(--t3);font-style:italic">No data</span>';
+    var bLines = text.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
+    return bLines.map(function(line) {
+      var clean = line.replace(/^[-\u2022\u00b7\u25aa\u25b8*]\s*/, '').replace(/^\d+[.)]\s*/, '').trim();
+      return '<div style="display:flex;gap:10px;margin-bottom:9px;align-items:flex-start">' +
+        '<span style="color:var(--purple2);flex-shrink:0;margin-top:3px;font-size:9px">&#x25B8;</span>' +
+        '<span style="line-height:1.6">' + escH(clean) + '</span></div>';
+    }).join('');
+  }
+
+  function renderBoost(text) {
+    if (!text) return '<span style="color:var(--t3);font-style:italic">No data</span>';
+    var bLines = text.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
+    var num = 0;
+    return bLines.map(function(line) {
+      num++;
+      var clean = line.replace(/^\d+[.)]\s*/, '').replace(/^[-\u2022]\s*/, '').trim();
+      return '<div style="display:flex;gap:14px;margin-bottom:12px;align-items:flex-start">' +
+        '<span style="font-family:var(--display);font-size:22px;font-weight:900;color:var(--purple2);flex-shrink:0;line-height:1.1;min-width:20px">' + num + '</span>' +
+        '<span style="font-size:13px;color:var(--t2);line-height:1.65">' + escH(clean) + '</span></div>';
+    }).join('');
+  }
+
+  var heroGradeClass = 'grade-' + gradeLetter.toLowerCase() + '-hero';
   container.innerHTML =
-    '<div class="chk-grade-hero">' +
+    '<div class="chk-grade-hero ' + heroGradeClass + '">' +
       '<div class="chk-grade-circle ' + gradeClass + '">' +
-        '<div class="chk-grade-letter">' + escH(grade) + '</div>' +
+        '<div class="chk-grade-letter">' + escH(gradeLetter) + '</div>' +
         '<div class="chk-grade-sub">Grade</div>' +
       '</div>' +
-      '<div class="chk-grade-right">' +
-        '<div class="chk-grade-verdict">' + escH(verdict) + '</div>' +
+      '<div class="chk-grade-right" style="flex:1;min-width:0">' +
+        '<div class="chk-grade-verdict">' + escH(verdict || 'Analysis complete') + '</div>' +
         '<div class="chk-grade-summary">' + escH(summary) + '</div>' +
       '</div>' +
     '</div>' +
     '<div class="chk-section-grid">' +
-      '<div class="chk-card green"><div class="chk-card-label">What Is Working</div><div class="chk-card-val">' + escH(working) + '</div></div>' +
-      '<div class="chk-card red"><div class="chk-card-label">What Is Weak</div><div class="chk-card-val">' + escH(weak) + '</div></div>' +
+      '<div class="chk-card green">' +
+        '<div class="chk-card-label">What Is Working</div>' +
+        '<div class="chk-card-val" style="white-space:normal">' + renderBullets(working) + '</div>' +
+      '</div>' +
+      '<div class="chk-card red">' +
+        '<div class="chk-card-label">What Is Weak</div>' +
+        '<div class="chk-card-val" style="white-space:normal">' + renderBullets(weak) + '</div>' +
+      '</div>' +
     '</div>' +
-    '<div class="chk-boost"><div class="chk-boost-label">How to Boost Your Grade</div><div class="chk-boost-val">' + escH(formatSchedule(boost)) + '</div></div>' +
-    '<div class="chk-card ' + readinessColor + '" style="margin-bottom:16px"><div class="chk-card-label">Post Readiness</div><div class="chk-card-val">' + escH(readiness) + '</div></div>';
+    '<div class="chk-boost">' +
+      '<div class="chk-boost-label">How to Boost Your Grade</div>' +
+      '<div class="chk-boost-val" style="white-space:normal">' + renderBoost(boost) + '</div>' +
+    '</div>' +
+    '<div class="chk-card ' + readinessColor + '" style="margin-bottom:16px">' +
+      '<div class="chk-card-label">Post Readiness</div>' +
+      '<div class="chk-card-val" style="font-family:var(--display);font-size:18px;font-weight:900;text-transform:uppercase;letter-spacing:.04em">' + escH(readiness || '—') + '</div>' +
+    '</div>' +
+    '<div style="display:flex;gap:10px">' +
+      '<button class="copy-btn" id="chk-copy-btn">Copy Report</button>' +
+      '<button class="regen-btn" onclick="runChecker()">Re-analyze</button>' +
+    '</div>';
+
+  // Wire copy button after innerHTML is set
+  var copyBtn = document.getElementById('chk-copy-btn');
+  if (copyBtn) {
+    var reportText = 'PURX PRE-POST CHECKER\n\nGRADE: ' + gradeLetter + '\nVERDICT: ' + verdict +
+      '\n\nSUMMARY:\n' + summary +
+      '\n\nWHAT IS WORKING:\n' + working +
+      '\n\nWHAT IS WEAK:\n' + weak +
+      '\n\nHOW TO BOOST YOUR GRADE:\n' + boost +
+      '\n\nPOST READINESS: ' + readiness;
+    copyBtn.addEventListener('click', function() {
+      navigator.clipboard.writeText(reportText).then(function(){ showToast('Report copied'); });
+    });
+  }
 }
 
 // Init
