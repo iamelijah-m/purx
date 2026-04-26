@@ -3845,15 +3845,47 @@ function buildVpaPrompt(niche, context) {
     '\n  "algorithm_breakdown": "What specific algorithm signals this post likely triggered — watch time, shares, saves, comments, sends — and how",' +
     '\n  "steal_formula": "The exact replicable formula in 2-4 sentences. Write it like instructions someone can follow TODAY for their next post.",' +
     '\n  "steal_caption": "Write a ready-to-use caption starter in the same style as the viral post, adapted for a ' + niche + ' creator. Make it feel native to ' + niche + '."' +
-    '\n}';
+    '\n}\n\nIMPORTANT: Return ONLY the raw JSON object. No markdown, no code fences, no explanation. Start with { and end with }';
 }
 
 function renderVpaOutput(raw, container) {
-  var cleaned = raw.replace(/^```json\s*/i,'').replace(/```\s*$/i,'').trim();
+  // Aggressive extraction — handles backticks, preamble, trailing text
+  var cleaned = raw.replace(/^[\s\S]*?(?=\{)/, '').replace(/\}[^}]*$/, '}').trim();
+  if(!cleaned || cleaned[0] !== '{') {
+    cleaned = raw.replace(/```json/gi,'').replace(/```/g,'').trim();
+    var fb = cleaned.indexOf('{'); var lb = cleaned.lastIndexOf('}');
+    if(fb !== -1 && lb > fb) cleaned = cleaned.substring(fb, lb+1);
+  }
   var data;
   try { data = JSON.parse(cleaned); }
   catch(e) {
-    container.innerHTML = '<div class="vpa-card purple full"><div class="vpa-card-label">Analysis</div><div class="vpa-card-val">' + escH(raw) + '</div></div>';
+    container.style.display = 'flex';
+    var fallCard = document.createElement('div');
+    fallCard.className = 'vpa-card purple full';
+    fallCard.style.cssText = 'grid-column:1/-1';
+    var fallLabel = document.createElement('div');
+    fallLabel.className = 'vpa-card-label';
+    fallLabel.textContent = 'Analysis';
+    var fallVal = document.createElement('div');
+    fallVal.className = 'vpa-card-val';
+    fallVal.style.cssText = 'white-space:pre-wrap;font-size:14px;line-height:1.75';
+    fallVal.textContent = raw;
+    var fallBtns = document.createElement('div');
+    fallBtns.style.cssText = 'display:flex;gap:10px;margin-top:16px';
+    var fallCopy = document.createElement('button');
+    fallCopy.className = 'copy-btn';
+    fallCopy.textContent = 'Copy Analysis';
+    fallCopy.onclick = function(){ navigator.clipboard.writeText(raw).then(function(){ showToast('Copied'); }); };
+    var fallRegen = document.createElement('button');
+    fallRegen.className = 'regen-btn';
+    fallRegen.textContent = 'Try Again';
+    fallRegen.onclick = runVpa;
+    fallBtns.appendChild(fallCopy);
+    fallBtns.appendChild(fallRegen);
+    fallCard.appendChild(fallLabel);
+    fallCard.appendChild(fallVal);
+    fallCard.appendChild(fallBtns);
+    container.appendChild(fallCard);
     return;
   }
 
