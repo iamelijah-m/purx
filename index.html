@@ -87,11 +87,106 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .app-content{flex:1;max-width:1100px;width:100%;margin:0 auto;padding:48px 40px}
 
 /* ── DASHBOARD ── */
-.dash-hero{margin-bottom:40px;animation:fadeUp .5s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.dash-greeting{font-family:var(--mono);font-size:10px;color:var(--purple3);letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px}
-.dash-headline{font-family:var(--display);font-size:clamp(42px,6vw,80px);font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;color:var(--white);margin-bottom:16px}
-.dash-sub{font-size:15px;color:var(--t2);line-height:1.65;max-width:560px}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scoreRing{from{stroke-dashoffset:283}to{stroke-dashoffset:var(--ring-offset)}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,0)}50%{box-shadow:0 0 24px 4px rgba(124,58,237,.18)}}
+
+/* ── TOP ROW: greeting + score ── */
+.dash-top{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start;margin-bottom:20px;animation:fadeUp .4s ease both}
+@media(max-width:640px){.dash-top{grid-template-columns:1fr}}
+.dash-greeting-block{}
+.dash-greeting{font-family:var(--mono);font-size:10px;color:var(--purple3);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+.dash-headline{font-family:var(--display);font-size:clamp(36px,5vw,72px);font-weight:900;text-transform:uppercase;line-height:.9;letter-spacing:-.02em;color:var(--white);margin-bottom:12px}
+.dash-sub{font-size:14px;color:var(--t2);line-height:1.65;max-width:480px}
+
+/* ── MOMENTUM SCORE ── */
+.momentum-card{
+  background:var(--surface);border:1px solid var(--border2);border-radius:2px;
+  padding:24px;display:flex;flex-direction:column;align-items:center;
+  min-width:160px;flex-shrink:0;position:relative;overflow:hidden;
+  animation:fadeUp .4s .1s ease both;
+}
+.momentum-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3))}
+.momentum-label{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:16px}
+.momentum-ring{position:relative;width:88px;height:88px}
+.momentum-ring svg{transform:rotate(-90deg)}
+.momentum-ring-bg{fill:none;stroke:var(--border2);stroke-width:6}
+.momentum-ring-fill{fill:none;stroke:var(--purple2);stroke-width:6;stroke-linecap:round;stroke-dasharray:283;animation:scoreRing 1.2s .5s cubic-bezier(.34,1.56,.64,1) both}
+.momentum-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.momentum-score{font-family:var(--display);font-size:30px;font-weight:900;color:var(--white);line-height:1}
+.momentum-max{font-family:var(--mono);font-size:8px;color:var(--t3);margin-top:2px}
+.momentum-status{font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;margin-top:12px;padding:5px 12px;border-radius:100px;border:1px solid}
+.momentum-status.hot{color:var(--green);border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.08)}
+.momentum-status.building{color:var(--amber);border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.08)}
+.momentum-status.cold{color:var(--t3);border-color:var(--border2);background:transparent}
+
+/* ── TODAY FOCUS CARD ── */
+.dash-today{
+  background:linear-gradient(135deg,rgba(124,58,237,.08) 0%,rgba(6,6,6,0) 60%),var(--surface);
+  border:1px solid rgba(124,58,237,.2);border-radius:2px;padding:28px 32px;
+  margin-bottom:20px;position:relative;overflow:hidden;
+  animation:fadeUp .4s .15s ease both;
+  display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;
+}
+@media(max-width:640px){.dash-today{grid-template-columns:1fr}}
+.dash-today::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3))}
+.dash-today::after{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--purple),transparent)}
+.today-eyebrow{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--purple3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.today-eyebrow::before{content:'';width:16px;height:1px;background:var(--purple2)}
+.today-title{font-family:var(--display);font-size:clamp(22px,3vw,32px);font-weight:900;text-transform:uppercase;color:var(--white);line-height:1;margin-bottom:8px}
+.today-desc{font-size:13px;color:var(--t2);line-height:1.6;max-width:480px}
+.today-action{font-family:var(--display);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;background:var(--white);color:var(--bg);border:none;padding:14px 24px;cursor:pointer;border-radius:2px;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.today-action:hover{background:#e8e8e8;letter-spacing:.2em}
+
+/* ── STATS ROW ── */
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;animation:fadeUp .4s .2s ease both}
+@media(max-width:700px){.dash-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:380px){.dash-stats{grid-template-columns:repeat(2,1fr)}}
+.dstat{background:var(--surface);border:1px solid var(--border);padding:18px 20px;border-radius:2px;position:relative;overflow:hidden;transition:border-color .2s}
+.dstat:hover{border-color:var(--border2)}
+.dstat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .2s}
+.dstat:hover::before{opacity:1}
+.dstat.purple::before{background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.dstat.green::before{background:var(--green)}
+.dstat.amber::before{background:var(--amber)}
+.dstat.red::before{background:var(--red)}
+.dstat-val{font-family:var(--display);font-size:40px;font-weight:900;color:var(--white);line-height:1;margin-bottom:4px}
+.dstat-label{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase}
+.dstat-delta{font-family:var(--mono);font-size:9px;margin-top:6px}
+.dstat-delta.up{color:var(--green)}
+.dstat-delta.neutral{color:var(--t3)}
+
+/* ── NEXT MOVE ── */
+.dash-next-move{
+  background:var(--surface);border:1px solid var(--border);border-radius:2px;
+  padding:20px 24px;margin-bottom:20px;
+  display:flex;align-items:center;gap:20px;
+  animation:fadeUp .4s .25s ease both;cursor:pointer;transition:border-color .2s;
+}
+.dash-next-move:hover{border-color:var(--border2)}
+.next-move-icon{font-family:var(--display);font-size:36px;font-weight:900;color:var(--purple2);flex-shrink:0;line-height:1;width:48px;text-align:center}
+.next-move-body{flex:1;min-width:0}
+.next-move-eyebrow{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
+.next-move-text{font-size:14px;color:var(--t1);line-height:1.55;font-weight:500}
+.next-move-cta{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--purple3);margin-top:4px}
+.next-move-arrow{font-family:var(--mono);font-size:11px;color:var(--t3);flex-shrink:0;transition:transform .2s,color .2s}
+.dash-next-move:hover .next-move-arrow{transform:translateX(4px);color:var(--purple3)}
+
+/* ── STREAK ── */
+.dash-streak{display:flex;gap:12px;margin-bottom:20px;animation:fadeUp .4s .3s ease both}
+@media(max-width:640px){.dash-streak{flex-direction:column}}
+.streak-card{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:16px 20px;flex:1;display:flex;align-items:center;gap:16px}
+.streak-icon{font-size:24px;flex-shrink:0}
+.streak-label{font-family:var(--mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);margin-bottom:2px}
+.streak-val{font-family:var(--display);font-size:22px;font-weight:900;color:var(--white);line-height:1}
+.streak-dots{display:flex;gap:4px;margin-top:6px}
+.streak-dot{width:8px;height:8px;border-radius:50%;background:var(--border2)}
+.streak-dot.active{background:var(--purple2)}
+.streak-dot.today{background:var(--green);animation:pulseGlow .1s ease}
+
+/* ── QUICK TOOLS ── */
+.dash-tools-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin-bottom:12px;animation:fadeUp .4s .32s ease both}
 .stat-card{background:var(--surface);border:1px solid var(--border);padding:20px 24px;border-radius:2px;flex:1}
 .stat-num{font-family:var(--display);font-size:36px;font-weight:900;color:var(--white);line-height:1}
 .stat-label{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase;margin-top:4px}
@@ -679,14 +774,104 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 
     <!-- DASHBOARD -->
     <section id="sec-dashboard">
-      <div id="dash-profile-bar" class="dash-profile-bar" style="display:none"></div>
 
-      <div class="dash-hero">
-        <div class="dash-greeting" id="dash-greeting">Welcome back</div>
-        <div class="dash-headline" id="dash-headline">What are<br>we building<br>today?</div>
-        <div class="dash-sub" id="dash-sub">Four AI-powered tools built for creators who are serious about growth. Pick a tool and let's get to work.</div>
+      <!-- TOP ROW: Greeting + Momentum Score -->
+      <div class="dash-top">
+        <div class="dash-greeting-block">
+          <div class="dash-greeting" id="dash-greeting">Welcome back</div>
+          <div class="dash-headline" id="dash-headline">What are<br>we building<br>today?</div>
+          <div class="dash-sub" id="dash-sub">Five AI tools built for creators who are serious about growth.</div>
+        </div>
+        <div class="momentum-card" id="momentum-card">
+          <div class="momentum-label">Momentum</div>
+          <div class="momentum-ring">
+            <svg width="88" height="88" viewBox="0 0 88 88">
+              <circle class="momentum-ring-bg" cx="44" cy="44" r="38"/>
+              <circle class="momentum-ring-fill" id="momentum-ring-fill" cx="44" cy="44" r="38" style="--ring-offset:283"/>
+            </svg>
+            <div class="momentum-num">
+              <div class="momentum-score" id="momentum-score">0</div>
+              <div class="momentum-max">/100</div>
+            </div>
+          </div>
+          <div class="momentum-status cold" id="momentum-status">Getting started</div>
+        </div>
       </div>
 
+      <!-- TODAY FOCUS CARD -->
+      <div class="dash-today" id="dash-today">
+        <div>
+          <div class="today-eyebrow">Today's focus</div>
+          <div class="today-title" id="today-title">Your next move is ready</div>
+          <div class="today-desc" id="today-desc">Loading your personalized recommendation...</div>
+        </div>
+        <button class="today-action" id="today-action-btn" onclick="handleTodayAction()">Let's go →</button>
+      </div>
+
+      <!-- STATS ROW -->
+      <div class="dash-stats">
+        <div class="dstat purple">
+          <div class="dstat-val" id="stat-total">0</div>
+          <div class="dstat-label">Total Generations</div>
+          <div class="dstat-delta neutral" id="stat-total-delta">Start creating</div>
+        </div>
+        <div class="dstat green">
+          <div class="dstat-val" id="stat-captions">0</div>
+          <div class="dstat-label">Captions</div>
+          <div class="dstat-delta neutral" id="stat-captions-delta">—</div>
+        </div>
+        <div class="dstat amber">
+          <div class="dstat-val" id="stat-hooks">0</div>
+          <div class="dstat-label">Hooks</div>
+          <div class="dstat-delta neutral" id="stat-hooks-delta">—</div>
+        </div>
+        <div class="dstat red">
+          <div class="dstat-val" id="stat-checks">0</div>
+          <div class="dstat-label">Posts Checked</div>
+          <div class="dstat-delta neutral" id="stat-checks-delta">—</div>
+        </div>
+      </div>
+
+      <!-- STREAK + NEXT MOVE -->
+      <div class="dash-next-move" id="dash-next-move" onclick="handleNextMove()">
+        <div class="next-move-icon" id="next-move-icon">→</div>
+        <div class="next-move-body">
+          <div class="next-move-eyebrow">Recommended next</div>
+          <div class="next-move-text" id="next-move-text">Pick a tool below to get started</div>
+          <div class="next-move-cta" id="next-move-cta">Open tool →</div>
+        </div>
+        <div class="next-move-arrow">→</div>
+      </div>
+
+      <!-- STREAK BAR -->
+      <div class="dash-streak">
+        <div class="streak-card">
+          <div class="streak-icon">🔥</div>
+          <div>
+            <div class="streak-label">Day streak</div>
+            <div class="streak-val" id="streak-val">0</div>
+            <div class="streak-dots" id="streak-dots"></div>
+          </div>
+        </div>
+        <div class="streak-card">
+          <div class="streak-icon">⚡</div>
+          <div>
+            <div class="streak-label">This week</div>
+            <div class="streak-val" id="week-gen-val">0</div>
+            <div class="streak-label" style="margin-top:2px">generations</div>
+          </div>
+        </div>
+        <div class="streak-card">
+          <div class="streak-icon">🎯</div>
+          <div>
+            <div class="streak-label">Most used tool</div>
+            <div class="streak-val" id="top-tool-val" style="font-size:16px;margin-top:4px">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL GRID -->
+      <div class="dash-tools-label">Your tools</div>
       <div class="tool-grid">
         <div class="tool-card" onclick="showSection('caption')">
           <div class="tool-num">01</div>
@@ -716,13 +901,13 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
           <div class="tool-num">05</div>
           <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px">
             <div>
-              <div class="tool-name" style="font-size:clamp(28px,4vw,48px)">Pre-Post<br>Checker</div>
-              <div class="tool-desc" style="max-width:480px;margin-top:12px">Upload your content before posting. Get an AI grade, a full breakdown, and exactly what to fix to maximize reach before you hit publish.</div>
+              <div class="tool-name" style="font-size:clamp(22px,3vw,40px)">Pre-Post<br>Checker</div>
+              <div class="tool-desc" style="max-width:440px;margin-top:10px">Grade your content before you post. Get a full breakdown and exactly what to fix to maximize reach.</div>
             </div>
-            <div style="display:flex;gap:10px;flex-shrink:0">
-              <div style="font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--green);border-radius:100px">A–F Grade</div>
-              <div style="font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);color:var(--purple3);border-radius:100px">Visual Analysis</div>
-              <div style="font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--amber);border-radius:100px">Boost Tips</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--green);border-radius:100px">A–F Grade</div>
+              <div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);color:var(--purple3);border-radius:100px">Visual AI</div>
+              <div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--amber);border-radius:100px">Boost Tips</div>
             </div>
           </div>
           <div class="tool-arrow">→</div>
@@ -1263,30 +1448,209 @@ async function saveGeneration(tool, content, meta={}) {
   }
 }
 
+// ── DASHBOARD STATE ──
+var nextMoveTarget = 'caption';
+
 async function loadStats() {
-  if(!currentUser)return;
+  if(!currentUser) return;
   try {
-    const {data,error} = await sb.from('generations').select('tool').eq('user_id',currentUser.id);
-    if(error||!data)return;
+    const {data, error} = await sb.from('generations')
+      .select('tool, created_at')
+      .eq('user_id', currentUser.id)
+      .order('created_at', {ascending: false});
+    if(error || !data) return;
     generationsCache = data;
-    const total=data.length;
-    const captions=data.filter(r=>r.tool==='caption').length;
-    const hooks=data.filter(r=>r.tool==='hook').length;
-    // Animate all stat elements
-    ['stat-total','stat-total-2'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) animateCount(el, total, 800);
+
+    const total = data.length;
+    const captions = data.filter(r => r.tool === 'caption').length;
+    const hooks = data.filter(r => r.tool === 'hook').length;
+    const hashtags = data.filter(r => r.tool === 'hashtag').length;
+    const calendars = data.filter(r => r.tool === 'calendar').length;
+    const checks = data.filter(r => r.tool === 'checker').length;
+
+    // Animate stat counters
+    animateCount(document.getElementById('stat-total'), total, 800);
+    animateCount(document.getElementById('stat-captions'), captions, 800);
+    animateCount(document.getElementById('stat-hooks'), hooks, 800);
+    animateCount(document.getElementById('stat-checks'), checks, 800);
+
+    // Usage badge in header
+    const badge = document.getElementById('usage-badge');
+    if(badge) badge.textContent = total + ' generations';
+
+    // ── STREAK calculation ──
+    const today = new Date(); today.setHours(0,0,0,0);
+    const days = new Set();
+    data.forEach(r => {
+      const d = new Date(r.created_at); d.setHours(0,0,0,0);
+      days.add(d.getTime());
     });
-    ['stat-captions','stat-captions-2'].forEach(id => {
+    let streak = 0;
+    let check = new Date(today);
+    while(days.has(check.getTime())) {
+      streak++;
+      check.setDate(check.getDate() - 1);
+    }
+    const streakEl = document.getElementById('streak-val');
+    if(streakEl) animateCount(streakEl, streak, 600);
+
+    // Streak dots (last 7 days)
+    const dotsEl = document.getElementById('streak-dots');
+    if(dotsEl) {
+      dotsEl.innerHTML = '';
+      for(let i = 6; i >= 0; i--) {
+        const d = new Date(today); d.setDate(d.getDate() - i);
+        const dot = document.createElement('div');
+        const isToday = i === 0;
+        const hasGen = days.has(d.getTime());
+        dot.className = 'streak-dot' + (isToday && hasGen ? ' today' : hasGen ? ' active' : '');
+        dotsEl.appendChild(dot);
+      }
+    }
+
+    // ── THIS WEEK count ──
+    const weekStart = new Date(today); weekStart.setDate(today.getDate() - today.getDay());
+    const thisWeek = data.filter(r => new Date(r.created_at) >= weekStart).length;
+    const weekEl = document.getElementById('week-gen-val');
+    if(weekEl) animateCount(weekEl, thisWeek, 600);
+
+    // ── TOP TOOL ──
+    const toolCounts = {caption: captions, hook: hooks, hashtag: hashtags, calendar: calendars, checker: checks};
+    const topTool = Object.entries(toolCounts).sort((a,b) => b[1]-a[1])[0];
+    const topToolEl = document.getElementById('top-tool-val');
+    if(topToolEl && topTool && topTool[1] > 0) {
+      const toolNames = {caption:'Captions', hook:'Hooks', hashtag:'Hashtags', calendar:'Planner', checker:'Checker'};
+      topToolEl.textContent = toolNames[topTool[0]] || topTool[0];
+    }
+
+    // ── MOMENTUM SCORE (0-100) ──
+    // Based on: total gens, streak, variety of tools used, this week activity
+    const toolVariety = Object.values(toolCounts).filter(v => v > 0).length;
+    const score = Math.min(100, Math.round(
+      (Math.min(total, 30) / 30) * 40 +   // 40pts: volume (caps at 30)
+      (Math.min(streak, 7) / 7) * 30 +     // 30pts: streak (caps at 7 days)
+      (toolVariety / 5) * 20 +             // 20pts: variety
+      (Math.min(thisWeek, 5) / 5) * 10     // 10pts: this week activity
+    ));
+
+    const scoreEl = document.getElementById('momentum-score');
+    if(scoreEl) animateCount(scoreEl, score, 1000);
+
+    // Animate ring
+    const ring = document.getElementById('momentum-ring-fill');
+    if(ring) {
+      const offset = 283 - (283 * score / 100);
+      ring.style.setProperty('--ring-offset', offset);
+      ring.style.strokeDashoffset = offset;
+      if(score >= 70) ring.style.stroke = 'var(--green)';
+      else if(score >= 40) ring.style.stroke = 'var(--purple2)';
+      else ring.style.stroke = 'var(--amber)';
+    }
+
+    // Momentum status label
+    const statusEl = document.getElementById('momentum-status');
+    if(statusEl) {
+      if(score >= 70) { statusEl.textContent = 'On fire 🔥'; statusEl.className = 'momentum-status hot'; }
+      else if(score >= 35) { statusEl.textContent = 'Building'; statusEl.className = 'momentum-status building'; }
+      else { statusEl.textContent = 'Getting started'; statusEl.className = 'momentum-status cold'; }
+    }
+
+    // ── TODAY FOCUS CARD ──
+    updateTodayFocus(total, captions, hooks, hashtags, calendars, checks, streak, thisWeek);
+
+    // ── NEXT MOVE ──
+    updateNextMove(toolCounts, streak, thisWeek, total);
+
+    // ── STAT DELTAS ──
+    const deltaMap = {
+      'stat-total-delta': total > 0 ? (thisWeek + ' this week') : 'Start creating',
+      'stat-captions-delta': captions > 0 ? 'Keep writing' : 'Try it →',
+      'stat-hooks-delta': hooks > 0 ? 'Keep testing' : 'Try it →',
+      'stat-checks-delta': checks > 0 ? 'Keep checking' : 'New tool →',
+    };
+    Object.entries(deltaMap).forEach(([id, val]) => {
       const el = document.getElementById(id);
-      if (el) animateCount(el, captions, 800);
+      if(el) { el.textContent = val; el.className = 'dstat-delta ' + (val.includes('→') ? 'neutral' : 'up'); }
     });
-    ['stat-hooks','stat-hooks-2'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) animateCount(el, hooks, 800);
-    });
-    document.getElementById('usage-badge').textContent=`${total} generations`;
-  } catch(e){console.warn(e);}
+
+  } catch(e){ console.warn('loadStats error:', e); }
+}
+
+function updateTodayFocus(total, captions, hooks, hashtags, calendars, checks, streak, thisWeek) {
+  const titleEl = document.getElementById('today-title');
+  const descEl = document.getElementById('today-desc');
+  const btnEl = document.getElementById('today-action-btn');
+  if(!titleEl || !descEl) return;
+
+  const hour = new Date().getHours();
+  const timeOfDay = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
+
+  let title, desc, btn, target;
+
+  if(total === 0) {
+    title = 'Start your first generation';
+    desc = 'Run your first caption and PURX will start building your momentum score, streak, and personalized recommendations.';
+    btn = 'Generate a caption'; target = 'caption';
+  } else if(checks === 0) {
+    title = 'Grade a post before you publish';
+    desc = "You haven't used the Pre-Post Checker yet. Upload a screenshot and see how your content scores before it goes live.";
+    btn = 'Open checker'; target = 'checker';
+  } else if(calendars === 0) {
+    title = 'Build your content calendar';
+    desc = 'Map out your full week — what to post, when, and why it works. Takes 30 seconds.';
+    btn = 'Build my week'; target = 'calendar';
+  } else if(streak === 0) {
+    title = 'Get your streak back';
+    desc = "You haven't generated anything today yet. Run one tool to keep your momentum alive.";
+    btn = 'Generate now'; target = 'caption';
+  } else if(thisWeek >= 5) {
+    title = "You're on a roll this week";
+    desc = 'Strong week — ' + thisWeek + ' generations. Keep the momentum going and check your content before posting.';
+    btn = 'Check a post'; target = 'checker';
+  } else {
+    const focusMap = [
+      {cond: captions < 3, title: 'Write your next caption', desc: 'Creators who caption consistently grow 3x faster. Run another one.', btn: 'Write caption', target: 'caption'},
+      {cond: hooks < 2, title: 'Get 5 new hooks ready', desc: 'Hooks are the first second of your reel. Having a bank of them means you never waste a shoot.', btn: 'Generate hooks', target: 'hook'},
+      {cond: hashtags < 2, title: 'Build a hashtag strategy', desc: 'Your hashtags are your discovery layer. A tiered strategy gets your content in front of the right people.', btn: 'Get hashtags', target: 'hashtag'},
+    ];
+    const focus = focusMap.find(f => f.cond) || focusMap[0];
+    title = focus.title; desc = focus.desc; btn = focus.btn; target = focus.target;
+  }
+
+  titleEl.textContent = title;
+  descEl.textContent = desc;
+  if(btnEl) btnEl.textContent = btn + ' →';
+  window._todayTarget = target;
+}
+
+function handleTodayAction() {
+  showSection(window._todayTarget || 'caption');
+}
+
+function updateNextMove(toolCounts, streak, thisWeek, total) {
+  const textEl = document.getElementById('next-move-text');
+  const ctaEl = document.getElementById('next-move-cta');
+  const iconEl = document.getElementById('next-move-icon');
+  if(!textEl) return;
+
+  const moves = [
+    {cond: toolCounts.checker === 0, icon: '✦', text: 'Try the Pre-Post Checker — upload a screenshot and get an A–F grade before you post.', cta: 'Open Post Checker', target: 'checker'},
+    {cond: toolCounts.calendar === 0, icon: '◆', text: "You haven't built a content calendar yet. Map your whole week in 30 seconds.", cta: 'Build calendar', target: 'calendar'},
+    {cond: streak === 0 && total > 0, icon: '🔥', text: 'Your streak reset. Generate something today to keep your momentum alive.', cta: 'Generate now', target: 'caption'},
+    {cond: thisWeek < 3, icon: '⚡', text: "Aim for at least 3 generations this week to stay sharp. You've done " + thisWeek + " so far.", cta: 'Keep going', target: 'caption'},
+    {cond: toolCounts.hook < 5, icon: '→', text: 'Build a bank of hooks. Having 5+ options means your reels always open strong.', cta: 'Generate hooks', target: 'hook'},
+    {cond: true, icon: '✦', text: 'Check your next post before it goes live — even great content can be better.', cta: 'Open checker', target: 'checker'},
+  ];
+
+  const move = moves.find(m => m.cond) || moves[moves.length - 1];
+  if(iconEl) iconEl.textContent = move.icon;
+  textEl.textContent = move.text;
+  if(ctaEl) ctaEl.textContent = move.cta + ' →';
+  window._nextMoveTarget = move.target;
+}
+
+function handleNextMove() {
+  showSection(window._nextMoveTarget || 'caption');
 }
 
 async function loadHistory() {
@@ -2333,40 +2697,34 @@ function animateCount(el, target, duration) {
 }
 
 function renderProfileBar(p) {
-  const bar = document.getElementById('dash-profile-bar');
-  if (!bar) return;
-  const name = p.name || 'Creator';
-  const initial = name.charAt(0).toUpperCase();
-  const niches = (p.niches || []).slice(0,3).join(' · ');
-  const location = [p.city, p.state].filter(Boolean).join(', ');
-  const levelMap = {micro:'Micro Creator', growing:'Growing Creator', established:'Established Creator'};
-  const levelStr = levelMap[p.creator_level] || '';
-  const meta = [niches, location, levelStr].filter(Boolean).join(' — ');
-  const followers = p.current_followers ? p.current_followers.toLocaleString() + ' followers' : '';
-
-  bar.innerHTML =
-    '<div class="dash-profile-left">' +
-      '<div class="dash-profile-avatar">' + initial + '</div>' +
-      '<div class="dash-profile-info">' +
-        '<div class="dash-profile-name">' + escH(name) + '</div>' +
-        '<div class="dash-profile-meta">' + escH(meta) + (followers ? ' — ' + escH(followers) : '') + '</div>' +
-      '</div>' +
-    '</div>' +
-    '<div class="dash-profile-right">' +
-      '<div class="dash-profile-stat">' +
-        '<div class="dash-profile-stat-num" id="stat-total">0</div>' +
-        '<div class="dash-profile-stat-label">Generations</div>' +
-      '</div>' +
-      '<div class="dash-profile-stat">' +
-        '<div class="dash-profile-stat-num" id="stat-captions">0</div>' +
-        '<div class="dash-profile-stat-label">Captions</div>' +
-      '</div>' +
-      '<div class="dash-profile-stat">' +
-        '<div class="dash-profile-stat-num" id="stat-hooks">0</div>' +
-        '<div class="dash-profile-stat-label">Hooks</div>' +
-      '</div>' +
-    '</div>';
-  bar.style.display = 'flex';
+  // Update greeting with first name
+  const name = p.name ? p.name.split(' ')[0] : '';
+  if(name) {
+    const greetEl = document.getElementById('dash-greeting');
+    if(greetEl) {
+      const hour = new Date().getHours();
+      const time = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+      greetEl.textContent = time + ', ' + name;
+    }
+  }
+  // Update headline based on goal
+  const headlineEl = document.getElementById('dash-headline');
+  if(headlineEl && p.goal) {
+    const headlines = {
+      'grow followers fast': "Let's grow<br>your audience<br>today.",
+      'build a personal brand': "Build your<br>brand one<br>post at a time.",
+      'monetize my audience': "Time to turn<br>followers into<br>revenue.",
+      'go viral': "Let's make<br>something<br>go viral.",
+      'drive traffic to my business': "Drive traffic.<br>Build your<br>business.",
+      'build an engaged community': "Build your<br>community<br>today."
+    };
+    headlineEl.innerHTML = headlines[p.goal] || 'What are<br>we building<br>today?';
+  }
+  // Update sub with niche
+  if(p.niches && p.niches.length > 0) {
+    const subEl = document.getElementById('dash-sub');
+    if(subEl) subEl.textContent = 'Five AI tools built for serious ' + p.niches[0] + ' creators. Every output is personalized to you.';
+  }
 }
 
 // ── ONBOARDING ──
