@@ -3856,8 +3856,6 @@ function renderVpaOutput(raw, container) {
     var fb = cleaned.indexOf('{'); var lb = cleaned.lastIndexOf('}');
     if(fb !== -1 && lb > fb) cleaned = cleaned.substring(fb, lb+1);
   }
-  console.log('VPA RAW:', raw);
-  console.log('VPA CLEANED:', cleaned);
   var data;
   try { data = JSON.parse(cleaned); }
   catch(e) {
