@@ -707,6 +707,40 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .chk-boost::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--purple2))}
 .chk-boost-label{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--purple3);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(124,58,237,.2)}
 .chk-boost-val{font-size:13px;color:var(--t2);line-height:1.75;white-space:pre-line}
+
+/* ── TREND PULSE ── */
+.trend-pulse-section{margin-bottom:20px;animation:fadeUp .4s .35s ease both}
+.trend-pulse-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.trend-pulse-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);display:flex;align-items:center;gap:10px}
+.trend-pulse-live{width:6px;height:6px;border-radius:50%;background:var(--green);animation:lddot 1.5s ease-in-out infinite;flex-shrink:0}
+.trend-refresh-btn{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);background:none;border:1px solid var(--border);padding:6px 14px;border-radius:2px;cursor:pointer;transition:all .2s}
+.trend-refresh-btn:hover{color:var(--t1);border-color:var(--border2)}
+.trend-refresh-btn:disabled{opacity:.4;cursor:not-allowed}
+.trend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:700px){.trend-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.trend-grid{grid-template-columns:1fr}}
+.trend-card{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:18px 20px;position:relative;overflow:hidden;transition:border-color .2s}
+.trend-card:hover{border-color:var(--border2)}
+.trend-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.trend-card.hooks::before{background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.trend-card.formats::before{background:var(--amber)}
+.trend-card.audio::before{background:var(--green)}
+.trend-card.avoid::before{background:var(--red)}
+.trend-card.caption::before{background:linear-gradient(90deg,var(--purple2),var(--purple3))}
+.trend-card.timing::before{background:var(--amber)}
+.trend-card-eyebrow{font-family:var(--mono);font-size:7px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.trend-card.hooks .trend-card-eyebrow{color:var(--purple3)}
+.trend-card.formats .trend-card-eyebrow{color:var(--amber)}
+.trend-card.audio .trend-card-eyebrow{color:var(--green)}
+.trend-card.avoid .trend-card-eyebrow{color:var(--red)}
+.trend-card.caption .trend-card-eyebrow{color:var(--purple3)}
+.trend-card.timing .trend-card-eyebrow{color:var(--amber)}
+.trend-card-content{font-size:12px;color:var(--t2);line-height:1.65}
+.trend-card-content strong{color:var(--t1);font-weight:600}
+.trend-loading{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:700px){.trend-loading{grid-template-columns:1fr 1fr}}
+.trend-skeleton{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:18px 20px;height:110px;position:relative;overflow:hidden}
+.trend-skeleton::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.03),transparent);animation:ldslide 1.6s ease-in-out infinite}
 </style>
 </head>
 <body>
@@ -866,6 +900,27 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
           <div>
             <div class="streak-label">Most used tool</div>
             <div class="streak-val" id="top-tool-val" style="font-size:16px;margin-top:4px">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TREND PULSE -->
+      <div class="trend-pulse-section" id="trend-pulse-section">
+        <div class="trend-pulse-header">
+          <div class="trend-pulse-label">
+            <div class="trend-pulse-live"></div>
+            Trend Pulse — What's working right now
+          </div>
+          <button class="trend-refresh-btn" id="trend-refresh-btn" onclick="loadTrendPulse(true)">↻ Refresh</button>
+        </div>
+        <div id="trend-pulse-body">
+          <div class="trend-loading">
+            <div class="trend-skeleton"></div>
+            <div class="trend-skeleton"></div>
+            <div class="trend-skeleton"></div>
+            <div class="trend-skeleton"></div>
+            <div class="trend-skeleton"></div>
+            <div class="trend-skeleton"></div>
           </div>
         </div>
       </div>
@@ -1350,6 +1405,7 @@ function showApp() {
   showSection('dashboard');
   loadStats();
   loadProfile();
+  loadTrendPulse(false);
 }
 
 function showAuth() {
@@ -2682,6 +2738,8 @@ function applyProfile(p) {
 
   // Profile bar
   renderProfileBar(p);
+  // Reload trend pulse with correct niche
+  loadTrendPulse(false);
 
   // Pre-fill planner fields
   if (p.current_followers) {
@@ -3198,6 +3256,95 @@ function renderCheckerOutput(raw, container) {
       navigator.clipboard.writeText(reportText).then(function(){ showToast('Report copied'); });
     });
   }
+}
+
+
+// ── TREND PULSE ──
+var trendPulseCache = null;
+var trendPulseNiche = null;
+var trendPulseLoading = false;
+
+async function loadTrendPulse(forceRefresh) {
+  if (trendPulseLoading) return;
+  const body = document.getElementById('trend-pulse-body');
+  const refreshBtn = document.getElementById('trend-refresh-btn');
+  if (!body) return;
+
+  // Get niche from profile or default
+  const niche = (userProfile && userProfile.niches && userProfile.niches[0]) || 'lifestyle';
+
+  // Use cache if same niche and not forced
+  if (!forceRefresh && trendPulseCache && trendPulseNiche === niche) {
+    renderTrendPulse(trendPulseCache, body);
+    return;
+  }
+
+  trendPulseLoading = true;
+  if (refreshBtn) { refreshBtn.disabled = true; refreshBtn.textContent = '↻ Loading...'; }
+
+  // Show skeletons
+  body.innerHTML = '<div class="trend-loading">' +
+    Array(6).fill('<div class="trend-skeleton"></div>').join('') +
+    '</div>';
+
+  const prompt = buildTrendPulsePrompt(niche);
+
+  try {
+    const raw = await callWorker(prompt);
+    const cleaned = raw
+      .replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
+    const data = JSON.parse(cleaned);
+    trendPulseCache = data;
+    trendPulseNiche = niche;
+    renderTrendPulse(data, body);
+  } catch(e) {
+    body.innerHTML =
+      '<div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);' +
+      'padding:20px 24px;border-radius:2px;font-family:var(--mono);font-size:10px;color:var(--t3)">' +
+      'Could not load Trend Pulse — click Refresh to try again.</div>';
+    console.error('Trend Pulse error:', e);
+  }
+
+  trendPulseLoading = false;
+  if (refreshBtn) { refreshBtn.disabled = false; refreshBtn.textContent = '↻ Refresh'; }
+}
+
+function buildTrendPulsePrompt(niche) {
+  return 'You are PURX — an elite Instagram growth strategist with real-time knowledge of what is working RIGHT NOW on Instagram and TikTok for ' + niche + ' creators.' +
+    '\n\nGenerate a Trend Pulse briefing. Return ONLY a valid JSON object with exactly these 6 keys. No markdown, no backticks, no explanation.' +
+    '\n\n{' +
+    '\n  "hooks": "2-3 specific hook styles dominating ' + niche + ' content right now. Name the style and give a short example. Be concrete, not generic.",' +
+    '\n  "formats": "2-3 content formats that are getting the most reach for ' + niche + ' creators right now. Explain why each is performing.",' +
+    '\n  "audio": "The current audio/sound strategy working for ' + niche + ' reels. Trending vibes, types of audio, and why they are winning algorithmically right now.",' +
+    '\n  "caption": "What caption style is converting best for ' + niche + ' content right now. Include the opening pattern that is stopping the scroll.",' +
+    '\n  "timing": "The single best day and time to post ' + niche + ' content this week and why. Include a second-best slot.",' +
+    '\n  "avoid": "2-3 things ' + niche + ' creators are doing right now that are actively hurting reach. Be direct and specific."' +
+    '\n}';
+}
+
+function renderTrendPulse(data, body) {
+  var cards = [
+    { key: 'hooks',   cls: 'hooks',   label: '🎯 Hook Styles' },
+    { key: 'formats', cls: 'formats', label: '📱 Content Formats' },
+    { key: 'audio',   cls: 'audio',   label: '🎵 Audio Strategy' },
+    { key: 'caption', cls: 'caption', label: '✍️ Caption Style' },
+    { key: 'timing',  cls: 'timing',  label: '⏰ Best Timing' },
+    { key: 'avoid',   cls: 'avoid',   label: '⚠️ What to Avoid' },
+  ];
+
+  body.innerHTML = '<div class="trend-grid">' +
+    cards.map(function(c) {
+      var text = data[c.key] || 'No data';
+      // Bold any text in quotes or ALL CAPS words for visual interest
+      var formatted = escH(text)
+        .replace(/&quot;([^&]+)&quot;/g, '<strong>"$1"</strong>')
+        .replace(/\b([A-Z]{3,})\b/g, '<strong>$1</strong>');
+      return '<div class="trend-card ' + c.cls + '">' +
+        '<div class="trend-card-eyebrow">' + c.label + '</div>' +
+        '<div class="trend-card-content">' + formatted + '</div>' +
+        '</div>';
+    }).join('') +
+    '</div>';
 }
 
 // Init
