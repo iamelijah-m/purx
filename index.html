@@ -2671,93 +2671,6 @@ async function callWorker(prompt, images) {
   return data.text || '';
 }
 
-async function callWorker_OLD(prompt) {
-  const res = await fetch(WORKER_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt })
-  });
-  if(!res.ok) throw new Error('Worker error '+res.status);
-  const data = await res.json();
-  if(!data.ok) throw new Error(data.error||'Unknown error');
-  return data.text||'';
-}
-
-async function runTool(tool) {
-  const configs = {
-    caption:{
-      getNiche:()=>getPillVal('cap-niche-pills'),
-      getGoal:()=>getPillVal('cap-goal-pills'),
-      getBrief:()=>document.getElementById('cap-brief').value.trim(),
-      getPrompt:(n,g,b)=>PROMPTS.caption(n,g,b,getProfileContext()),
-      btnId:'cap-btn',loadId:'cap-loading',outId:'cap-output',textId:'cap-text',isCalendar:false
-    },
-    hook:{
-      getNiche:()=>getPillVal('hook-niche-pills'),
-      getGoal:()=>getPillVal('hook-style-pills'),
-      getBrief:()=>document.getElementById('hook-brief').value.trim(),
-      getPrompt:(n,g,b)=>PROMPTS.hook(n,b,g,getProfileContext()),
-      btnId:'hook-btn',loadId:'hook-loading',outId:'hook-output',textId:'hook-text',isCalendar:false
-    },
-    hashtag:{
-      getNiche:()=>getPillVal('ht-niche-pills'),
-      getGoal:()=>'',
-      getBrief:()=>document.getElementById('ht-brief').value.trim(),
-      getPrompt:(n,g,b)=>PROMPTS.hashtag(n,b,getProfileContext()),
-      btnId:'ht-btn',loadId:'ht-loading',outId:'ht-output',textId:'ht-text',isCalendar:false
-    },
-    _unused_calendar:{
-      getNiche:()=>'',getGoal:()=>'',getBrief:()=>'',getPrompt:()=>'',
-      btnId:'',loadId:'',outId:'',textId:null,isCalendar:false
-    }
-  };
-
-  const cfg=configs[tool];
-  const btn=document.getElementById(cfg.btnId);
-  const loading=document.getElementById(cfg.loadId);
-  const output=document.getElementById(cfg.outId);
-
-  btn.disabled=true;
-  loading.classList.add('show');
-  output.classList.remove('show');
-
-  try {
-    const niche=cfg.getNiche();
-    const goal=cfg.getGoal();
-    const brief=cfg.getBrief();
-    const prompt=cfg.getPrompt(niche,goal,brief);
-    const result=await callWorker(prompt);
-
-    renderRichOutput(cfg.textId, result);
-
-    output.classList.add('show');
-
-    // Save to Supabase
-    const genId = await saveGeneration(tool, result, {niche, goal, brief});
-    if(tool === 'caption' && genId) {
-      lastCapGenId = genId;
-      const pb = document.getElementById('cap-posted-btn');
-      if(pb) { pb.style.display = 'inline-flex'; pb.textContent = 'Mark as Posted'; pb.className = 'mark-posted-btn'; pb.disabled = false; }
-    }
-    if(tool === 'hook' && genId) {
-      lastHookGenId = genId;
-      const pb = document.getElementById('hook-posted-btn');
-      if(pb) { pb.style.display = 'inline-flex'; pb.textContent = 'Mark as Posted'; pb.className = 'mark-posted-btn'; pb.disabled = false; }
-    }
-    loadStats();
-
-  } catch(e){
-    showToast('Error generating — check your Worker is deployed.');
-    console.error(e);
-  }
-
-  loading.classList.remove('show');
-  btn.disabled=false;
-}
-
-// ── PLANNER ──
-let lastPlannerData = null;
-
 function getPlannerInputs() {
   const niche = getPillVal('cal-niche-pills') || 'lifestyle';
   const theme = document.getElementById('cal-theme').value.trim() || 'premium lifestyle content';
@@ -3196,7 +3109,7 @@ function renderRichOutput(textId, rawText) {
   const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
   // Detect tool type by looking for key section labels
-  const isCap = text.includes('CAPTION:') || text.includes('WHY THIS WORKS:');
+  const isCap = text.includes('PURX VERDICT:') || text.includes('WHY THIS WORKS:') || text.includes('CAPTION VOICE NOTE:') || text.includes('POSTING SCHEDULE:');
   const isHook = text.includes('HOOKS:') || text.includes('HOOK BREAKDOWN:');
   const isHash = text.includes('BROAD') && text.includes('MID-TIER');
 
