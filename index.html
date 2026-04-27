@@ -1271,13 +1271,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
           <button class="pill" data-val="fitness">Fitness</button>
           <button class="pill" data-val="business">Business</button>
         </div>
-        <label class="form-label">Your goal</label>
-        <div class="pill-row" id="cap-goal-pills">
-          <button class="pill on" data-val="grow followers">Grow followers</button>
-          <button class="pill" data-val="drive engagement">Drive engagement</button>
-          <button class="pill" data-val="build personal brand">Build brand</button>
-          <button class="pill" data-val="go viral">Go viral</button>
-        </div>
+
         <label class="form-label">Describe your post (optional)</label>
         <textarea class="form-textarea" id="cap-brief" placeholder="e.g. Me leaning on my C8 at sunset — clean, aspirational, no talking..."></textarea>
         <button class="gen-btn" id="cap-btn" onclick="runTool('caption')">Generate Caption →</button>
@@ -2621,7 +2615,7 @@ Every hashtag must be real, active, and directly relevant to ${niche} and this s
   const configs = {
     caption:{
       getNiche:()=>getPillVal('cap-niche-pills'),
-      getGoal:()=>getPillVal('cap-goal-pills'),
+      getGoal:()=>'',
       getBrief:()=>document.getElementById('cap-brief').value.trim(),
       getPrompt:(n,g,b)=>PROMPTS.caption(n,g,b,getProfileContext()),
       btnId:'cap-btn',loadId:'cap-loading',outId:'cap-output',textId:'cap-text',isCalendar:false
