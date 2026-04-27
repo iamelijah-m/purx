@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="pragma" content="no-cache">
 <title>PURX — Creator Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,800;0,900;1,900&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -4779,9 +4781,6 @@ function addMarkPostedBtn(container, genId) {
 
 
 
-// Init
-showSection('dashboard');
-
 function renderActionList(action) {
   var lines = action.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
   if(!lines.length) return '';
@@ -4828,6 +4827,10 @@ function renderScheduleTable(schedule) {
     rows +
   '</div>';
 }
+
+// Init
+showSection('dashboard');
+
 
 </script>
 </body>
