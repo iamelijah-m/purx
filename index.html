@@ -799,6 +799,45 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .vpa-steal-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--purple3);margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(124,58,237,.15)}
 .vpa-steal-formula{font-size:18px;color:var(--white);line-height:1.75;letter-spacing:.01em}
 .vpa-steal-caption{font-size:14px;color:var(--purple3);line-height:1.7;margin-top:16px;padding:16px 20px;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.12);border-radius:2px;font-style:italic}
+
+/* ── BIO AUDIT ── */
+.bio-output{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.bio-hero{
+  background:linear-gradient(135deg,rgba(16,185,129,.06) 0%,rgba(6,6,6,0) 60%),var(--surface);
+  border:1px solid rgba(16,185,129,.25);border-radius:2px;padding:36px 40px;
+  position:relative;overflow:hidden;
+}
+.bio-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--purple2),var(--purple3))}
+.bio-hero::after{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--green),transparent)}
+.bio-eyebrow{font-family:var(--mono);font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:var(--green);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.bio-eyebrow::before{content:'';width:20px;height:1px;background:var(--green)}
+.bio-score-row{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.bio-score-pill{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:7px 14px;border-radius:100px;border:1px solid;display:flex;align-items:center;gap:6px}
+.bio-score-pill.overall{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.3);color:var(--green)}
+.bio-score-pill.convert{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.3);color:var(--purple3)}
+.bio-score-pill.clarity{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.3);color:var(--amber)}
+.bio-rewrite-box{
+  background:var(--bg2);border:1px solid rgba(16,185,129,.2);border-radius:2px;
+  padding:28px 32px;position:relative;overflow:hidden;
+}
+.bio-rewrite-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--purple2))}
+.bio-rewrite-label{font-family:var(--mono);font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--green);margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(16,185,129,.15)}
+.bio-rewrite-text{font-size:19px;color:var(--white);line-height:1.85;white-space:pre-wrap;letter-spacing:.01em}
+.bio-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.bio-grid{grid-template-columns:1fr}}
+.bio-card{background:var(--surface);border:1px solid var(--border2);border-radius:2px;padding:22px 26px;position:relative;overflow:hidden}
+.bio-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.bio-card.green::before{background:var(--green)}
+.bio-card.red::before{background:var(--red)}
+.bio-card.amber::before{background:var(--amber)}
+.bio-card.purple::before{background:var(--purple2)}
+.bio-card.full{grid-column:1/-1}
+.bio-card-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.bio-card.green .bio-card-label{color:var(--green)}
+.bio-card.red .bio-card-label{color:var(--red)}
+.bio-card.amber .bio-card-label{color:var(--amber)}
+.bio-card.purple .bio-card-label{color:var(--purple3)}
+.bio-card-val{font-size:14px;color:var(--t2);line-height:1.75}
 </style>
 </head>
 <body>
@@ -871,6 +910,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
     <button class="nav-btn" onclick="showSection('history')">History</button>
     <button class="nav-btn nav-checker-btn" onclick="showSection('checker')">Post Checker</button>
     <button class="nav-btn" onclick="showSection('viral')" style="color:var(--amber);opacity:.8">Viral Analyzer</button>
+    <button class="nav-btn" onclick="showSection('bioaudit')" style="color:var(--green);opacity:.8">Bio Audit</button>
     <button class="nav-btn" onclick="showSection('settings')" style="margin-left:auto">Settings</button>
   </nav>
 
@@ -1027,6 +1067,12 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
           <div class="tool-name">Viral Post<br>Analyzer</div>
           <div class="tool-desc">Upload any viral post in your niche. Get a full breakdown of exactly why it worked — and a formula you can steal.</div>
           <div class="tool-arrow" style="border-color:rgba(245,158,11,.3);color:var(--amber)">→</div>
+        </div>
+        <div class="tool-card" onclick="showSection('bioaudit')" style="border-color:rgba(16,185,129,.15);background:linear-gradient(135deg,rgba(16,185,129,.04) 0%,var(--surface) 60%)">
+          <div class="tool-num">07</div>
+          <div class="tool-name">Bio<br>Audit</div>
+          <div class="tool-desc">Upload your profile screenshot. Get a new bio written for you, plus exactly what to fix to convert more followers.</div>
+          <div class="tool-arrow" style="border-color:rgba(16,185,129,.3);color:var(--green)">→</div>
         </div>
         <div class="tool-card checker-hero-card" onclick="showSection('checker')" style="grid-column:1/-1">
           <div class="tool-num">05</div>
@@ -1439,6 +1485,85 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
       </div>
 
       <div id="vpa-output" class="vpa-output" style="display:none"></div>
+    <!-- BIO AUDIT -->
+    <section id="sec-bioaudit" class="tool-panel">
+      <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
+      <div class="panel-title">Bio<br>Audit</div>
+      <div class="panel-sub">07 — Rewrite your profile, convert more followers</div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px" class="chk-how-grid">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:16px 20px;display:flex;align-items:flex-start;gap:12px">
+          <span style="font-family:var(--display);font-size:22px;font-weight:900;color:var(--green);line-height:1;flex-shrink:0">1</span>
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:4px">Screenshot</div>
+            <div style="font-size:12px;color:var(--t2);line-height:1.5">Take a screenshot of your full Instagram profile</div>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:16px 20px;display:flex;align-items:flex-start;gap:12px">
+          <span style="font-family:var(--display);font-size:22px;font-weight:900;color:var(--green);line-height:1;flex-shrink:0">2</span>
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:4px">Audit</div>
+            <div style="font-size:12px;color:var(--t2);line-height:1.5">AI reads your bio, name, highlights, and profile strategy</div>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:16px 20px;display:flex;align-items:flex-start;gap:12px">
+          <span style="font-family:var(--display);font-size:22px;font-weight:900;color:var(--green);line-height:1;flex-shrink:0">3</span>
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:4px">Rewrite</div>
+            <div style="font-size:12px;color:var(--t2);line-height:1.5">Get a new bio ready to copy-paste, plus exactly what to fix</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <label class="form-label" style="margin-top:0">Upload your Instagram profile screenshot</label>
+        <div class="chk-drop-zone" id="bio-drop-zone" onclick="document.getElementById('bio-file-input').click()">
+          <div class="chk-drop-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 13V3M10 3L6 7M10 3L14 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 14v1a2 2 0 002 2h10a2 2 0 002-2v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="chk-drop-text" id="bio-drop-text">Drop your profile screenshot</div>
+          <div class="chk-drop-sub" id="bio-drop-sub">Show your full bio, name, highlights — the more visible the better</div>
+        </div>
+        <input type="file" id="bio-file-input" accept="image/*" style="display:none" onchange="handleBioFile(this.files)">
+        <div id="bio-preview" style="margin-bottom:12px"></div>
+
+        <label class="form-label">Your niche</label>
+        <div class="pill-row" id="bio-niche-pills">
+          <button class="pill on" data-val="lifestyle">Lifestyle</button>
+          <button class="pill" data-val="fashion">Fashion</button>
+          <button class="pill" data-val="cars">Cars</button>
+          <button class="pill" data-val="motivation">Motivation</button>
+          <button class="pill" data-val="fitness">Fitness</button>
+          <button class="pill" data-val="business">Business</button>
+        </div>
+
+        <label class="form-label">Your main goal for your profile</label>
+        <div class="pill-row" id="bio-goal-pills">
+          <button class="pill on" data-val="grow followers fast">Grow followers</button>
+          <button class="pill" data-val="drive traffic to a link">Drive link clicks</button>
+          <button class="pill" data-val="build credibility and authority">Build authority</button>
+          <button class="pill" data-val="convert followers into clients">Get clients</button>
+        </div>
+
+        <label class="form-label">Anything specific you want in the bio? (optional)</label>
+        <textarea class="form-textarea" id="bio-context" placeholder="e.g. I want to mention Tampa, my car content, and that I post daily..."></textarea>
+
+        <div style="display:flex;gap:12px;margin-top:24px">
+          <button class="gen-btn" id="bio-btn" onclick="runBioAudit()" style="margin-top:0;flex:1">Audit My Bio →</button>
+          <button onclick="resetBioAudit()" style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:transparent;color:var(--t3);border:1px solid var(--border2);padding:0 20px;border-radius:2px;cursor:pointer;transition:all .2s;flex-shrink:0" onmouseover="this.style.color='var(--t1)'" onmouseout="this.style.color='var(--t3)'">Reset</button>
+        </div>
+      </div>
+
+      <div class="loading" id="bio-loading">
+        <div class="ld-label" id="bio-loading-label">Reading your profile...</div>
+        <div class="ld-bar"><div class="ld-fill"></div></div>
+        <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+      </div>
+
+      <div id="bio-output" class="bio-output" style="display:none"></div>
     </section>
 
   </main>
@@ -1747,7 +1872,7 @@ document.addEventListener('keydown', e => {
 function showSection(id) {
   document.querySelectorAll('.app-content section').forEach(s=>s.style.display='none');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
-  const sections=['dashboard','caption','hook','hashtag','calendar','history','checker','viral','settings'];
+  const sections=['dashboard','caption','hook','hashtag','calendar','history','checker','viral','bioaudit','settings'];
   const idx=sections.indexOf(id);
   const sec=document.getElementById('sec-'+id);
   if(sec)sec.style.display='block';
@@ -3988,6 +4113,225 @@ function renderVpaOutput(raw, container) {
   actEl.appendChild(copyBtn);
   actEl.appendChild(regenBtn);
   container.appendChild(actEl);
+}
+
+
+// ── BIO AUDIT ──
+var bioFile = null;
+var bioLoading = false;
+
+document.addEventListener('DOMContentLoaded', function() {
+  var dz = document.getElementById('bio-drop-zone');
+  if(!dz) return;
+  dz.addEventListener('dragover', function(e){ e.preventDefault(); dz.classList.add('has-files'); });
+  dz.addEventListener('dragleave', function(){ if(!bioFile) dz.classList.remove('has-files'); });
+  dz.addEventListener('drop', function(e){
+    e.preventDefault();
+    if(e.dataTransfer.files && e.dataTransfer.files.length) handleBioFile(e.dataTransfer.files);
+  });
+});
+
+function handleBioFile(files) {
+  if(!files || !files.length) return;
+  bioFile = files[0];
+  var dz = document.getElementById('bio-drop-zone');
+  var preview = document.getElementById('bio-preview');
+  if(dz) {
+    dz.classList.add('has-files');
+    var dt = document.getElementById('bio-drop-text');
+    var ds = document.getElementById('bio-drop-sub');
+    if(dt) dt.textContent = bioFile.name;
+    if(ds) ds.textContent = 'Click to change';
+  }
+  if(preview) {
+    var url = URL.createObjectURL(bioFile);
+    preview.innerHTML = '<img src="' + url + '" style="height:120px;border-radius:2px;border:1px solid var(--border2);object-fit:cover;margin-top:8px">';
+  }
+}
+
+function resetBioAudit() {
+  bioFile = null;
+  var dz = document.getElementById('bio-drop-zone');
+  var preview = document.getElementById('bio-preview');
+  var input = document.getElementById('bio-file-input');
+  var output = document.getElementById('bio-output');
+  var ctx = document.getElementById('bio-context');
+  if(dz) {
+    dz.classList.remove('has-files');
+    var dt = document.getElementById('bio-drop-text');
+    var ds = document.getElementById('bio-drop-sub');
+    if(dt) dt.textContent = 'Drop your profile screenshot';
+    if(ds) ds.textContent = 'Show your full bio, name, highlights — the more visible the better';
+  }
+  if(preview) preview.innerHTML = '';
+  if(input) input.value = '';
+  if(output) { output.style.display = 'none'; output.innerHTML = ''; }
+  if(ctx) ctx.value = '';
+  showToast('Reset');
+}
+
+async function runBioAudit() {
+  if(bioLoading) return;
+  if(!bioFile) { showToast('Upload your profile screenshot first'); return; }
+
+  var btn = document.getElementById('bio-btn');
+  var loading = document.getElementById('bio-loading');
+  var output = document.getElementById('bio-output');
+  var labelEl = document.getElementById('bio-loading-label');
+  var niche = getPillVal('bio-niche-pills') || 'lifestyle';
+  var goal = getPillVal('bio-goal-pills') || 'grow followers fast';
+  var context = document.getElementById('bio-context').value.trim();
+
+  bioLoading = true;
+  btn.disabled = true;
+  loading.classList.add('show');
+  output.style.display = 'none';
+  output.innerHTML = '';
+
+  var msgs = ['Reading your profile...', 'Auditing your bio strategy...', 'Rewriting your bio...', 'Building your action plan...'];
+  var msgIdx = 0;
+  var msgTimer = labelEl ? setInterval(function(){
+    msgIdx = (msgIdx + 1) % msgs.length;
+    labelEl.textContent = msgs[msgIdx];
+  }, 2000) : null;
+
+  try {
+    var b64 = await fileToBase64(bioFile);
+    var prompt = buildBioPrompt(niche, goal, context);
+    var images = [{ data: b64, media_type: 'image/jpeg' }];
+    var raw = await callWorker(prompt, images);
+
+    // Extract JSON
+    var cleaned = raw.replace(/^```json\s*/i,'').replace(/```\s*$/i,'').trim();
+    var fb = cleaned.indexOf('{'); var lb = cleaned.lastIndexOf('}');
+    if(fb !== -1 && lb > fb) cleaned = cleaned.substring(fb, lb+1);
+
+    var data;
+    try { data = JSON.parse(cleaned); }
+    catch(e) {
+      // Fallback to raw text display
+      data = { verdict: 'Audit Complete', summary: raw, new_bio: '', what_is_working: raw, what_to_fix: '', highlight_strategy: '', profile_photo_tip: '', keyword_tip: '', quick_wins: '' };
+    }
+
+    renderBioOutput(data, output);
+    output.style.display = 'flex';
+    setTimeout(function(){ output.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+    saveGeneration('bioaudit', raw);
+  } catch(e) {
+    showToast('Could not audit — try again');
+    console.error('Bio audit error:', e);
+  }
+
+  clearInterval(msgTimer);
+  loading.classList.remove('show');
+  btn.disabled = false;
+  bioLoading = false;
+}
+
+function buildBioPrompt(niche, goal, context) {
+  return 'You are PURX — an elite Instagram growth strategist who specializes in profile optimization. A ' + niche + ' creator wants their Instagram profile audited and their bio rewritten.' +
+    '\nGoal: ' + goal + (context ? '\nCreator notes: ' + context : '') +
+    '\n\nAnalyze the uploaded Instagram profile screenshot carefully. Look at: the bio text, the name field, the highlight covers/labels, the profile photo if visible, the follower/following ratio, and any link in bio.' +
+    '\n\nReturn ONLY a valid JSON object with exactly these keys. No markdown, no backticks, no explanation. Start with { and end with }.' +
+    '\n\n{' +
+    '\n  "verdict": "One bold punchy sentence on the current state of this profile. Be direct.",' +
+    '\n  "summary": "2-3 sentences: what this profile is doing right now vs what it could be doing. Specific to what you see.",' +
+    '\n  "profile_score": "Rate 1-10 overall and explain why in one sentence.",' +
+    '\n  "conversion_score": "Rate 1-10 how well this bio converts visitors to followers, and why.",' +
+    '\n  "clarity_score": "Rate 1-10 how clear it is what this creator does in the first 2 seconds.",' +
+    '\n  "new_bio": "Write a completely new bio for this creator. Max 150 characters. Include: what they do, who they serve, their personality, and a reason to follow or click the link. Use line breaks with \\n for formatting. No emojis unless they had them and they worked.",' +
+    '\n  "new_name_field": "Suggest an optimized Instagram name field (not handle). Should include keywords people search for. Max 30 chars.",' +
+    '\n  "what_is_working": "2-3 specific things about the current profile that are actually good. Be real — not generic praise.",' +
+    '\n  "what_to_fix": "3-5 specific things to change ranked by impact. Be direct and specific to what you see.",' +
+    '\n  "highlight_strategy": "Assess the current highlights if visible. What should they rename, reorder, or add? Give specific names.",' +
+    '\n  "keyword_tip": "What keyword(s) should this creator add to their name field or bio to appear in Instagram search? Explain why these keywords.",' +
+    '\n  "quick_wins": "2-3 things they can change in the next 10 minutes that will immediately improve the profile."' +
+    '\n}';
+}
+
+function renderBioOutput(data, container) {
+  function score(val) {
+    var m = String(val || '').match(/\d+/);
+    return m ? parseInt(m[0]) : 0;
+  }
+  function scoreColor(s) {
+    return s >= 8 ? 'var(--green)' : s >= 6 ? 'var(--amber)' : 'var(--red)';
+  }
+
+  var ps = score(data.profile_score);
+  var cs = score(data.conversion_score);
+  var cl = score(data.clarity_score);
+
+  // Hero
+  var hero = document.createElement('div');
+  hero.className = 'bio-hero';
+  hero.innerHTML =
+    '<div class="bio-eyebrow">Profile Audit</div>' +
+    '<div class="bio-score-row">' +
+      '<div class="bio-score-pill overall">Profile <strong style="color:' + scoreColor(ps) + ';margin-left:4px">' + ps + '/10</strong></div>' +
+      '<div class="bio-score-pill convert">Conversion <strong style="color:' + scoreColor(cs) + ';margin-left:4px">' + cs + '/10</strong></div>' +
+      '<div class="bio-score-pill clarity">Clarity <strong style="color:' + scoreColor(cl) + ';margin-left:4px">' + cl + '/10</strong></div>' +
+    '</div>' +
+    '<div style="font-family:var(--display);font-size:clamp(22px,3vw,36px);font-weight:900;text-transform:uppercase;color:var(--white);line-height:1;margin-bottom:12px;letter-spacing:.02em">' + escH(data.verdict || 'Audit complete') + '</div>' +
+    '<div style="font-size:15px;color:var(--t2);line-height:1.75">' + escH(data.summary || '') + '</div>';
+  container.appendChild(hero);
+
+  // New bio rewrite box
+  if(data.new_bio) {
+    var rewrite = document.createElement('div');
+    rewrite.className = 'bio-rewrite-box';
+    rewrite.innerHTML =
+      '<div class="bio-rewrite-label">Your New Bio — Ready to Copy</div>' +
+      '<div class="bio-rewrite-text">' + escH(data.new_bio) + '</div>' +
+      (data.new_name_field ? '<div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(16,185,129,.15)">' +
+        '<div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:8px">Optimized Name Field</div>' +
+        '<div style="font-size:15px;color:var(--white);font-weight:600">' + escH(data.new_name_field) + '</div>' +
+        '</div>' : '');
+    container.appendChild(rewrite);
+  }
+
+  // Grid cards
+  var grid = document.createElement('div');
+  grid.className = 'bio-grid';
+  var cards = [
+    { cls:'green', label:'What Is Working', val: data.what_is_working },
+    { cls:'red',   label:'What to Fix', val: data.what_to_fix },
+    { cls:'amber', label:'Highlight Strategy', val: data.highlight_strategy },
+    { cls:'purple',label:'Keyword Strategy', val: data.keyword_tip },
+  ];
+  cards.forEach(function(c) {
+    var card = document.createElement('div');
+    card.className = 'bio-card ' + c.cls;
+    card.innerHTML = '<div class="bio-card-label">' + escH(c.label) + '</div><div class="bio-card-val">' + escH(c.val || '') + '</div>';
+    grid.appendChild(card);
+  });
+  container.appendChild(grid);
+
+  // Quick wins full width
+  if(data.quick_wins) {
+    var qw = document.createElement('div');
+    qw.className = 'bio-card amber full';
+    qw.style.cssText = 'grid-column:1/-1;background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.2)';
+    qw.innerHTML =
+      '<div class="bio-card-label" style="color:var(--amber)">Quick Wins — Do These in 10 Minutes</div>' +
+      '<div class="bio-card-val" style="font-size:15px;color:var(--t1)">' + escH(data.quick_wins) + '</div>';
+    container.appendChild(qw);
+  }
+
+  // Action buttons
+  var acts = document.createElement('div');
+  acts.style.cssText = 'display:flex;gap:10px';
+  var copyBtn = document.createElement('button');
+  copyBtn.className = 'copy-btn';
+  copyBtn.textContent = 'Copy New Bio';
+  copyBtn.onclick = function(){ navigator.clipboard.writeText(data.new_bio || '').then(function(){ showToast('New bio copied ✓'); }); };
+  var regenBtn = document.createElement('button');
+  regenBtn.className = 'regen-btn';
+  regenBtn.textContent = 'Re-audit';
+  regenBtn.onclick = runBioAudit;
+  acts.appendChild(copyBtn);
+  acts.appendChild(regenBtn);
+  container.appendChild(acts);
 }
 
 // Init
