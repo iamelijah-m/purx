@@ -2500,30 +2500,26 @@ CAPTION REQUIREMENTS:
 - End with a question, statement worth saving, or subtle CTA
 - 4-6 hashtags on a new line — mix of mid-tier and niche-specific, never massive generic tags
 
-After the caption, provide this breakdown with EXACTLY these labels:
+After the caption, provide this breakdown with EXACTLY these labels. BE CONCISE — each section must be SHORT and punchy, not paragraphs:
 
 WHY THIS WORKS:
-[The specific psychological trigger this caption uses and why it earns attention from a ${niche} audience right now — be specific, not generic]
+[2 sentences MAX. Name the specific psychological trigger and why it works for ${niche} right now. No fluff.]
 
 POSTING SCHEDULE:
-[Give a full week posting schedule. Put EACH DAY ON ITS OWN LINE. Format exactly like this, one per line:
-Monday — 7:00 PM EST — [reason]
-Tuesday — [time] — [reason]
-Cover at least 4 days. Be specific to ${niche} content and the creator's location.]
+[3 days only. Each on its own line. Format: Day — Time EST — one-word reason
+Example: Monday — 7:00 PM EST — peak scroll
+Keep the reason to 2-4 words max.]
 
 PERFORMANCE TIP:
-[One specific action to take within the first 30 minutes of posting to signal engagement to the algorithm — be tactical and specific to ${niche}]
+[One sentence. One specific action. First 30 minutes only. No explanations.]
 
 ACTION SEQUENCE:
-[3 steps, each on its own line:
-1) What to do immediately before posting
-2) What to do within 30 minutes of posting
-3) What to do that evening to compound reach]
+[3 steps. Each one sentence. Number them 1-3. No sub-points, no explanations.]
 
 CAPTION VOICE NOTE:
-[The one phrase or line in this caption that makes it sound human and real — protect this when editing, it is the soul of the caption]
+[The exact phrase that makes this sound real. Just the phrase, no explanation.]
 
-Output only the caption followed by the labeled sections above. No preamble, no extra commentary.`,
+Output ONLY the caption then the labeled sections. No preamble, no extra text.`,
 
   hook:(niche,brief,style,profileCtx)=>
     `You are PURX — an elite Instagram Reels strategist who understands the real mechanics of why people stop scrolling and keep watching. You think about attention as a finite resource and you know that the first 1-2 seconds of a reel determine everything — whether it gets pushed or buried.
@@ -2550,14 +2546,14 @@ HOOKS:
 5. [hook]
 
 HOOK BREAKDOWN:
-1. [The specific attention mechanism this hook uses — what psychological trigger, why it works for ${niche} RIGHT NOW, what makes it different from the generic version]
-2. [same]
-3. [same]
-4. [same]
-5. [same]
+1. [One sentence: the mechanism + why it works for ${niche} now]
+2. [One sentence]
+3. [One sentence]
+4. [One sentence]
+5. [One sentence]
 
 BEST HOOK FOR REACH:
-[Which number, why it will outperform the others for a ${niche} creator specifically, and what type of audience it attracts]
+[Hook number + one sentence why it wins for ${niche}. That's it.]
 
 POSTING SCHEDULE:
 [Full week Reel posting schedule. Put EACH DAY ON ITS OWN LINE. Format exactly:
@@ -3267,15 +3263,53 @@ function renderCaptionOutput(el, lines) {
         (tip ? '<span class="cap-action-pill tip">⚡ ' + escH((tip.split('.')[0]||tip).substring(0,55)) + '</span>' : '') +
         (action ? '<span class="cap-action-pill action">✦ Do this now</span>' : '') +
       '</div>' +
-      // ── Insight cards: supporting detail ──
+      // ── Insight cards: scannable, tight ──
       '<div class="cap-insight-grid">' +
         (why ? '<div class="cap-insight-card purple"><div class="cap-insight-card-label purple">Why This Works</div><div class="cap-insight-card-val">' + escH(why) + '</div></div>' : '') +
-        (tip ? '<div class="cap-insight-card amber"><div class="cap-insight-card-label amber">Performance Tip</div><div class="cap-insight-card-val">' + escH(tip) + '</div></div>' : '') +
-        (schedule ? '<div class="cap-insight-card green" style="grid-column:1/-1"><div class="cap-insight-card-label green">Posting Schedule</div><div class="cap-insight-card-val" style="white-space:pre-line">' + escH(formatSchedule(schedule)) + '</div></div>' : '') +
-        (action ? '<div class="cap-insight-card purple" style="grid-column:1/-1"><div class="cap-insight-card-label purple">Action Sequence — Do This Right Now</div><div class="cap-insight-card-val" style="white-space:pre-line">' + escH(formatSchedule(action)) + '</div></div>' : '') +
-        (voice ? '<div class="cap-insight-card default" style="grid-column:1/-1"><div class="cap-insight-card-label default">Caption Voice Note</div><div class="cap-insight-card-val">' + escH(voice) + '</div></div>' : '') +
+        (tip ? '<div class="cap-insight-card amber"><div class="cap-insight-card-label amber">Do This First</div><div class="cap-insight-card-val">' + escH(tip) + '</div></div>' : '') +
       '</div>' +
+      // ── Schedule: compact table ──
+      (schedule ? renderScheduleTable(schedule) : '') +
+      // ── Action sequence: numbered list ──
+      (action ? renderActionList(action) : '') +
+      // ── Voice note: inline highlight ──
+      (voice ? '<div style="margin-top:10px;padding:14px 20px;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.12);border-radius:3px;font-family:var(--mono);font-size:10px;color:var(--purple3);letter-spacing:.08em">✦ ' + escH(voice) + '</div>' : '') +
     '</div>';
+}
+
+function renderScheduleTable(schedule) {
+  var lines = schedule.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l && l.includes('—'); });
+  if(!lines.length) return '';
+  var rows = lines.map(function(line) {
+    var parts = line.split('—').map(function(p){ return p.trim(); });
+    var day = parts[0] || '';
+    var time = parts[1] || '';
+    var reason = parts.slice(2).join('—').trim();
+    return '<div style="display:grid;grid-template-columns:100px 110px 1fr;gap:0;border-bottom:1px solid var(--border)">' +
+      '<div style="padding:10px 16px;font-family:var(--display);font-size:13px;font-weight:900;text-transform:uppercase;color:var(--white);letter-spacing:.04em">' + escH(day) + '</div>' +
+      '<div style="padding:10px 0;font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:.04em">' + escH(time) + '</div>' +
+      '<div style="padding:10px 0;font-size:12px;color:var(--t3)">' + escH(reason) + '</div>' +
+    '</div>';
+  }).join('');
+  return '<div style="margin-top:10px;background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden">' +
+    '<div style="padding:10px 16px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--green)">Post Schedule</div>' +
+    rows +
+  '</div>';
+}
+
+function renderActionList(action) {
+  var lines = action.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
+  var items = lines.map(function(line, i) {
+    var text = line.replace(/^\d+[.)\)]\s*/, '').trim();
+    return '<div style="display:flex;gap:14px;padding:12px 16px;border-bottom:1px solid var(--border);align-items:flex-start">' +
+      '<div style="font-family:var(--display);font-size:20px;font-weight:900;color:var(--purple2);flex-shrink:0;line-height:1.1;width:20px">' + (i+1) + '</div>' +
+      '<div style="font-size:13px;color:var(--t2);line-height:1.6;padding-top:2px">' + escH(text) + '</div>' +
+    '</div>';
+  }).join('');
+  return '<div style="margin-top:10px;background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden">' +
+    '<div style="padding:10px 16px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--purple3)">Do This Now</div>' +
+    items +
+  '</div>';
 }
 
 function extractHookType(breakdown) {
