@@ -838,6 +838,46 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .bio-card.amber .bio-card-label{color:var(--amber)}
 .bio-card.purple .bio-card-label{color:var(--purple3)}
 .bio-card-val{font-size:14px;color:var(--t2);line-height:1.75}
+
+/* ── PROGRESS TRACKING ── */
+.progress-hero{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:700px){.progress-hero{grid-template-columns:repeat(2,1fr)}}
+.prog-stat{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:20px 22px;position:relative;overflow:hidden;transition:border-color .2s}
+.prog-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.prog-stat.purple::before{background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.prog-stat.green::before{background:var(--green)}
+.prog-stat.amber::before{background:var(--amber)}
+.prog-stat.blue::before{background:#3b82f6}
+.prog-stat-val{font-family:var(--display);font-size:44px;font-weight:900;color:var(--white);line-height:1;margin-bottom:4px}
+.prog-stat-label{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase}
+.prog-stat-delta{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:6px}
+.prog-grade-track{background:var(--surface);border:1px solid var(--border2);border-radius:2px;padding:28px 32px;margin-bottom:20px}
+.prog-grade-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--purple3);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.prog-grade-label::before{content:'';width:16px;height:1px;background:var(--purple2)}
+.prog-grade-row{display:flex;gap:8px;align-items:flex-end;height:80px;margin-bottom:12px}
+.prog-grade-bar{flex:1;border-radius:2px 2px 0 0;min-height:4px;transition:height .6s cubic-bezier(.34,1.56,.64,1);position:relative}
+.prog-grade-bar.A{background:var(--green)}
+.prog-grade-bar.B{background:var(--purple2)}
+.prog-grade-bar.C{background:var(--amber)}
+.prog-grade-bar.D,.prog-grade-bar.F{background:var(--red)}
+.prog-grade-bar-label{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:.08em;white-space:nowrap}
+.prog-grade-avg{font-family:var(--display);font-size:48px;font-weight:900;color:var(--white);line-height:1}
+.prog-grade-avg-label{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase;margin-top:4px}
+.prog-posted-list{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:24px 28px;margin-bottom:20px}
+.prog-posted-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.prog-posted-item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.prog-posted-item:last-child{border-bottom:none;padding-bottom:0}
+.prog-posted-tool{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--purple3);flex-shrink:0;width:64px;padding-top:2px}
+.prog-posted-text{font-size:13px;color:var(--t2);line-height:1.55;flex:1;min-width:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.prog-posted-date{font-family:var(--mono);font-size:8px;color:var(--t3);flex-shrink:0;padding-top:2px}
+.prog-empty{display:flex;flex-direction:column;align-items:center;gap:12px;padding:48px 0;text-align:center}
+.prog-empty-num{font-family:var(--display);font-size:64px;font-weight:900;color:var(--t4);line-height:1}
+.prog-empty-label{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3)}
+.prog-empty-desc{font-size:13px;color:var(--t3);max-width:280px;line-height:1.65}
+/* Mark as posted button on outputs */
+.mark-posted-btn{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:transparent;color:var(--green);border:1px solid rgba(16,185,129,.3);padding:10px 20px;border-radius:2px;cursor:pointer;transition:all .2s}
+.mark-posted-btn:hover{background:rgba(16,185,129,.08);border-color:var(--green)}
+.mark-posted-btn.done{color:var(--t3);border-color:var(--border);cursor:default}
 </style>
 </head>
 <body>
@@ -911,6 +951,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
     <button class="nav-btn nav-checker-btn" onclick="showSection('checker')">Post Checker</button>
     <button class="nav-btn" onclick="showSection('viral')" style="color:var(--amber);opacity:.8">Viral Analyzer</button>
     <button class="nav-btn" onclick="showSection('bioaudit')" style="color:var(--green);opacity:.8">Bio Audit</button>
+    <button class="nav-btn" onclick="showSection('progress')">Progress</button>
     <button class="nav-btn" onclick="showSection('settings')" style="margin-left:auto">Settings</button>
   </nav>
 
@@ -1129,6 +1170,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
           <div class="output-actions">
             <button class="copy-btn" onclick="copyOutput('cap-text')">Copy</button>
             <button class="regen-btn" onclick="runTool('caption')">Regenerate</button>
+            <button class="mark-posted-btn" id="cap-posted-btn" onclick="markAsPosted(lastCapGenId, this)" style="display:none">Mark as Posted</button>
           </div>
         </div>
       </div>
@@ -1172,6 +1214,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
           <div class="output-actions">
             <button class="copy-btn" onclick="copyOutput('hook-text')">Copy all</button>
             <button class="regen-btn" onclick="runTool('hook')">Regenerate</button>
+            <button class="mark-posted-btn" id="hook-posted-btn" onclick="markAsPosted(lastHookGenId, this)" style="display:none">Mark as Posted</button>
           </div>
         </div>
       </div>
@@ -1566,6 +1609,68 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
       </div>
 
       <div id="bio-output" class="bio-output" style="display:none"></div>
+    <!-- PROGRESS TRACKING -->
+    <section id="sec-progress" class="tool-panel">
+      <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
+      <div class="panel-title">Your<br>Progress</div>
+      <div class="panel-sub">Track how you're growing over time</div>
+
+      <!-- Stats row -->
+      <div class="progress-hero" id="prog-stats-row">
+        <div class="prog-stat purple">
+          <div class="prog-stat-val" id="prog-total">—</div>
+          <div class="prog-stat-label">Total Generations</div>
+          <div class="prog-stat-delta" id="prog-total-delta"></div>
+        </div>
+        <div class="prog-stat green">
+          <div class="prog-stat-val" id="prog-posted">—</div>
+          <div class="prog-stat-label">Posts Published</div>
+          <div class="prog-stat-delta" id="prog-posted-delta"></div>
+        </div>
+        <div class="prog-stat amber">
+          <div class="prog-stat-val" id="prog-avg-grade">—</div>
+          <div class="prog-stat-label">Avg Checker Grade</div>
+          <div class="prog-stat-delta" id="prog-grade-delta"></div>
+        </div>
+        <div class="prog-stat blue">
+          <div class="prog-stat-val" id="prog-streak">—</div>
+          <div class="prog-stat-label">Day Streak</div>
+          <div class="prog-stat-delta" id="prog-streak-delta"></div>
+        </div>
+      </div>
+
+      <!-- Grade chart -->
+      <div class="prog-grade-track" id="prog-grade-track" style="display:none">
+        <div class="prog-grade-label">Checker Grade History</div>
+        <div style="display:flex;align-items:flex-end;gap:24px">
+          <div style="flex:1">
+            <div class="prog-grade-row" id="prog-grade-bars"></div>
+            <div style="height:20px"></div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div class="prog-grade-avg" id="prog-grade-avg-val">—</div>
+            <div class="prog-grade-avg-label">Average grade</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Posted content list -->
+      <div class="prog-posted-list" id="prog-posted-list">
+        <div class="prog-posted-label">Content You've Published</div>
+        <div id="prog-posted-items">
+          <div class="prog-empty">
+            <div class="prog-empty-num">0</div>
+            <div class="prog-empty-label">Nothing marked as posted yet</div>
+            <div class="prog-empty-desc">After you generate a caption or hook, hit "Mark as Posted" to track what you actually publish. Your progress builds from there.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tool breakdown -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:24px 28px">
+        <div class="prog-posted-label">Generations by Tool</div>
+        <div id="prog-tool-breakdown" style="display:flex;flex-direction:column;gap:10px;margin-top:4px"></div>
+      </div>
     </section>
 
   </main>
@@ -1704,6 +1809,9 @@ const sb = createClient(
 // ── STATE ──
 let currentUser = null;
 let generationsCache = [];
+var lastCapGenId = null;
+var lastHookGenId = null;
+var lastCheckerGenId = null;
 
 // ── AUTH STATE ──
 sb.auth.onAuthStateChange((event, session) => {
@@ -1874,7 +1982,7 @@ document.addEventListener('keydown', e => {
 function showSection(id) {
   document.querySelectorAll('.app-content section').forEach(s=>{s.style.display='none';s.style.animation='none';});
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
-  const sections=['dashboard','caption','hook','hashtag','calendar','history','checker','viral','bioaudit','settings'];
+  const sections=['dashboard','caption','hook','hashtag','calendar','history','checker','viral','bioaudit','progress','settings'];
   const idx=sections.indexOf(id);
   const sec=document.getElementById('sec-'+id);
   if(sec){
@@ -1890,6 +1998,7 @@ function showSection(id) {
   window.scrollTo(0,0);
   if(id==='history')loadHistory();
   if(id==='settings')loadSettingsForm();
+  if(id==='progress')loadProgress();
 }
 
 // ── PILLS ──
@@ -1909,18 +2018,20 @@ function getPillVal(rowId){
 
 // ── SUPABASE HISTORY ──
 async function saveGeneration(tool, content, meta={}) {
-  if(!currentUser)return;
+  if(!currentUser) return null;
   try {
-    await sb.from('generations').insert({
+    const {data, error} = await sb.from('generations').insert({
       user_id: currentUser.id,
       tool,
       content,
       meta,
       created_at: new Date().toISOString()
-    });
+    }).select('id').single();
+    if(error) throw error;
+    return data ? data.id : null;
   } catch(e){
-    // Fail silently — don't break the UX if DB write fails
     console.warn('Could not save generation:', e);
+    return null;
   }
 }
 
@@ -2472,7 +2583,17 @@ async function runTool(tool) {
     output.classList.add('show');
 
     // Save to Supabase
-    await saveGeneration(tool, result, {niche, goal, brief});
+    const genId = await saveGeneration(tool, result, {niche, goal, brief});
+    if(tool === 'caption' && genId) {
+      lastCapGenId = genId;
+      const pb = document.getElementById('cap-posted-btn');
+      if(pb) { pb.style.display = 'inline-flex'; pb.textContent = 'Mark as Posted'; pb.className = 'mark-posted-btn'; pb.disabled = false; }
+    }
+    if(tool === 'hook' && genId) {
+      lastHookGenId = genId;
+      const pb = document.getElementById('hook-posted-btn');
+      if(pb) { pb.style.display = 'inline-flex'; pb.textContent = 'Mark as Posted'; pb.className = 'mark-posted-btn'; pb.disabled = false; }
+    }
     loadStats();
 
   } catch(e){
@@ -3669,7 +3790,10 @@ async function runChecker() {
     renderCheckerOutput(resultText, output);
     output.style.display = 'block';
     setTimeout(function(){ output.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
-    await saveGeneration('checker', data.text || '', { contentType: contentType, goal: goal });
+    // Extract grade from checker output for progress tracking
+    var chkGradeMatch = (resultText||'').match(/GRADE:\s*([A-F])/i);
+    var chkGrade = chkGradeMatch ? chkGradeMatch[1].toUpperCase() : null;
+    lastCheckerGenId = await saveGeneration('checker', resultText, { contentType: contentType, goal: goal, grade: chkGrade });
     loadStats();
 
   } catch(e) {
@@ -4341,6 +4465,163 @@ function renderBioOutput(data, container) {
   acts.appendChild(copyBtn);
   acts.appendChild(regenBtn);
   container.appendChild(acts);
+}
+
+
+// ── PROGRESS TRACKING ──
+
+async function loadProgress() {
+  if(!currentUser) return;
+  try {
+    const {data, error} = await sb.from('generations')
+      .select('id, tool, content, meta, created_at')
+      .eq('user_id', currentUser.id)
+      .order('created_at', {ascending: false});
+    if(error) throw error;
+    renderProgress(data || []);
+  } catch(e) {
+    console.warn('loadProgress error:', e);
+  }
+}
+
+function renderProgress(data) {
+  const total = data.length;
+  const posted = data.filter(r => r.meta && r.meta.posted).length;
+
+  // Grade history from checker runs
+  const checkerRuns = data.filter(r => r.tool === 'checker' && r.meta && r.meta.grade);
+  const grades = checkerRuns.map(r => r.meta.grade).filter(Boolean);
+  const gradeToNum = {A:4, B:3, C:2, D:1, F:0};
+  const numToGrade = ['F','D','C','B','A'];
+  const avgNum = grades.length ? grades.reduce((a,g) => a + (gradeToNum[g]||0), 0) / grades.length : null;
+  const avgGrade = avgNum !== null ? numToGrade[Math.round(avgNum)] : '—';
+
+  // Streak
+  const today = new Date(); today.setHours(0,0,0,0);
+  const days = new Set(data.map(r => {
+    const d = new Date(r.created_at); d.setHours(0,0,0,0);
+    return d.getTime();
+  }));
+  let streak = 0;
+  let check = new Date(today);
+  while(days.has(check.getTime())) {
+    streak++; check.setDate(check.getDate()-1);
+  }
+
+  // Stats
+  animateCount(document.getElementById('prog-total'), total, 800);
+  animateCount(document.getElementById('prog-posted'), posted, 800);
+  const avgEl = document.getElementById('prog-avg-grade');
+  if(avgEl) avgEl.textContent = avgGrade;
+  animateCount(document.getElementById('prog-streak'), streak, 600);
+
+  // Deltas
+  const thisWeek = data.filter(r => new Date(r.created_at) >= new Date(today.getTime() - 7*86400000)).length;
+  const setDelta = (id, text) => { const el = document.getElementById(id); if(el) el.textContent = text; };
+  setDelta('prog-total-delta', thisWeek + ' this week');
+  setDelta('prog-posted-delta', posted > 0 ? Math.round(posted/Math.max(total,1)*100) + '% post rate' : 'Start marking posts');
+  setDelta('prog-grade-delta', grades.length > 0 ? grades.length + ' posts checked' : 'Use checker to track');
+  setDelta('prog-streak-delta', streak > 0 ? 'Keep it going' : 'Generate today');
+
+  // Grade chart
+  if(grades.length > 0) {
+    const track = document.getElementById('prog-grade-track');
+    if(track) track.style.display = 'block';
+    const gradeCounts = {A:0,B:0,C:0,D:0,F:0};
+    grades.forEach(g => { if(gradeCounts[g] !== undefined) gradeCounts[g]++; });
+    const maxCount = Math.max(...Object.values(gradeCounts), 1);
+    const barsEl = document.getElementById('prog-grade-bars');
+    if(barsEl) {
+      barsEl.innerHTML = Object.entries(gradeCounts).map(([g, count]) => {
+        const pct = Math.round((count / maxCount) * 100);
+        return '<div class="prog-grade-bar ' + g + '" style="height:' + Math.max(pct,4) + '%"><div class="prog-grade-bar-label">' + g + ' (' + count + ')</div></div>';
+      }).join('');
+    }
+    const avgValEl = document.getElementById('prog-grade-avg-val');
+    if(avgValEl) avgValEl.textContent = avgGrade;
+  }
+
+  // Posted content list
+  const postedItems = data.filter(r => r.meta && r.meta.posted);
+  const itemsEl = document.getElementById('prog-posted-items');
+  if(itemsEl) {
+    if(postedItems.length === 0) {
+      itemsEl.innerHTML =
+        '<div class="prog-empty">' +
+        '<div class="prog-empty-num">0</div>' +
+        '<div class="prog-empty-label">Nothing marked as posted yet</div>' +
+        '<div class="prog-empty-desc">After you generate a caption or hook, hit "Mark as Posted" to track what you actually publish.</div>' +
+        '</div>';
+    } else {
+      const toolLabels = {caption:'Caption',hook:'Hook',hashtag:'Hashtags',calendar:'Planner',checker:'Checker',viral:'Viral',bioaudit:'Bio Audit'};
+      itemsEl.innerHTML = postedItems.slice(0,20).map(function(r) {
+        const date = new Date(r.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+        const preview = (r.content||'').substring(0,100);
+        return '<div class="prog-posted-item">' +
+          '<div class="prog-posted-tool">' + escH(toolLabels[r.tool]||r.tool) + '</div>' +
+          '<div class="prog-posted-text">' + escH(preview) + '</div>' +
+          '<div class="prog-posted-date">' + escH(date) + '</div>' +
+          '</div>';
+      }).join('');
+    }
+  }
+
+  // Tool breakdown bars
+  const toolCounts = {};
+  data.forEach(r => { toolCounts[r.tool] = (toolCounts[r.tool]||0)+1; });
+  const toolLabels = {caption:'Captions',hook:'Hooks',hashtag:'Hashtags',calendar:'Planner',checker:'Post Checker',viral:'Viral Analyzer',bioaudit:'Bio Audit'};
+  const maxTool = Math.max(...Object.values(toolCounts), 1);
+  const breakdownEl = document.getElementById('prog-tool-breakdown');
+  if(breakdownEl) {
+    const toolColors = {caption:'var(--purple2)',hook:'var(--purple3)',hashtag:'var(--amber)',calendar:'var(--green)',checker:'var(--red)',viral:'var(--amber)',bioaudit:'var(--green)'};
+    breakdownEl.innerHTML = Object.entries(toolCounts)
+      .sort((a,b) => b[1]-a[1])
+      .map(([tool, count]) => {
+        const pct = Math.round(count/maxTool*100);
+        const color = toolColors[tool] || 'var(--purple2)';
+        return '<div>' +
+          '<div style="display:flex;justify-content:space-between;margin-bottom:6px">' +
+            '<div style="font-family:var(--mono);font-size:9px;color:var(--t2);letter-spacing:.08em">' + escH(toolLabels[tool]||tool) + '</div>' +
+            '<div style="font-family:var(--mono);font-size:9px;color:var(--t3)">' + count + '</div>' +
+          '</div>' +
+          '<div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden">' +
+            '<div style="height:100%;width:' + pct + '%;background:' + color + ';border-radius:2px;transition:width .8s ease"></div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+  }
+}
+
+async function markAsPosted(genId, btn) {
+  if(!currentUser || !genId) return;
+  try {
+    // Get current meta
+    const {data, error} = await sb.from('generations')
+      .select('meta').eq('id', genId).eq('user_id', currentUser.id).single();
+    if(error) throw error;
+    const newMeta = Object.assign({}, data.meta || {}, { posted: true, posted_at: new Date().toISOString() });
+    await sb.from('generations').update({ meta: newMeta }).eq('id', genId).eq('user_id', currentUser.id);
+    if(btn) {
+      btn.textContent = 'Posted ✓';
+      btn.className = 'mark-posted-btn done';
+      btn.disabled = true;
+    }
+    showToast('Marked as posted ✓ — tracked in your Progress');
+    loadStats();
+  } catch(e) {
+    showToast('Could not mark — try again');
+    console.error('markAsPosted error:', e);
+  }
+}
+
+function addMarkPostedBtn(container, genId) {
+  if(!genId) return;
+  var btn = document.createElement('button');
+  btn.className = 'mark-posted-btn';
+  btn.textContent = 'Mark as Posted';
+  btn.onclick = function(){ markAsPosted(genId, btn); };
+  container.appendChild(btn);
+  return btn;
 }
 
 // Init
