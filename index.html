@@ -320,7 +320,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 }
 
 /* ── CONTENT AREA ── */
-.app-content{flex:1;max-width:1060px;width:100%;margin:0 auto;padding:56px 40px}
+.app-content{flex:1;max-width:1280px;width:100%;margin:0 auto;padding:48px 48px}
 
 /* ── DASHBOARD ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -393,6 +393,32 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .streak-dot.today{background:var(--green)}
 .dash-tools-label{font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--t3);margin-bottom:12px;animation:fadeUp .5s .38s ease both;display:flex;align-items:center;gap:12px}
 .dash-tools-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── TOOL GRID ── */
+.tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:0}
+@media(max-width:600px){.tool-grid{grid-template-columns:1fr}}
+.tool-card{
+  background:var(--surface);border:1px solid var(--border);
+  padding:32px;cursor:pointer;transition:all .3s cubic-bezier(.25,.46,.45,.94);
+  position:relative;overflow:hidden;border-radius:3px;
+  animation:fadeUp .5s ease both;
+}
+.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--purple2));opacity:0;transition:opacity .25s}
+.tool-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.tool-card:hover::before{opacity:1}
+.tool-num{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.2em;margin-bottom:20px}
+.tool-name{font-family:var(--display);font-size:clamp(28px,2.5vw,36px);text-transform:uppercase;letter-spacing:.06em;color:var(--silver);line-height:1;margin-bottom:14px}
+.tool-desc{font-size:13px;color:var(--t2);line-height:1.65;max-width:280px;font-weight:300}
+.tool-arrow{
+  position:absolute;bottom:24px;right:24px;
+  font-family:var(--mono);font-size:11px;color:var(--t3);
+  width:32px;height:32px;border:1px solid var(--border2);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .25s;
+}
+.tool-card:hover .tool-arrow{color:var(--purple3);border-color:var(--purple2);background:rgba(109,40,217,.1);transform:translateX(2px)}
+.checker-hero-card{background:linear-gradient(135deg,rgba(109,40,217,.07) 0%,var(--surface) 60%) !important;border-color:rgba(109,40,217,.2) !important;margin-top:4px}
+.checker-hero-card:hover{border-color:rgba(109,40,217,.45) !important}
 
 /* ── TOOL PANEL ── */
 .tool-panel{display:none}
