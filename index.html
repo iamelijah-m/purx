@@ -435,6 +435,33 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .cap-insight-card-label.default{color:var(--t3)}
 .cap-insight-card-val{font-size:14px;color:var(--t2);line-height:1.78}
 
+/* PURX Verdict — strategist voice */
+.cap-verdict{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:18px 24px;
+  background:linear-gradient(90deg,rgba(124,58,237,.12),rgba(124,58,237,.04));
+  border:1px solid rgba(124,58,237,.2);border-radius:3px;
+  margin-bottom:12px;
+}
+.cap-verdict-icon{font-size:16px;color:var(--purple2);flex-shrink:0;margin-top:1px}
+.cap-verdict-text{font-size:15px;color:var(--white);line-height:1.6;font-weight:500;font-style:italic}
+
+/* Caption hero action row */
+.cap-hero-actions{display:flex;align-items:center;gap:12px;margin-top:28px}
+.cap-hero-copy{font-family:var(--display);font-size:13px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--bg);background:var(--white);border:none;padding:13px 28px;border-radius:2px;cursor:pointer;transition:all .2s}
+.cap-hero-copy:hover{background:#f0f0f0;letter-spacing:.2em}
+.cap-hero-regen{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);background:none;border:1px solid var(--border2);padding:13px 20px;border-radius:2px;cursor:pointer;transition:all .2s}
+.cap-hero-regen:hover{color:var(--t1);border-color:var(--border2)}
+
+/* Voice note — subtle inline */
+.cap-voice-note{
+  display:flex;align-items:center;gap:10px;margin-top:10px;
+  padding:12px 18px;
+  background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.1);border-radius:3px;
+}
+.cap-voice-icon{color:var(--purple2);font-size:10px;flex-shrink:0}
+.cap-voice-text{font-family:var(--mono);font-size:11px;color:var(--purple3);letter-spacing:.06em;font-style:italic}
+
 /* ── HOOK TOOL OUTPUT ── */
 
 .hook-list{border:1px solid var(--border2);border-radius:2px;overflow:hidden;margin-bottom:16px}
@@ -2486,40 +2513,48 @@ function copyModal(){
 // ── AI TOOLS ──
 const PROMPTS = {
   caption:(niche,goal,brief,profileCtx)=>
-    `You are PURX — an elite Instagram content strategist with deep, current knowledge of how the Instagram algorithm actually works right now. You don't rely on outdated rules. You understand that the algorithm is constantly evolving and you reason from first principles: what earns genuine engagement, what signals trust to the system, what makes real humans stop and read.
+    `You are PURX — a world-class Instagram strategist who thinks like a top creator, not a marketer. You write captions that feel earned, not manufactured. You know the difference between a caption that gets saved and one that gets scrolled past.
 
 CREATOR PROFILE: ${profileCtx || 'A serious Instagram creator'}
 
-TASK: Generate ONE Instagram caption for this ${niche} creator. Their goal: ${goal}. Post description: "${brief || 'a premium, aspirational lifestyle moment'}".
+TASK: Write ONE Instagram caption for this ${niche} creator. Goal: ${goal}. Post: "${brief || 'a premium, aspirational lifestyle moment'}".
 
-CAPTION REQUIREMENTS:
-- Written in all lowercase — signals effortlessness, not laziness
-- Opens with a line that earns the tap or the stop — not a generic statement
-- Voice: confident, specific, human — sounds like someone who actually lives this niche
-- 1-3 lines max — tight, no filler
-- End with a question, statement worth saving, or subtle CTA
-- 4-6 hashtags on a new line — mix of mid-tier and niche-specific, never massive generic tags
+CAPTION RULES:
+- All lowercase — effortless, not lazy
+- First line stops the scroll — specific, visceral, real
+- 2-3 lines max. Every word earns its place.
+- Ends with a question or a line people save
+- 4-6 hashtags below — mid-tier and niche only, never massive generics
 
-After the caption, provide this breakdown with EXACTLY these labels. BE CONCISE — each section must be SHORT and punchy, not paragraphs:
+Then give the breakdown with EXACTLY these labels. Write like a strategist talking directly to the creator — direct, specific, confident. Short. Not a report.
+
+PURX VERDICT:
+[One bold sentence. What makes this caption different and why it's going to work. Sound like a strategist, not an AI. Example: "This one's going to polarize people — that's exactly why it spreads."]
 
 WHY THIS WORKS:
-[2 sentences MAX. Name the specific psychological trigger and why it works for ${niche} right now. No fluff.]
+[2 sentences. The specific psychological trigger. Why this ${niche} audience will stop, save, or comment. Be sharp.]
 
 POSTING SCHEDULE:
-[3 days only. Each on its own line. Format: Day — Time EST — one-word reason
-Example: Monday — 7:00 PM EST — peak scroll
-Keep the reason to 2-4 words max.]
+[All 7 days. Best time for each day this content type performs. Format exactly — one per line:
+Monday — 7:00 PM EST — [2-4 word reason]
+Tuesday — [time] — [reason]
+Wednesday — [time] — [reason]
+Thursday — [time] — [reason]
+Friday — [time] — [reason]
+Saturday — [time] — [reason]
+Sunday — [time] — [reason]
+Times must be real optimal windows for ${niche} content, not generic advice.]
 
 PERFORMANCE TIP:
-[One sentence. One specific action. First 30 minutes only. No explanations.]
+[One sentence. Most important thing to do in the first 30 minutes. Tactical and specific.]
 
 ACTION SEQUENCE:
-[3 steps. Each one sentence. Number them 1-3. No sub-points, no explanations.]
+[3 steps. One sentence each. Bold and direct — what to do right now, not eventually.]
 
 CAPTION VOICE NOTE:
-[The exact phrase that makes this sound real. Just the phrase, no explanation.]
+[The exact phrase in this caption that makes it sound human. Just quote the phrase.]
 
-Output ONLY the caption then the labeled sections. No preamble, no extra text.`,
+Output ONLY the caption then the sections above. No preamble. No extra text.`,
 
   hook:(niche,brief,style,profileCtx)=>
     `You are PURX — an elite Instagram Reels strategist who understands the real mechanics of why people stop scrolling and keep watching. You think about attention as a finite resource and you know that the first 1-2 seconds of a reel determine everything — whether it gets pushed or buried.
@@ -3227,90 +3262,62 @@ function getSectionContent(lines, label, nextLabels) {
 }
 
 function renderCaptionOutput(el, lines) {
-  const allLabels = ['CAPTION:','WHY THIS WORKS:','POSTING SCHEDULE:','PERFORMANCE TIP:','ACTION SEQUENCE:','CAPTION VOICE NOTE:'];
-  // Caption is either after CAPTION: label OR everything before WHY THIS WORKS:
-  let caption = getSectionContent(lines, 'CAPTION:', allLabels.slice(1));
-  if (!caption) {
-    // Claude outputs caption raw (no label) then sections — grab lines before first section label
-    const firstSectionIdx = lines.findIndex(l =>
-      ['WHY THIS WORKS:','POSTING SCHEDULE:','PERFORMANCE TIP:','ACTION SEQUENCE:','CAPTION VOICE NOTE:']
-      .some(lbl => l.toUpperCase().startsWith(lbl))
-    );
-    caption = firstSectionIdx > 0 ? lines.slice(0, firstSectionIdx).join('\n').trim() : '';
-  }
-  const why = getSectionContent(lines, 'WHY THIS WORKS:', allLabels.slice(2));
-  const schedule = getSectionContent(lines, 'POSTING SCHEDULE:', allLabels.slice(3));
-  const tip = getSectionContent(lines, 'PERFORMANCE TIP:', allLabels.slice(4));
-  const action = getSectionContent(lines, 'ACTION SEQUENCE:', allLabels.slice(5));
+  const allLabels = ['CAPTION:','PURX VERDICT:','WHY THIS WORKS:','POSTING SCHEDULE:','PERFORMANCE TIP:','ACTION SEQUENCE:','CAPTION VOICE NOTE:'];
+  // Caption is everything before the first section label
+  const firstSectionIdx = lines.findIndex(l =>
+    ['PURX VERDICT:','WHY THIS WORKS:','POSTING SCHEDULE:','PERFORMANCE TIP:','ACTION SEQUENCE:','CAPTION VOICE NOTE:']
+    .some(lbl => l.toUpperCase().startsWith(lbl))
+  );
+  let caption = firstSectionIdx > 0 ? lines.slice(0, firstSectionIdx).join('\n').trim() : '';
+  if (!caption) caption = getSectionContent(lines, 'CAPTION:', allLabels.slice(1));
+  const verdict = getSectionContent(lines, 'PURX VERDICT:', allLabels.slice(2));
+  const why = getSectionContent(lines, 'WHY THIS WORKS:', allLabels.slice(3));
+  const schedule = getSectionContent(lines, 'POSTING SCHEDULE:', allLabels.slice(4));
+  const tip = getSectionContent(lines, 'PERFORMANCE TIP:', allLabels.slice(5));
+  const action = getSectionContent(lines, 'ACTION SEQUENCE:', allLabels.slice(6));
   const voice = getSectionContent(lines, 'CAPTION VOICE NOTE:', []);
 
   // Extract first day/time for action bar
   const schedMatch = schedule.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)[^\n]*/i);
   const schedTag = schedMatch ? schedMatch[0].substring(0,40) : 'Schedule inside';
 
-  var capCopy = caption;
   el.innerHTML =
     '<div class="cap-output-wrap">' +
-      // ── Hero: Caption is the star ──
+
+      // ── PURX Verdict: strategist voice at the top ──
+      (verdict ? '<div class="cap-verdict">' +
+        '<div class="cap-verdict-icon">✦</div>' +
+        '<div class="cap-verdict-text">' + escH(verdict) + '</div>' +
+      '</div>' : '') +
+
+      // ── Caption hero: the star ──
       '<div class="cap-hero">' +
         '<div class="cap-hero-label">Your Caption</div>' +
         '<div class="cap-hero-text" id="cap-hero-text">' + escH(caption) + '</div>' +
-        '<button class="cap-hero-copy" onclick="navigator.clipboard.writeText(document.getElementById(\'cap-hero-text\').textContent).then(function(){showToast(\'Caption copied ✓\')})">Copy Caption →</button>' +
+        '<div class="cap-hero-actions">' +
+          '<button class="cap-hero-copy" onclick="navigator.clipboard.writeText(document.getElementById(\'cap-hero-text\').textContent).then(function(){showToast(\'Caption copied ✓\')})">Copy Caption →</button>' +
+          '<button class="cap-hero-regen" onclick="runTool(\'caption\')">Regenerate</button>' +
+        '</div>' +
       '</div>' +
-      // ── Action strip: scannable pills ──
-      '<div class="cap-action-strip">' +
-        (schedTag ? '<span class="cap-action-pill time">📅 ' + escH(schedTag) + '</span>' : '') +
-        (tip ? '<span class="cap-action-pill tip">⚡ ' + escH((tip.split('.')[0]||tip).substring(0,55)) + '</span>' : '') +
-        (action ? '<span class="cap-action-pill action">✦ Do this now</span>' : '') +
-      '</div>' +
-      // ── Insight cards: scannable, tight ──
+
+      // ── Why it works + Do this first ──
       '<div class="cap-insight-grid">' +
         (why ? '<div class="cap-insight-card purple"><div class="cap-insight-card-label purple">Why This Works</div><div class="cap-insight-card-val">' + escH(why) + '</div></div>' : '') +
         (tip ? '<div class="cap-insight-card amber"><div class="cap-insight-card-label amber">Do This First</div><div class="cap-insight-card-val">' + escH(tip) + '</div></div>' : '') +
       '</div>' +
-      // ── Schedule: compact table ──
+
+      // ── Full 7-day schedule ──
       (schedule ? renderScheduleTable(schedule) : '') +
-      // ── Action sequence: numbered list ──
+
+      // ── Action sequence ──
       (action ? renderActionList(action) : '') +
-      // ── Voice note: inline highlight ──
-      (voice ? '<div style="margin-top:10px;padding:14px 20px;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.12);border-radius:3px;font-family:var(--mono);font-size:10px;color:var(--purple3);letter-spacing:.08em">✦ ' + escH(voice) + '</div>' : '') +
+
+      // ── Voice note ──
+      (voice ? '<div class="cap-voice-note"><span class="cap-voice-icon">✦</span><span class="cap-voice-text">' + escH(voice) + '</span></div>' : '') +
+
     '</div>';
 }
 
-function renderScheduleTable(schedule) {
-  var lines = schedule.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l && l.includes('—'); });
-  if(!lines.length) return '';
-  var rows = lines.map(function(line) {
-    var parts = line.split('—').map(function(p){ return p.trim(); });
-    var day = parts[0] || '';
-    var time = parts[1] || '';
-    var reason = parts.slice(2).join('—').trim();
-    return '<div style="display:grid;grid-template-columns:100px 110px 1fr;gap:0;border-bottom:1px solid var(--border)">' +
-      '<div style="padding:10px 16px;font-family:var(--display);font-size:13px;font-weight:900;text-transform:uppercase;color:var(--white);letter-spacing:.04em">' + escH(day) + '</div>' +
-      '<div style="padding:10px 0;font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:.04em">' + escH(time) + '</div>' +
-      '<div style="padding:10px 0;font-size:12px;color:var(--t3)">' + escH(reason) + '</div>' +
-    '</div>';
-  }).join('');
-  return '<div style="margin-top:10px;background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden">' +
-    '<div style="padding:10px 16px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--green)">Post Schedule</div>' +
-    rows +
-  '</div>';
-}
-
-function renderActionList(action) {
-  var lines = action.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
-  var items = lines.map(function(line, i) {
-    var text = line.replace(/^\d+[.)\)]\s*/, '').trim();
-    return '<div style="display:flex;gap:14px;padding:12px 16px;border-bottom:1px solid var(--border);align-items:flex-start">' +
-      '<div style="font-family:var(--display);font-size:20px;font-weight:900;color:var(--purple2);flex-shrink:0;line-height:1.1;width:20px">' + (i+1) + '</div>' +
-      '<div style="font-size:13px;color:var(--t2);line-height:1.6;padding-top:2px">' + escH(text) + '</div>' +
-    '</div>';
-  }).join('');
-  return '<div style="margin-top:10px;background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden">' +
-    '<div style="padding:10px 16px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--purple3)">Do This Now</div>' +
-    items +
-  '</div>';
-}
 
 function extractHookType(breakdown) {
   const types = ['IDENTITY','CONTROVERSY','CURIOSITY','PATTERN INTERRUPT','STORY TEASE','SENSORY','HUMOR','EMOTIONAL','POV'];
@@ -4776,4 +4783,34 @@ function addMarkPostedBtn(container, genId) {
 showSection('dashboard');
 </script>
 </body>
-</html>
+</html>function renderScheduleTable(schedule) {
+  var lines = schedule.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l && l.includes('—'); });
+  if(!lines.length) return '';
+  var dayOrder = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+  lines.sort(function(a,b){
+    var ai = dayOrder.findIndex(function(d){ return a.toLowerCase().startsWith(d); });
+    var bi = dayOrder.findIndex(function(d){ return b.toLowerCase().startsWith(d); });
+    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+  });
+  var today = new Date().toLocaleDateString('en-US',{weekday:'long'}).toLowerCase();
+  var rows = lines.map(function(line) {
+    var parts = line.split('—').map(function(p){ return p.trim(); });
+    var day = parts[0] || ''; var time = parts[1] || '';
+    var reason = parts.slice(2).join('—').trim();
+    var isToday = today.length > 2 && day.toLowerCase().indexOf(today.substring(0,3)) === 0;
+    var todayBadge = isToday ? '<span style="font-family:var(--mono);font-size:7px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:var(--green);padding:2px 8px;border-radius:100px;letter-spacing:.1em;margin-left:8px">TODAY</span>' : '';
+    return '<div style="display:grid;grid-template-columns:170px 130px 1fr;border-bottom:1px solid var(--border);' + (isToday ? 'background:rgba(16,185,129,.04)' : '') + '">' +
+      '<div style="padding:12px 18px;font-family:var(--display);font-size:14px;font-weight:900;text-transform:uppercase;color:' + (isToday ? 'var(--green)' : 'var(--white)') + ';letter-spacing:.04em;display:flex;align-items:center">' + escH(day) + todayBadge + '</div>' +
+      '<div style="padding:12px 0;font-family:var(--mono);font-size:12px;color:var(--amber);letter-spacing:.04em;display:flex;align-items:center">' + escH(time) + '</div>' +
+      '<div style="padding:12px 0;font-size:13px;color:var(--t3);display:flex;align-items:center">' + escH(reason) + '</div>' +
+    '</div>';
+  }).join('');
+  return '<div style="margin-top:10px;background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden">' +
+    '<div style="padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">' +
+      '<span style="font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--green)">Best Times to Post</span>' +
+      '<span style="font-family:var(--mono);font-size:7px;color:var(--t4);letter-spacing:.1em">Post any day — these are your windows</span>' +
+    '</div>' +
+    rows +
+  '</div>';
+}
+
