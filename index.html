@@ -4779,11 +4779,12 @@ function addMarkPostedBtn(container, genId) {
   return btn;
 }
 
+
+
 // Init
 showSection('dashboard');
-</script>
-</body>
-</html>function renderScheduleTable(schedule) {
+
+function renderScheduleTable(schedule) {
   var lines = schedule.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l && l.includes('—'); });
   if(!lines.length) return '';
   var dayOrder = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
@@ -4814,3 +4815,6 @@ showSection('dashboard');
   '</div>';
 }
 
+</script>
+</body>
+</html>
