@@ -2641,7 +2641,92 @@ ACTION SEQUENCE:
 [3 steps: 1) What to do with hashtags right at posting, 2) What to check 1 hour after posting, 3) How to use these hashtags in stories to compound reach]
 
 Every hashtag must be real, active, and directly relevant to ${niche} and this specific post. Output only the formatted sections above.`
-};
+};async function runTool(tool) {
+  const configs = {
+    caption:{
+      getNiche:()=>getPillVal('cap-niche-pills'),
+      getGoal:()=>getPillVal('cap-goal-pills'),
+      getBrief:()=>document.getElementById('cap-brief').value.trim(),
+      getPrompt:(n,g,b)=>PROMPTS.caption(n,g,b,getProfileContext()),
+      btnId:'cap-btn',loadId:'cap-loading',outId:'cap-output',textId:'cap-text',isCalendar:false
+    },
+    hook:{
+      getNiche:()=>getPillVal('hook-niche-pills'),
+      getGoal:()=>getPillVal('hook-style-pills'),
+      getBrief:()=>document.getElementById('hook-brief').value.trim(),
+      getPrompt:(n,g,b)=>PROMPTS.hook(n,b,g,getProfileContext()),
+      btnId:'hook-btn',loadId:'hook-loading',outId:'hook-output',textId:'hook-text',isCalendar:false
+    },
+    hashtag:{
+      getNiche:()=>getPillVal('ht-niche-pills'),
+      getGoal:()=>'',
+      getBrief:()=>document.getElementById('ht-brief').value.trim(),
+      getPrompt:(n,g,b)=>PROMPTS.hashtag(n,b,getProfileContext()),
+      btnId:'ht-btn',loadId:'ht-loading',outId:'ht-output',textId:'ht-text',isCalendar:false
+    }
+  };
+
+  const cfg = configs[tool];
+  if(!cfg) return;
+  const btn = document.getElementById(cfg.btnId);
+  const loading = document.getElementById(cfg.loadId);
+  const output = document.getElementById(cfg.outId);
+  if(!btn || !loading || !output) return;
+
+  btn.disabled = true;
+  loading.classList.add('show');
+  output.classList.remove('show');
+
+  // Cycle loading messages
+  var loadingMsgs = {
+    caption: ['Writing something that actually sounds like you...','Crafting your hook...','Building your strategy...'],
+    hook: ['Crafting 5 ways to stop the scroll...','Writing your hooks...','Perfecting the delivery...'],
+    hashtag: ['Building your discovery stack...','Finding your best tags...','Tiering your strategy...']
+  };
+  var msgList = loadingMsgs[tool] || ['Generating...'];
+  var msgIdx = 0;
+  var labelEl = document.getElementById(cfg.loadId + '-label') || loading.querySelector('.ld-label');
+  var msgTimer = labelEl ? setInterval(function(){
+    msgIdx = (msgIdx + 1) % msgList.length;
+    labelEl.textContent = msgList[msgIdx];
+  }, 2200) : null;
+
+  try {
+    const niche = cfg.getNiche();
+    const goal = cfg.getGoal();
+    const brief = cfg.getBrief();
+    const prompt = cfg.getPrompt(niche, goal, brief);
+    const result = await callWorker(prompt);
+
+    renderRichOutput(cfg.textId, result);
+    output.classList.add('show');
+    setTimeout(function(){ output.scrollIntoView({ behavior:'smooth', block:'start' }); }, 100);
+
+    const genId = await saveGeneration(tool, result, {niche, goal, brief});
+    if(tool === 'caption' && genId) {
+      lastCapGenId = genId;
+      const pb = document.getElementById('cap-posted-btn');
+      if(pb) { pb.style.display = 'inline-flex'; pb.textContent = 'Mark as Posted'; pb.className = 'mark-posted-btn'; pb.disabled = false; }
+    }
+    if(tool === 'hook' && genId) {
+      lastHookGenId = genId;
+      const pb = document.getElementById('hook-posted-btn');
+      if(pb) { pb.style.display = 'inline-flex'; pb.textContent = 'Mark as Posted'; pb.className = 'mark-posted-btn'; pb.disabled = false; }
+    }
+    loadStats();
+
+  } catch(e) {
+    const msg = e.message || 'Unknown error';
+    showToast(msg.length > 80 ? msg.substring(0,80) + '...' : msg);
+    console.error('runTool error:', e);
+  }
+
+  clearInterval(msgTimer);
+  loading.classList.remove('show');
+  btn.disabled = false;
+}
+
+
 
 // ── GLOBAL ERROR HANDLER ──
 window.addEventListener('unhandledrejection', function(e) {
