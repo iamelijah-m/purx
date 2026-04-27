@@ -185,21 +185,139 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 
 /* ── APP LAYOUT ── */
 #app-screen{flex-direction:column}
-.app-header{position:sticky;top:0;z-index:100;background:rgba(6,6,6,.98);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px}
-.header-logo{font-family:var(--display);font-size:24px;letter-spacing:.2em;color:var(--white);text-transform:uppercase;transition:opacity .2s}
-.header-right{display:flex;align-items:center;gap:24px}
-.header-user{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:.08em}
-.usage-badge{font-family:var(--mono);font-size:9px;letter-spacing:.08em;padding:5px 12px;background:rgba(109,40,217,.1);border:1px solid rgba(109,40,217,.25);color:var(--purple3);border-radius:100px}
-.signout-btn{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);background:none;border:1px solid var(--border2);padding:7px 14px;cursor:pointer;border-radius:2px;transition:all .2s}
-.signout-btn:hover{color:var(--t1);border-color:var(--t3)}
 
-/* ── NAV ── */
-.app-nav{display:flex;gap:0;padding:0 40px;border-bottom:1px solid var(--border);background:rgba(12,12,12,.95);overflow-x:auto;scrollbar-width:none}
-.nav-btn{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);background:none;border:none;border-bottom:2px solid transparent;padding:18px 20px;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-1px}
+/* ── HEADER ── */
+.app-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(5,5,7,.97);
+  backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:60px;
+}
+.header-logo{
+  font-family:var(--display);font-size:22px;letter-spacing:.22em;
+  color:var(--silver);text-transform:uppercase;
+  cursor:pointer;user-select:none;transition:opacity .2s;flex-shrink:0;
+}
+.header-logo:hover{opacity:.75}
+.header-center{flex:1;display:flex;justify-content:center}
+.header-right{display:flex;align-items:center;gap:16px;flex-shrink:0}
+.header-user{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.08em}
+.usage-badge{
+  font-family:var(--mono);font-size:8px;letter-spacing:.1em;
+  padding:4px 12px;background:rgba(109,40,217,.08);
+  border:1px solid rgba(109,40,217,.2);color:var(--purple3);border-radius:100px;
+}
+
+/* More menu button */
+.header-more-btn{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--t3);background:none;border:1px solid var(--border2);
+  padding:6px 14px;border-radius:2px;cursor:pointer;transition:all .2s;position:relative;
+}
+.header-more-btn:hover{color:var(--t1);border-color:var(--border2)}
+.header-more-dropdown{
+  position:absolute;top:calc(100% + 8px);right:0;
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:3px;padding:6px;min-width:180px;
+  box-shadow:0 16px 48px rgba(0,0,0,.6);
+  display:none;z-index:200;
+  animation:fadeIn .15s ease;
+}
+.header-more-dropdown.open{display:block}
+.header-more-item{
+  font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--t2);background:none;border:none;padding:10px 14px;
+  cursor:pointer;width:100%;text-align:left;border-radius:2px;
+  transition:all .15s;display:flex;align-items:center;gap:10px;
+}
+.header-more-item:hover{color:var(--silver);background:rgba(255,255,255,.04)}
+.header-more-item.on{color:var(--purple3)}
+.header-more-divider{height:1px;background:var(--border);margin:4px 0}
+.signout-item{color:var(--t3) !important}
+.signout-item:hover{color:var(--red) !important}
+
+/* ── TOP NAV — main tools only ── */
+.app-nav{
+  display:flex;gap:0;padding:0 32px;
+  border-bottom:1px solid var(--border);
+  background:rgba(10,10,15,.95);
+  overflow-x:auto;scrollbar-width:none;
+}
+.app-nav::-webkit-scrollbar{display:none}
+.nav-btn{
+  font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--t3);background:none;border:none;
+  border-bottom:1px solid transparent;
+  padding:16px 18px;cursor:pointer;white-space:nowrap;
+  transition:all .2s;margin-bottom:-1px;
+}
 .nav-btn.on{color:var(--silver);border-bottom-color:var(--purple2)}
 .nav-btn:hover:not(.on){color:var(--t2)}
-.nav-checker-btn:not(.on){color:var(--purple3)!important;opacity:.7}
-.nav-checker-btn.on{color:var(--white);border-bottom-color:var(--purple2)}
+.nav-checker-btn:not(.on){color:var(--purple3)}
+.nav-checker-btn.on{color:var(--silver);border-bottom-color:var(--purple2)}
+
+/* ── MOBILE BOTTOM TAB BAR ── */
+.mobile-tab-bar{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:rgba(5,5,7,.97);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
+  border-top:1px solid var(--border);
+  padding:0 0 env(safe-area-inset-bottom,0px);
+}
+.mobile-tabs{display:flex;align-items:stretch}
+.mobile-tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:5px;padding:10px 4px;background:none;border:none;cursor:pointer;
+  font-family:var(--mono);font-size:7px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--t3);transition:color .2s;min-height:56px;
+}
+.mobile-tab.on{color:var(--purple3)}
+.mobile-tab:active{opacity:.7}
+.mobile-tab-icon{font-size:20px;line-height:1}
+.mobile-tab-label{font-size:7px}
+
+/* ── TOOLS SUBMENU (mobile) ── */
+.mobile-tools-sheet{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:300;
+  background:var(--surface);border-top:1px solid var(--border2);
+  border-radius:16px 16px 0 0;
+  padding:16px 0 calc(80px + env(safe-area-inset-bottom,0px));
+  box-shadow:0 -24px 64px rgba(0,0,0,.7);
+  animation:slideUp .25s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.mobile-tools-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 20px}
+.mobile-tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.mobile-tool-item{
+  background:var(--surface);padding:20px 24px;
+  font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--t2);cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:10px;
+}
+.mobile-tool-item:active{background:rgba(109,40,217,.08);color:var(--purple3)}
+.mobile-sheet-overlay{
+  display:none;position:fixed;inset:0;z-index:290;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+}
+
+@media(max-width:768px){
+  .app-header{padding:0 20px;height:56px}
+  .header-center{display:none}
+  .app-nav{display:none}
+  .mobile-tab-bar{display:block}
+  .app-content{padding:32px 16px 100px}
+  .usage-badge{display:none}
+  .app-footer{display:none !important}
+}
+@media(min-width:769px){
+  .mobile-tab-bar{display:none !important}
+  .mobile-tools-sheet{display:none !important}
+  .mobile-sheet-overlay{display:none !important}
+}
 
 /* ── CONTENT AREA ── */
 .app-content{flex:1;max-width:1060px;width:100%;margin:0 auto;padding:56px 40px}
@@ -1183,11 +1301,22 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 <!-- APP SCREEN -->
 <div id="app-screen" class="screen">
   <header class="app-header">
-    <div class="header-logo" onclick="showSection('dashboard')" style="cursor:pointer;user-select:none">PURX</div>
+    <div class="header-logo" onclick="showSection('dashboard')">PURX</div>
     <div class="header-right">
-      <div class="usage-badge" id="usage-badge">— generations</div>
-      <div class="header-user" id="user-email-display"></div>
-      <button class="signout-btn" onclick="handleSignout()">Sign out</button>
+      <div class="usage-badge" id="usage-badge">0 generations</div>
+      <div style="position:relative">
+        <button class="header-more-btn" onclick="toggleMoreMenu(event)">
+          <span id="user-email-display" style="font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.06em;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+          <span style="color:var(--t3);font-size:10px">▾</span>
+        </button>
+        <div class="header-more-dropdown" id="header-more-dropdown">
+          <button class="header-more-item" onclick="showSection('history');closeMoreMenu()">📋 History</button>
+          <button class="header-more-item" onclick="showSection('progress');closeMoreMenu()">📈 Progress</button>
+          <button class="header-more-item" onclick="showSection('settings');closeMoreMenu()">⚙️ Settings</button>
+          <div class="header-more-divider"></div>
+          <button class="header-more-item signout-item" onclick="handleSignout();closeMoreMenu()">Sign out</button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -1197,15 +1326,53 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
     <button class="nav-btn" onclick="showSection('hook')">Hooks</button>
     <button class="nav-btn" onclick="showSection('hashtag')">Hashtags</button>
     <button class="nav-btn" onclick="showSection('calendar')">Calendar</button>
-    <button class="nav-btn" onclick="showSection('history')">History</button>
     <button class="nav-btn nav-checker-btn" onclick="showSection('checker')">Post Checker</button>
-    <button class="nav-btn" onclick="showSection('viral')" style="color:var(--amber);opacity:.8">Viral Analyzer</button>
-    <button class="nav-btn" onclick="showSection('bioaudit')" style="color:var(--green);opacity:.8">Bio Audit</button>
-    <button class="nav-btn" onclick="showSection('progress')">Progress</button>
-    <button class="nav-btn" onclick="showSection('settings')" style="margin-left:auto">Settings</button>
+    <button class="nav-btn" onclick="showSection('viral')">Viral Analyzer</button>
+    <button class="nav-btn" onclick="showSection('bioaudit')">Bio Audit</button>
   </nav>
 
-  <main class="app-content">
+  <!-- Mobile Bottom Tab Bar -->
+  <div class="mobile-tab-bar" id="mobile-tab-bar">
+    <div class="mobile-tabs">
+      <button class="mobile-tab on" id="mtab-dashboard" onclick="showSection('dashboard');setMobileTab('dashboard')">
+        <span class="mobile-tab-icon">⌂</span>
+        <span class="mobile-tab-label">Home</span>
+      </button>
+      <button class="mobile-tab" id="mtab-tools" onclick="openToolsSheet()">
+        <span class="mobile-tab-icon">✦</span>
+        <span class="mobile-tab-label">Tools</span>
+      </button>
+      <button class="mobile-tab" id="mtab-checker" onclick="showSection('checker');setMobileTab('checker')">
+        <span class="mobile-tab-icon">◎</span>
+        <span class="mobile-tab-label">Checker</span>
+      </button>
+      <button class="mobile-tab" id="mtab-progress" onclick="showSection('progress');setMobileTab('progress')">
+        <span class="mobile-tab-icon">↗</span>
+        <span class="mobile-tab-label">Progress</span>
+      </button>
+      <button class="mobile-tab" id="mtab-more" onclick="showSection('settings');setMobileTab('more')">
+        <span class="mobile-tab-icon">◐</span>
+        <span class="mobile-tab-label">More</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Tools Sheet -->
+  <div class="mobile-sheet-overlay" id="mobile-sheet-overlay" onclick="closeToolsSheet()"></div>
+  <div class="mobile-tools-sheet" id="mobile-tools-sheet">
+    <div class="mobile-tools-handle"></div>
+    <div class="mobile-tools-grid">
+      <div class="mobile-tool-item" onclick="showSection('caption');closeToolsSheet();setMobileTab('')">📝 Captions</div>
+      <div class="mobile-tool-item" onclick="showSection('hook');closeToolsSheet();setMobileTab('')">🎣 Hooks</div>
+      <div class="mobile-tool-item" onclick="showSection('hashtag');closeToolsSheet();setMobileTab('')"># Hashtags</div>
+      <div class="mobile-tool-item" onclick="showSection('calendar');closeToolsSheet();setMobileTab('')">📅 Planner</div>
+      <div class="mobile-tool-item" onclick="showSection('viral');closeToolsSheet();setMobileTab('')">🔥 Viral Analyzer</div>
+      <div class="mobile-tool-item" onclick="showSection('bioaudit');closeToolsSheet();setMobileTab('')">👤 Bio Audit</div>
+      <div class="mobile-tool-item" onclick="showSection('history');closeToolsSheet();setMobileTab('')">📋 History</div>
+    </div>
+  </div>
+
+    <main class="app-content">
 
     <!-- DASHBOARD -->
     <section id="sec-dashboard">
@@ -4935,6 +5102,57 @@ function renderScheduleTable(schedule) {
     rows +
   '</div>';
 }
+
+// ── MOBILE NAV ──
+function setMobileTab(id) {
+  document.querySelectorAll('.mobile-tab').forEach(function(t) { t.classList.remove('on'); });
+  var el = document.getElementById('mtab-' + id);
+  if(el) el.classList.add('on');
+}
+
+function openToolsSheet() {
+  var sheet = document.getElementById('mobile-tools-sheet');
+  var overlay = document.getElementById('mobile-sheet-overlay');
+  if(sheet) sheet.style.display = 'block';
+  if(overlay) overlay.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeToolsSheet() {
+  var sheet = document.getElementById('mobile-tools-sheet');
+  var overlay = document.getElementById('mobile-sheet-overlay');
+  if(sheet) sheet.style.display = 'none';
+  if(overlay) overlay.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function toggleMoreMenu(e) {
+  e.stopPropagation();
+  var dd = document.getElementById('header-more-dropdown');
+  if(dd) dd.classList.toggle('open');
+}
+
+function closeMoreMenu() {
+  var dd = document.getElementById('header-more-dropdown');
+  if(dd) dd.classList.remove('open');
+}
+
+document.addEventListener('click', function(e) {
+  var dd = document.getElementById('header-more-dropdown');
+  if(dd && dd.classList.contains('open')) {
+    var btn = dd.closest('.header-more-btn') || dd.parentElement;
+    if(!btn || !btn.contains(e.target)) closeMoreMenu();
+  }
+});
+
+// Update setMobileTab when showSection called
+var _origShowSection = showSection;
+showSection = function(id) {
+  _origShowSection(id);
+  var tabMap = {dashboard:'dashboard',checker:'checker',progress:'progress',settings:'more'};
+  if(tabMap[id]) setMobileTab(tabMap[id]);
+};
+
 
 // Init
 showSection('dashboard');
