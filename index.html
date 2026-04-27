@@ -1988,12 +1988,9 @@ function showSection(id) {
   const idx=sections.indexOf(id);
   const sec=document.getElementById('sec-'+id);
   if(sec){
-    sec.style.display='block';
-    sec.style.opacity='1';
-    sec.style.transform='none';
-    // Force animation replay
-    void sec.offsetWidth;
-    sec.style.animation='';
+    sec.style.cssText = 'display:block!important;opacity:1!important;visibility:visible!important;transform:none!important;animation:none!important';
+  } else {
+    console.error('showSection: could not find sec-'+id);
   }
   const navBtns=document.querySelectorAll('.nav-btn');
   if(navBtns[idx])navBtns[idx].classList.add('on');
