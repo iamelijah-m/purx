@@ -404,63 +404,38 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .rich-output{display:flex;flex-direction:column;gap:0}
 
 /* ── CAPTION TOOL OUTPUT ── */
-.cap-output-wrap{display:flex;flex-direction:column;gap:12px}
-.cap-hero{
-  position:relative;padding:52px 52px 48px;
-  background:linear-gradient(145deg,rgba(124,58,237,.12) 0%,rgba(6,6,6,0) 50%),var(--surface);
-  border:1px solid rgba(124,58,237,.25);border-radius:3px;overflow:hidden;
-}
-.cap-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3))}
-.cap-hero::after{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--purple),transparent)}
-.cap-hero-label{font-family:var(--mono);font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:var(--purple3);margin-bottom:24px;display:flex;align-items:center;gap:10px}
-.cap-hero-label::before{content:'';width:24px;height:1px;background:var(--purple2)}
-.cap-hero-text{font-size:24px;color:var(--white);line-height:1.95;white-space:pre-wrap;font-weight:400;letter-spacing:.012em}
-.cap-hero-copy{display:inline-flex;align-items:center;gap:8px;margin-top:28px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--bg);background:var(--white);border:none;padding:12px 24px;border-radius:2px;cursor:pointer;transition:all .2s}
-.cap-hero-copy:hover{background:#f0f0f0;letter-spacing:.18em}
-.cap-action-strip{display:flex;gap:10px;flex-wrap:wrap}
-.cap-action-pill{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:9px 16px;border-radius:100px;border:1px solid;display:flex;align-items:center;gap:7px;transition:all .2s}
-.cap-action-pill.time{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.25);color:var(--amber)}
-.cap-action-pill.tip{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.25);color:var(--green)}
-.cap-action-pill.action{background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.25);color:var(--purple3)}
+.cap-output-wrap{display:flex;flex-direction:column;gap:14px}
+.cap-verdict{display:flex;align-items:flex-start;gap:14px;padding:16px 22px;background:linear-gradient(90deg,rgba(124,58,237,.14),rgba(124,58,237,.04));border:1px solid rgba(124,58,237,.22);border-radius:3px}
+.cap-verdict-icon{font-size:14px;color:var(--purple2);flex-shrink:0;margin-top:2px}
+.cap-verdict-text{font-size:14px;color:var(--white);line-height:1.6;font-weight:500;font-style:italic}
+.cap-cards{display:flex;flex-direction:column;gap:10px}
+.cap-card{background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden;transition:border-color .2s}
+.cap-card:hover{border-color:var(--border2)}
+.cap-card-top{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border)}
+.cap-card-badge{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;padding:5px 12px;border-radius:100px;border:1px solid;display:flex;align-items:center;gap:6px}
+.cap-card-badge.reach{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.25);color:var(--purple3)}
+.cap-card-badge.engage{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.25);color:var(--amber)}
+.cap-card-badge.saves{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.25);color:var(--green)}
+.cap-card-body{padding:22px 24px}
+.cap-card-text{font-size:15px;color:var(--white);line-height:1.85;white-space:pre-wrap;letter-spacing:.01em;margin-bottom:16px}
+.cap-card-copy{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--t2);padding:9px 18px;border-radius:2px;cursor:pointer;transition:all .2s}
+.cap-card-copy:hover{background:var(--white);color:var(--bg);border-color:var(--white)}
+.cap-card-copy.copied{background:rgba(16,185,129,.1);border-color:var(--green);color:var(--green)}
 .cap-insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:640px){.cap-insight-grid{grid-template-columns:1fr}}
-.cap-insight-card{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:24px 28px;position:relative;overflow:hidden}
+.cap-insight-card{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:20px 24px;position:relative;overflow:hidden}
 .cap-insight-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
 .cap-insight-card.purple::before{background:linear-gradient(90deg,var(--purple),var(--purple2))}
 .cap-insight-card.amber::before{background:var(--amber)}
 .cap-insight-card.green::before{background:var(--green)}
 .cap-insight-card.default::before{background:var(--border2)}
-.cap-insight-card-label{font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.cap-insight-card-label{font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .cap-insight-card-label.purple{color:var(--purple3)}
 .cap-insight-card-label.amber{color:var(--amber)}
 .cap-insight-card-label.green{color:var(--green)}
 .cap-insight-card-label.default{color:var(--t3)}
-.cap-insight-card-val{font-size:14px;color:var(--t2);line-height:1.78}
-
-/* PURX Verdict — strategist voice */
-.cap-verdict{
-  display:flex;align-items:flex-start;gap:14px;
-  padding:18px 24px;
-  background:linear-gradient(90deg,rgba(124,58,237,.12),rgba(124,58,237,.04));
-  border:1px solid rgba(124,58,237,.2);border-radius:3px;
-  margin-bottom:12px;
-}
-.cap-verdict-icon{font-size:16px;color:var(--purple2);flex-shrink:0;margin-top:1px}
-.cap-verdict-text{font-size:15px;color:var(--white);line-height:1.6;font-weight:500;font-style:italic}
-
-/* Caption hero action row */
-.cap-hero-actions{display:flex;align-items:center;gap:12px;margin-top:28px}
-.cap-hero-copy{font-family:var(--display);font-size:13px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--bg);background:var(--white);border:none;padding:13px 28px;border-radius:2px;cursor:pointer;transition:all .2s}
-.cap-hero-copy:hover{background:#f0f0f0;letter-spacing:.2em}
-.cap-hero-regen{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);background:none;border:1px solid var(--border2);padding:13px 20px;border-radius:2px;cursor:pointer;transition:all .2s}
-.cap-hero-regen:hover{color:var(--t1);border-color:var(--border2)}
-
-/* Voice note — subtle inline */
-.cap-voice-note{
-  display:flex;align-items:center;gap:10px;margin-top:10px;
-  padding:12px 18px;
-  background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.1);border-radius:3px;
-}
+.cap-insight-card-val{font-size:13px;color:var(--t2);line-height:1.75}
+.cap-voice-note{display:flex;align-items:center;gap:10px;padding:12px 18px;background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.1);border-radius:3px}
 .cap-voice-icon{color:var(--purple2);font-size:10px;flex-shrink:0}
 .cap-voice-text{font-family:var(--mono);font-size:11px;color:var(--purple3);letter-spacing:.06em;font-style:italic}
 
@@ -2515,48 +2490,47 @@ function copyModal(){
 // ── AI TOOLS ──
 const PROMPTS = {
   caption:(niche,goal,brief,profileCtx)=>
-    `You are PURX — a world-class Instagram strategist who thinks like a top creator, not a marketer. You write captions that feel earned, not manufactured. You know the difference between a caption that gets saved and one that gets scrolled past.
+    `You are PURX — an elite Instagram strategist. Generate 3 distinct captions for this ${niche} creator, each targeting a different goal.
 
 CREATOR PROFILE: ${profileCtx || 'A serious Instagram creator'}
+POST: "${brief || 'premium lifestyle content'}"
 
-TASK: Write ONE Instagram caption for this ${niche} creator. Goal: ${goal}. Post: "${brief || 'a premium, aspirational lifestyle moment'}".
+Write all 3 in all lowercase. 2-3 lines max each. Tight, human, no filler. End each with a question or saveable line. 4-5 hashtags below each caption.
 
-CAPTION RULES:
-- All lowercase — effortless, not lazy
-- First line stops the scroll — specific, visceral, real
-- 2-3 lines max. Every word earns its place.
-- Ends with a question or a line people save
-- 4-6 hashtags below — mid-tier and niche only, never massive generics
+Use EXACTLY these labels:
 
-Then give the breakdown with EXACTLY these labels. Write like a strategist talking directly to the creator — direct, specific, confident. Short. Not a report.
+CAPTION 1 — GROW REACH:
+[Caption to maximize reach and new followers. Hook pulls in people who don't follow yet.]
+
+CAPTION 2 — DRIVE ENGAGEMENT:
+[Caption to spark comments. Asks something people actually want to answer.]
+
+CAPTION 3 — GET SAVES:
+[Caption to earn saves and shares. A line people want to keep or send to someone.]
 
 PURX VERDICT:
-[One bold sentence. What makes this caption different and why it's going to work. Sound like a strategist, not an AI. Example: "This one's going to polarize people — that's exactly why it spreads."]
+[One sentence. Which of the 3 to post first and exactly why. Strategist voice, not AI.]
 
 WHY THIS WORKS:
-[2 sentences. The specific psychological trigger. Why this ${niche} audience will stop, save, or comment. Be sharp.]
+[2 sentences max. Specific psychological reason these stop the scroll for ${niche}.]
 
 POSTING SCHEDULE:
-[All 7 days. Best time for each day this content type performs. Format exactly — one per line:
+[All 7 days. Best time each day. One per line:
 Monday — 7:00 PM EST — [2-4 word reason]
 Tuesday — [time] — [reason]
 Wednesday — [time] — [reason]
 Thursday — [time] — [reason]
 Friday — [time] — [reason]
 Saturday — [time] — [reason]
-Sunday — [time] — [reason]
-Times must be real optimal windows for ${niche} content, not generic advice.]
+Sunday — [time] — [reason]]
 
 PERFORMANCE TIP:
-[One sentence. Most important thing to do in the first 30 minutes. Tactical and specific.]
+[One sentence. Most important thing in the first 30 minutes after posting.]
 
 ACTION SEQUENCE:
-[3 steps. One sentence each. Bold and direct — what to do right now, not eventually.]
+[3 steps. One sentence each. What to do right now.]
 
-CAPTION VOICE NOTE:
-[The exact phrase in this caption that makes it sound human. Just quote the phrase.]
-
-Output ONLY the caption then the sections above. No preamble. No extra text.`,
+Output ONLY the labeled sections above. No preamble. No extra text.`,
 
   hook:(niche,brief,style,profileCtx)=>
     `You are PURX — an elite Instagram Reels strategist who understands the real mechanics of why people stop scrolling and keep watching. You think about attention as a finite resource and you know that the first 1-2 seconds of a reel determine everything — whether it gets pushed or buried.
@@ -3196,7 +3170,7 @@ function renderRichOutput(textId, rawText) {
   const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
   // Detect tool type by looking for key section labels
-  const isCap = text.includes('PURX VERDICT:') || text.includes('WHY THIS WORKS:') || text.includes('CAPTION VOICE NOTE:') || text.includes('POSTING SCHEDULE:');
+  const isCap = text.includes('CAPTION 1') || text.includes('CAPTION 2') || text.includes('PURX VERDICT:') || text.includes('WHY THIS WORKS:') || text.includes('POSTING SCHEDULE:');
   const isHook = text.includes('HOOKS:') || text.includes('HOOK BREAKDOWN:');
   const isHash = text.includes('BROAD') && text.includes('MID-TIER');
 
@@ -3262,59 +3236,70 @@ function getSectionContent(lines, label, nextLabels) {
 }
 
 function renderCaptionOutput(el, lines) {
-  const allLabels = ['CAPTION:','PURX VERDICT:','WHY THIS WORKS:','POSTING SCHEDULE:','PERFORMANCE TIP:','ACTION SEQUENCE:','CAPTION VOICE NOTE:'];
-  // Caption is everything before the first section label
-  const firstSectionIdx = lines.findIndex(l =>
-    ['PURX VERDICT:','WHY THIS WORKS:','POSTING SCHEDULE:','PERFORMANCE TIP:','ACTION SEQUENCE:','CAPTION VOICE NOTE:']
-    .some(lbl => l.toUpperCase().startsWith(lbl))
-  );
-  let caption = firstSectionIdx > 0 ? lines.slice(0, firstSectionIdx).join('\n').trim() : '';
-  if (!caption) caption = getSectionContent(lines, 'CAPTION:', allLabels.slice(1));
-  const verdict = getSectionContent(lines, 'PURX VERDICT:', allLabels.slice(2));
-  const why = getSectionContent(lines, 'WHY THIS WORKS:', allLabels.slice(3));
-  const schedule = getSectionContent(lines, 'POSTING SCHEDULE:', allLabels.slice(4));
-  const tip = getSectionContent(lines, 'PERFORMANCE TIP:', allLabels.slice(5));
-  const action = getSectionContent(lines, 'ACTION SEQUENCE:', allLabels.slice(6));
-  const voice = getSectionContent(lines, 'CAPTION VOICE NOTE:', []);
+  function getCaption(num) {
+    var label = 'CAPTION ' + num;
+    var start = -1;
+    for(var i = 0; i < lines.length; i++) {
+      if(lines[i].toUpperCase().indexOf(label) === 0) { start = i; break; }
+    }
+    if(start === -1) return '';
+    var body = [];
+    var firstLine = lines[start].replace(/^CAPTION\s+\d+\s*[—\-–]+.*/i,'').trim();
+    if(!firstLine) firstLine = lines[start].replace(/^[^:]+:\s*/,'').trim();
+    if(firstLine) body.push(firstLine);
+    for(var j = start+1; j < lines.length; j++) {
+      var up = lines[j].toUpperCase();
+      if(up.indexOf('CAPTION ') === 0 || up.indexOf('PURX VERDICT') === 0 ||
+         up.indexOf('WHY THIS') === 0 || up.indexOf('POSTING') === 0 ||
+         up.indexOf('PERFORMANCE') === 0 || up.indexOf('ACTION SEQ') === 0) break;
+      body.push(lines[j]);
+    }
+    return body.join('\n').trim();
+  }
 
-  // Extract first day/time for action bar
-  const schedMatch = schedule.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)[^\n]*/i);
-  const schedTag = schedMatch ? schedMatch[0].substring(0,40) : 'Schedule inside';
+  var cap1 = getCaption(1);
+  var cap2 = getCaption(2);
+  var cap3 = getCaption(3);
+  var verdict = getSectionContent(lines, 'PURX VERDICT:', ['WHY THIS WORKS:','POSTING SCHEDULE:']);
+  var why = getSectionContent(lines, 'WHY THIS WORKS:', ['POSTING SCHEDULE:','PERFORMANCE TIP:']);
+  var schedule = getSectionContent(lines, 'POSTING SCHEDULE:', ['PERFORMANCE TIP:','ACTION SEQUENCE:']);
+  var tip = getSectionContent(lines, 'PERFORMANCE TIP:', ['ACTION SEQUENCE:','CAPTION VOICE NOTE:']);
+  var action = getSectionContent(lines, 'ACTION SEQUENCE:', ['CAPTION VOICE NOTE:']);
+
+  function makeCard(text, cls, label, icon, num) {
+    if(!text) return '';
+    var id = 'cap-card-text-' + num;
+    return '<div class="cap-card">' +
+      '<div class="cap-card-top">' +
+        '<div class="cap-card-badge ' + cls + '">' + icon + ' ' + escH(label) + '</div>' +
+        '<button class="cap-card-copy" onclick="(function(btn,id){' +
+          'navigator.clipboard.writeText(document.getElementById(id).textContent).then(function(){' +
+            'btn.textContent=\'Copied \u2713\';btn.className=\'cap-card-copy copied\';' +
+            'showToast(\'Caption copied\');' +
+            'setTimeout(function(){btn.textContent=\'Copy\';btn.className=\'cap-card-copy\';},2200);' +
+          '});' +
+        '})(this,\'' + id + '\')">Copy</button>' +
+      '</div>' +
+      '<div class="cap-card-body">' +
+        '<div class="cap-card-text" id="' + id + '">' + escH(text) + '</div>' +
+      '</div>' +
+    '</div>';
+  }
 
   el.innerHTML =
     '<div class="cap-output-wrap">' +
-
-      // ── PURX Verdict: strategist voice at the top ──
-      (verdict ? '<div class="cap-verdict">' +
-        '<div class="cap-verdict-icon">✦</div>' +
-        '<div class="cap-verdict-text">' + escH(verdict) + '</div>' +
-      '</div>' : '') +
-
-      // ── Caption hero: the star ──
-      '<div class="cap-hero">' +
-        '<div class="cap-hero-label">Your Caption</div>' +
-        '<div class="cap-hero-text" id="cap-hero-text">' + escH(caption) + '</div>' +
-        '<div class="cap-hero-actions">' +
-          '<button class="cap-hero-copy" onclick="navigator.clipboard.writeText(document.getElementById(\'cap-hero-text\').textContent).then(function(){showToast(\'Caption copied ✓\')})">Copy Caption →</button>' +
-          '<button class="cap-hero-regen" onclick="runTool(\'caption\')">Regenerate</button>' +
-        '</div>' +
+      (verdict ? '<div class="cap-verdict"><div class="cap-verdict-icon">\u2756</div><div class="cap-verdict-text">' + escH(verdict) + '</div></div>' : '') +
+      '<div class="cap-cards">' +
+        makeCard(cap1, 'reach', 'Grow Reach', '\uD83D\uDE80', 1) +
+        makeCard(cap2, 'engage', 'Drive Engagement', '\uD83D\uDCAC', 2) +
+        makeCard(cap3, 'saves', 'Get Saves', '\uD83D\uDD16', 3) +
       '</div>' +
-
-      // ── Why it works + Do this first ──
       '<div class="cap-insight-grid">' +
-        (why ? '<div class="cap-insight-card purple"><div class="cap-insight-card-label purple">Why This Works</div><div class="cap-insight-card-val">' + escH(why) + '</div></div>' : '') +
+        (why ? '<div class="cap-insight-card purple"><div class="cap-insight-card-label purple">Why These Work</div><div class="cap-insight-card-val">' + escH(why) + '</div></div>' : '') +
         (tip ? '<div class="cap-insight-card amber"><div class="cap-insight-card-label amber">Do This First</div><div class="cap-insight-card-val">' + escH(tip) + '</div></div>' : '') +
       '</div>' +
-
-      // ── Full 7-day schedule ──
       (schedule ? renderScheduleTable(schedule) : '') +
-
-      // ── Action sequence ──
       (action ? renderActionList(action) : '') +
-
-      // ── Voice note ──
-      (voice ? '<div class="cap-voice-note"><span class="cap-voice-icon">✦</span><span class="cap-voice-text">' + escH(voice) + '</span></div>' : '') +
-
     '</div>';
 }
 
