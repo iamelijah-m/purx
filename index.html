@@ -51,32 +51,137 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .screen.active{display:flex}
 
 /* ── AUTH SCREEN ── */
-#auth-screen{align-items:center;justify-content:center;position:relative;overflow:hidden}
-.auth-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(109,40,217,0.16) 0%,transparent 65%);pointer-events:none}
-.auth-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,black,transparent);pointer-events:none}
-.auth-card{position:relative;z-index:2;width:100%;max-width:440px;padding:0 28px}
-.auth-logo{font-family:var(--display);font-size:80px;letter-spacing:.02em;color:var(--white);text-transform:uppercase;line-height:.88;margin-bottom:8px}
-.auth-tagline{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.25em;text-transform:uppercase;margin-bottom:52px;display:flex;align-items:center;gap:10px}
-.auth-tagline::before{content:'';width:20px;height:1px;background:var(--purple2)}
-.auth-logo-mark{display:inline-block;width:6px;height:6px;background:var(--purple2);border-radius:50%;margin-right:12px;animation:pulse-dot 2s ease-in-out infinite}
-@keyframes pulse-dot{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
-.auth-tabs{display:flex;gap:0;margin-bottom:32px;border-bottom:1px solid var(--border)}
-.auth-tab{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);background:none;border:none;padding:12px 20px 12px 0;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
-.auth-tab.on{color:var(--white);border-bottom-color:var(--purple2)}
-.auth-form{display:flex;flex-direction:column;gap:14px}
+#auth-screen{align-items:center;justify-content:center;position:relative;overflow:hidden;background:var(--bg)}
+
+/* Multi-layer atmospheric background */
+.auth-bg{position:absolute;inset:0;pointer-events:none}
+.auth-bg::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% -10%,rgba(109,40,217,.25) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 30% at 20% 80%,rgba(109,40,217,.06) 0%,transparent 50%),
+    radial-gradient(ellipse 40% 30% at 80% 80%,rgba(139,92,246,.05) 0%,transparent 50%);
+}
+.auth-bg::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(109,40,217,.08) 0%,transparent 55%);
+}
+.auth-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:72px 72px;
+  mask-image:radial-gradient(ellipse 90% 80% at 50% 20%,black 0%,transparent 70%);
+  pointer-events:none;
+}
+
+/* Split layout — left brand, right form */
+.auth-split{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:100vh;width:100%;max-width:1100px;margin:0 auto;
+}
+@media(max-width:768px){.auth-split{grid-template-columns:1fr;min-height:auto;padding:60px 0 40px}}
+
+/* Left: Brand panel */
+.auth-brand{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 60px 80px 40px;
+}
+@media(max-width:768px){.auth-brand{padding:0 24px 40px;align-items:flex-start}}
+.auth-logo{
+  font-family:var(--display);font-size:clamp(80px,10vw,140px);
+  letter-spacing:.04em;color:var(--silver);text-transform:uppercase;
+  line-height:.85;margin-bottom:24px;
+}
+.auth-brand-statement{
+  font-size:clamp(15px,1.6vw,18px);color:var(--t2);line-height:1.7;
+  max-width:340px;margin-bottom:40px;font-weight:300;
+}
+.auth-brand-statement strong{color:var(--silver);font-weight:500}
+.auth-brand-pills{display:flex;flex-direction:column;gap:12px}
+.auth-brand-pill{
+  display:flex;align-items:center;gap:12px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);
+}
+.auth-brand-pill-dot{width:5px;height:5px;border-radius:50%;background:var(--purple2);flex-shrink:0}
+.auth-brand-pill:nth-child(2) .auth-brand-pill-dot{background:var(--purple3)}
+.auth-brand-pill:nth-child(3) .auth-brand-pill-dot{background:var(--platinum)}
+
+/* Right: Form panel */
+.auth-form-panel{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 40px 80px 60px;
+  border-left:1px solid var(--border);
+}
+@media(max-width:768px){
+  .auth-form-panel{padding:0 24px;border-left:none;border-top:1px solid var(--border);padding-top:40px}
+}
+.auth-form-title{
+  font-family:var(--display);font-size:36px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--silver);margin-bottom:6px;
+}
+.auth-form-sub{
+  font-family:var(--mono);font-size:9px;color:var(--t3);
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:36px;
+  display:flex;align-items:center;gap:10px;
+}
+.auth-form-sub::before{content:'';width:16px;height:1px;background:var(--purple2)}
+
+/* Tab switcher */
+.auth-tabs{display:flex;gap:0;margin-bottom:28px;border-bottom:1px solid var(--border)}
+.auth-tab{
+  font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--t3);background:none;border:none;
+  padding:10px 18px 10px 0;cursor:pointer;
+  border-bottom:1px solid transparent;margin-bottom:-1px;transition:all .2s;
+}
+.auth-tab.on{color:var(--silver);border-bottom-color:var(--purple2)}
+.auth-tab:hover:not(.on){color:var(--t2)}
+
+/* Form fields */
+.auth-form{display:flex;flex-direction:column;gap:12px}
 .auth-form.hidden{display:none}
-.field-label{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px}
-.field-wrap{display:flex;flex-direction:column}
-.auth-input{background:var(--bg2);border:1px solid var(--border2);color:var(--t1);font-family:var(--font);font-size:15px;padding:15px 18px;outline:none;border-radius:2px;transition:border-color .2s,box-shadow .2s}
-.auth-input:focus{border-color:var(--purple2);box-shadow:0 0 0 3px rgba(109,40,217,.15)}
-.auth-input::placeholder{color:var(--t3)}
-.auth-btn{font-family:var(--display);font-size:15px;font-weight:900;letter-spacing:.28em;text-transform:uppercase;background:var(--silver);color:var(--bg2);border:none;padding:18px;cursor:pointer;border-radius:2px;margin-top:12px;transition:all .2s;position:relative;overflow:hidden}
-.auth-btn:hover{background:#e8e8e8}
+.field-wrap{display:flex;flex-direction:column;gap:7px}
+.field-label{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.18em;text-transform:uppercase}
+.auth-input{
+  background:rgba(255,255,255,.03);border:1px solid var(--border2);
+  color:var(--t1);font-family:var(--font);font-size:15px;
+  padding:14px 16px;outline:none;border-radius:3px;
+  transition:all .2s;
+}
+.auth-input:focus{
+  border-color:var(--purple2);
+  background:rgba(109,40,217,.05);
+  box-shadow:0 0 0 3px rgba(109,40,217,.1);
+}
+.auth-input::placeholder{color:var(--t3);font-size:14px}
+
+/* Submit button */
+.auth-btn{
+  font-family:var(--display);font-size:16px;letter-spacing:.32em;
+  text-transform:uppercase;background:var(--silver);color:var(--bg);
+  border:none;padding:17px;cursor:pointer;border-radius:3px;
+  margin-top:8px;transition:all .25s;position:relative;overflow:hidden;
+  font-weight:400;
+}
+.auth-btn::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 0%,rgba(255,255,255,.08) 50%,transparent 100%);
+  transform:translateX(-100%);transition:transform .4s ease;
+}
+.auth-btn:hover{background:var(--white);letter-spacing:.36em;transform:translateY(-1px);box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.auth-btn:hover::after{transform:translateX(100%)}
 .auth-btn:active{transform:scale(.99)}
-.auth-btn:disabled{opacity:.5;cursor:not-allowed}
-.auth-msg{font-family:var(--mono);font-size:10px;letter-spacing:.05em;margin-top:8px;min-height:16px}
+.auth-btn:disabled{opacity:.4;cursor:not-allowed}
+.auth-msg{font-family:var(--mono);font-size:9px;letter-spacing:.06em;margin-top:6px;min-height:14px}
 .auth-msg.err{color:var(--red)}
 .auth-msg.ok{color:var(--green)}
+
+/* Legacy compat */
+.auth-card{display:none}
+.auth-logo-mark{display:none}
 
 /* ── APP LAYOUT ── */
 #app-screen{flex-direction:column}
@@ -1014,46 +1119,63 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 <div id="auth-screen" class="screen active">
   <div class="auth-bg"></div>
   <div class="auth-grid"></div>
-  <div class="auth-card">
-    <div class="auth-logo"><span class="auth-logo-mark"></span>PURX</div>
-    <div class="auth-tagline">Creator Intelligence</div>
-    <div class="auth-tabs">
-      <button class="auth-tab on" onclick="switchTab('login')">Sign in</button>
-      <button class="auth-tab" onclick="switchTab('signup')">Create account</button>
+  <div class="auth-split">
+
+    <!-- Left: Brand -->
+    <div class="auth-brand">
+      <div class="auth-logo">PURX</div>
+      <div class="auth-brand-statement">
+        The AI content strategist built for <strong>serious creators</strong>. Every output is personalized to your niche, your voice, and your goals.
+      </div>
+      <div class="auth-brand-pills">
+        <div class="auth-brand-pill"><div class="auth-brand-pill-dot"></div>8 AI-powered creator tools</div>
+        <div class="auth-brand-pill"><div class="auth-brand-pill-dot"></div>Real-time trend intelligence</div>
+        <div class="auth-brand-pill"><div class="auth-brand-pill-dot"></div>Built for growth, not content mills</div>
+      </div>
     </div>
-    <div id="login-form" class="auth-form">
-      <div class="field-wrap">
-        <div class="field-label">Email</div>
-        <input class="auth-input" id="login-email" type="email" placeholder="you@email.com" autocomplete="email">
+
+    <!-- Right: Form -->
+    <div class="auth-form-panel">
+      <div class="auth-form-title" id="auth-form-title">Welcome back</div>
+      <div class="auth-form-sub" id="auth-form-sub">Sign in to your account</div>
+      <div class="auth-tabs">
+        <button class="auth-tab on" onclick="switchTab('login')">Sign in</button>
+        <button class="auth-tab" onclick="switchTab('signup')">Create account</button>
       </div>
-      <div class="field-wrap">
-        <div class="field-label">Password</div>
-        <input class="auth-input" id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+      <div id="login-form" class="auth-form">
+        <div class="field-wrap">
+          <div class="field-label">Email</div>
+          <input class="auth-input" id="login-email" type="email" placeholder="you@email.com" autocomplete="email">
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">Password</div>
+          <input class="auth-input" id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="auth-btn" id="login-btn" onclick="handleLogin()">Sign In →</button>
+        <div class="auth-msg" id="login-msg"></div>
+        <button onclick="switchTab('forgot')" style="background:none;border:none;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.1em;cursor:pointer;padding:6px 0;text-align:left;transition:color .2s" onmouseover="this.style.color='var(--t2)'" onmouseout="this.style.color='var(--t3)'">Forgot password?</button>
       </div>
-      <button class="auth-btn" id="login-btn" onclick="handleLogin()">Sign in →</button>
-      <div class="auth-msg" id="login-msg"></div>
-      <button onclick="switchTab('forgot')" style="background:none;border:none;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.1em;cursor:pointer;padding:4px 0;text-align:left;transition:color .2s" onmouseover="this.style.color='var(--t2)'" onmouseout="this.style.color='var(--t3)'">Forgot password?</button>
-    </div>
-    <div id="signup-form" class="auth-form hidden">
-      <div class="field-wrap">
-        <div class="field-label">Email</div>
-        <input class="auth-input" id="signup-email" type="email" placeholder="you@email.com" autocomplete="email">
+      <div id="signup-form" class="auth-form hidden">
+        <div class="field-wrap">
+          <div class="field-label">Email</div>
+          <input class="auth-input" id="signup-email" type="email" placeholder="you@email.com" autocomplete="email">
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">Password</div>
+          <input class="auth-input" id="signup-pass" type="password" placeholder="Min 6 characters" autocomplete="new-password">
+        </div>
+        <button class="auth-btn" id="signup-btn" onclick="handleSignup()">Create Account →</button>
+        <div class="auth-msg" id="signup-msg"></div>
       </div>
-      <div class="field-wrap">
-        <div class="field-label">Password</div>
-        <input class="auth-input" id="signup-pass" type="password" placeholder="Min 6 characters" autocomplete="new-password">
+      <div id="forgot-form" class="auth-form hidden">
+        <div class="field-wrap">
+          <div class="field-label">Email address</div>
+          <input class="auth-input" id="forgot-email" type="email" placeholder="you@email.com" autocomplete="email">
+        </div>
+        <button class="auth-btn" id="forgot-btn" onclick="handleForgotPassword()">Send Reset Link →</button>
+        <div class="auth-msg" id="forgot-msg"></div>
+        <button onclick="switchTab('login')" style="background:none;border:none;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.1em;cursor:pointer;padding:6px 0;transition:color .2s" onmouseover="this.style.color='var(--t2)'" onmouseout="this.style.color='var(--t3)'">← Back to sign in</button>
       </div>
-      <button class="auth-btn" id="signup-btn" onclick="handleSignup()">Create account →</button>
-      <div class="auth-msg" id="signup-msg"></div>
-    </div>
-    <div id="forgot-form" class="auth-form hidden">
-      <div class="field-wrap">
-        <div class="field-label">Email</div>
-        <input class="auth-input" id="forgot-email" type="email" placeholder="you@email.com" autocomplete="email">
-      </div>
-      <button class="auth-btn" id="forgot-btn" onclick="handleForgotPassword()">Send reset link →</button>
-      <div class="auth-msg" id="forgot-msg"></div>
-      <button onclick="switchTab('login')" style="background:none;border:none;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.1em;cursor:pointer;padding:4px 0;transition:color .2s" onmouseover="this.style.color='var(--t2)'" onmouseout="this.style.color='var(--t3)'">← Back to sign in</button>
     </div>
   </div>
 </div>
@@ -1975,9 +2097,12 @@ function switchTab(tab) {
   document.getElementById('signup-form').classList.toggle('hidden', tab!=='signup');
   const ff = document.getElementById('forgot-form');
   if(ff) ff.classList.toggle('hidden', tab!=='forgot');
-  // Update tagline for forgot flow
-  const tagline = document.querySelector('.auth-tagline');
-  if(tagline) tagline.textContent = tab==='forgot' ? 'Reset your password' : 'Creator Intelligence';
+  const titles = {login:['Welcome back','Sign in to your account'],signup:['Join PURX','Create your free account'],forgot:['Reset password','Enter your email below']};
+  const t = titles[tab] || titles.login;
+  const titleEl = document.getElementById('auth-form-title');
+  const subEl = document.getElementById('auth-form-sub');
+  if(titleEl) titleEl.textContent = t[0];
+  if(subEl) subEl.textContent = t[1];
 }
 
 async function handleLogin() {
