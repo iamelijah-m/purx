@@ -1209,6 +1209,24 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 }
 .upgrade-btn:hover{background:var(--white);letter-spacing:.28em;transform:translateY(-1px);box-shadow:0 8px 32px rgba(0,0,0,.5)}
 .upgrade-trial-note{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.08em;margin-top:8px;text-align:center}
+
+/* ── UPGRADE MODAL ── */
+.upgrade-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:9000;display:none;align-items:center;justify-content:center;padding:24px}
+.upgrade-modal-overlay.open{display:flex}
+.upgrade-modal-card{background:var(--surface);border:1px solid rgba(109,40,217,.35);border-radius:4px;padding:48px 40px;max-width:480px;width:100%;position:relative;text-align:center}
+.upgrade-modal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3));border-radius:4px 4px 0 0}
+.upgrade-modal-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--purple3);margin-bottom:16px}
+.upgrade-modal-title{font-family:var(--display);font-size:clamp(32px,5vw,48px);font-weight:900;text-transform:uppercase;letter-spacing:.02em;color:var(--white);line-height:.95;margin-bottom:20px}
+.upgrade-modal-desc{font-size:14px;color:var(--t2);line-height:1.65;margin-bottom:28px;max-width:360px;margin-left:auto;margin-right:auto}
+.upgrade-modal-price{margin-bottom:8px}
+.upgrade-modal-amount{font-family:var(--display);font-size:64px;font-weight:900;color:var(--white);line-height:1}
+.upgrade-modal-per{font-family:var(--mono);font-size:12px;color:var(--t2);vertical-align:bottom;padding-bottom:10px;display:inline-block}
+.upgrade-modal-trial{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--t3);margin-bottom:28px}
+.upgrade-modal-btn{display:block;font-family:var(--display);font-size:15px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;background:var(--white);color:var(--bg);text-decoration:none;padding:18px 32px;border-radius:2px;margin-bottom:16px;transition:all .2s}
+.upgrade-modal-btn:hover{background:#e8e8e8;letter-spacing:.26em}
+.upgrade-modal-close{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);background:none;border:none;cursor:pointer;padding:8px;transition:color .2s}
+.upgrade-modal-close:hover{color:var(--t1)}
+@media(max-width:480px){.upgrade-modal-card{padding:36px 24px}}
 </style>
 </head>
 <body>
@@ -1480,7 +1498,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
         <div class="upgrade-banner-text">
           <div class="upgrade-banner-eyebrow">Free Plan</div>
           <div class="upgrade-banner-title">Upgrade to Pro</div>
-          <div class="upgrade-banner-desc">$19/month · 7-day free trial · Cancel anytime</div>
+          <div class="upgrade-banner-desc" id="dash-banner-desc">3 free generations left · Then $19/month · 7-day free trial · Cancel anytime</div>
         </div>
         <a href="https://buy.stripe.com/14AbJ1cDnaQIfmr3EQ9ws00" target="_blank" class="upgrade-btn">Upgrade Now →</a>
       </div>
@@ -2449,13 +2467,7 @@ function showApp() {
   document.getElementById('auth-screen').classList.remove('active');
   document.getElementById('app-screen').classList.add('active');
   document.getElementById('user-email-display').textContent = currentUser?.email || '';
-  // Show upgrade banner if not pro
-  var plan = currentUser?.user_metadata?.plan || 'free';
-  var isPro = plan === 'pro' || plan === 'trialing';
-  var dashBanner = document.getElementById('dash-upgrade-banner');
-  var settingsBanner = document.getElementById('settings-upgrade-banner');
-  if(dashBanner) dashBanner.style.display = isPro ? 'none' : 'flex';
-  if(settingsBanner) settingsBanner.style.display = isPro ? 'none' : 'flex';
+  updateBannerState();
 
   // Show admin link in dropdown if this is the admin account
   var adminBtn = document.getElementById('admin-nav-btn');
@@ -2798,6 +2810,7 @@ async function loadStats() {
     });
 
   } catch(e){ console.warn('loadStats error:', e); }
+  updateBannerState();
 }
 
 function updateTodayFocus(total, captions, hooks, hashtags, calendars, checks, streak, thisWeek) {
@@ -3181,6 +3194,15 @@ Every hashtag must be real, active, and directly relevant to ${niche} and this s
     labelEl.textContent = msgList[msgIdx];
   }, 2200) : null;
 
+  // ── PAYWALL GATE ──
+  if (!checkFreeLimit()) {
+    clearInterval(msgTimer);
+    loading.classList.remove('show');
+    btn.disabled = false;
+    showUpgradeModal();
+    return;
+  }
+
   try {
     const niche = cfg.getNiche();
     const goal = cfg.getGoal();
@@ -3288,6 +3310,7 @@ function buildDayPrompt(inputs, dayNum, dayName, weekSummary) {
 
 
 async function runPlanner() {
+  if (!checkFreeLimit()) { showUpgradeModal(); return; }
   const btn = document.getElementById('cal-btn');
   const loading = document.getElementById('cal-loading');
   const output = document.getElementById('cal-output');
@@ -4408,6 +4431,7 @@ function buildCheckerPrompt(contentType, goal, profileCtx, niches) {
 }
 
 async function runChecker() {
+  if (!checkFreeLimit()) { showUpgradeModal(); return; }
   if (checkerFiles.length === 0) {
     showToast('Upload at least one screenshot first');
     return;
@@ -4716,6 +4740,7 @@ function resetVpa() {
 
 async function runVpa() {
   if(vpaLoading) return;
+  if (!checkFreeLimit()) { showUpgradeModal(); return; }
   if(!vpaFile) { showToast('Upload a screenshot first'); return; }
 
   var btn = document.getElementById('vpa-btn');
@@ -4959,6 +4984,7 @@ function resetBioAudit() {
 
 async function runBioAudit() {
   if(bioLoading) return;
+  if (!checkFreeLimit()) { showUpgradeModal(); return; }
   if(!bioFile) { showToast('Upload your profile screenshot first'); return; }
 
   var btn = document.getElementById('bio-btn');
@@ -5615,10 +5641,85 @@ function closeAdminUser() {
   if(modal) modal.classList.remove('open');
 }
 
+// ── FREE LIMIT / PAYWALL ──
+const FREE_LIMIT = 3;
+
+function getUserPlan() {
+  var plan = currentUser?.user_metadata?.plan || 'free';
+  return plan;
+}
+
+function isPro() {
+  var plan = getUserPlan();
+  return plan === 'pro' || plan === 'trialing';
+}
+
+function getFreeUsed() {
+  // Use generationsCache which is populated by loadStats
+  return generationsCache ? generationsCache.length : 0;
+}
+
+function checkFreeLimit() {
+  if (isPro()) return true; // pro users always pass
+  var used = getFreeUsed();
+  return used < FREE_LIMIT;
+}
+
+function updateBannerState() {
+  var pro = isPro();
+  var used = getFreeUsed();
+  var remaining = Math.max(0, FREE_LIMIT - used);
+
+  var dashBanner = document.getElementById('dash-upgrade-banner');
+  var settingsBanner = document.getElementById('settings-upgrade-banner');
+  var bannerDesc = document.getElementById('dash-banner-desc');
+
+  if (dashBanner) {
+    dashBanner.style.display = pro ? 'none' : 'flex';
+    if (!pro && bannerDesc) {
+      if (remaining > 0) {
+        bannerDesc.textContent = remaining + ' free generation' + (remaining === 1 ? '' : 's') + ' left · Then $19/month · 7-day free trial · Cancel anytime';
+      } else {
+        bannerDesc.textContent = 'You\'ve used all free generations · Upgrade to keep creating';
+      }
+    }
+  }
+  if (settingsBanner) {
+    settingsBanner.style.display = pro ? 'none' : 'flex';
+  }
+}
+
+function showUpgradeModal() {
+  var modal = document.getElementById('upgrade-modal');
+  if (modal) modal.classList.add('open');
+}
+
+function closeUpgradeModal() {
+  var modal = document.getElementById('upgrade-modal');
+  if (modal) modal.classList.remove('open');
+}
+
 // Init
 showSection('dashboard');
 
 
 </script>
+
+<!-- UPGRADE MODAL -->
+<div id="upgrade-modal" class="upgrade-modal-overlay" onclick="if(event.target===this)closeUpgradeModal()">
+  <div class="upgrade-modal-card">
+    <div class="upgrade-modal-eyebrow">Free limit reached</div>
+    <div class="upgrade-modal-title">You've used your<br>3 free generations</div>
+    <div class="upgrade-modal-desc">Upgrade to PURX Pro and get unlimited captions, hooks, hashtags, content planning, post checking, viral analysis, bio audits — everything. Built for creators who are serious about growth.</div>
+    <div class="upgrade-modal-price">
+      <span class="upgrade-modal-amount">$19</span>
+      <span class="upgrade-modal-per">/month</span>
+    </div>
+    <div class="upgrade-modal-trial">7-day free trial · Cancel anytime · Instant access</div>
+    <a href="https://buy.stripe.com/14AbJ1cDnaQIfmr3EQ9ws00" target="_blank" class="upgrade-modal-btn">Start Free Trial →</a>
+    <button class="upgrade-modal-close" onclick="closeUpgradeModal()">Maybe later</button>
+  </div>
+</div>
+
 </body>
 </html>
