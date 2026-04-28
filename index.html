@@ -2407,6 +2407,16 @@ function showApp() {
   document.getElementById('auth-screen').classList.remove('active');
   document.getElementById('app-screen').classList.add('active');
   document.getElementById('user-email-display').textContent = currentUser?.email || '';
+  // Show admin link in dropdown if this is the admin account
+  var adminBtn = document.getElementById('admin-nav-btn');
+  var adminDiv = document.getElementById('admin-nav-divider');
+  if(currentUser && currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+    if(adminBtn) adminBtn.style.display = 'flex';
+    if(adminDiv) adminDiv.style.display = 'block';
+  } else {
+    if(adminBtn) adminBtn.style.display = 'none';
+    if(adminDiv) adminDiv.style.display = 'none';
+  }
   showSection('dashboard');
   loadStats();
   loadProfile();
