@@ -1270,6 +1270,8 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
           <button class="header-more-item" onclick="showSection('progress');closeMoreMenu()">📈 Progress</button>
           <button class="header-more-item" onclick="showSection('settings');closeMoreMenu()">⚙️ Settings</button>
           <div class="header-more-divider"></div>
+          <button class="header-more-item" id="admin-nav-btn" onclick="showSection('admin');closeMoreMenu()" style="display:none;color:var(--purple3)">⚡ Admin Dashboard</button>
+          <div class="header-more-divider" id="admin-nav-divider" style="display:none"></div>
           <button class="header-more-item signout-item" onclick="handleSignout();closeMoreMenu()">Sign out</button>
         </div>
       </div>
