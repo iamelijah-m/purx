@@ -1185,6 +1185,30 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .admin-alert.warn .admin-alert-text{color:var(--amber)}
 .admin-alert.info .admin-alert-text{color:var(--purple3)}
 .admin-alert.success .admin-alert-text{color:var(--green)}
+
+/* ── UPGRADE / PAYWALL ── */
+.upgrade-banner{
+  background:linear-gradient(135deg,rgba(109,40,217,.12) 0%,rgba(5,5,7,0) 60%),var(--surface);
+  border:1px solid rgba(109,40,217,.25);border-radius:3px;
+  padding:28px 36px;margin-bottom:20px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  position:relative;overflow:hidden;
+}
+.upgrade-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3))}
+.upgrade-banner-text{}
+.upgrade-banner-eyebrow{font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--purple3);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.upgrade-banner-eyebrow::before{content:'';width:14px;height:1px;background:var(--purple2)}
+.upgrade-banner-title{font-family:var(--display);font-size:clamp(20px,3vw,28px);letter-spacing:.04em;text-transform:uppercase;color:var(--silver);line-height:1;margin-bottom:8px}
+.upgrade-banner-desc{font-size:13px;color:var(--t2);line-height:1.6;max-width:480px;font-weight:300}
+.upgrade-btn{
+  font-family:var(--display);font-size:14px;letter-spacing:.22em;text-transform:uppercase;
+  background:var(--silver);color:var(--bg);border:none;
+  padding:16px 32px;border-radius:2px;cursor:pointer;
+  transition:all .25s;white-space:nowrap;flex-shrink:0;
+  text-decoration:none;display:inline-block;
+}
+.upgrade-btn:hover{background:var(--white);letter-spacing:.28em;transform:translateY(-1px);box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.upgrade-trial-note{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.08em;margin-top:8px;text-align:center}
 </style>
 </head>
 <body>
@@ -1806,6 +1830,14 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
     <section id="sec-settings" class="tool-panel">
       <button class="panel-back" onclick="showSection('dashboard')">← Back</button>
       <div class="panel-title">Settings</div>
+      <div id="settings-upgrade-banner" style="display:none" class="upgrade-banner" style="margin-bottom:32px">
+        <div class="upgrade-banner-text">
+          <div class="upgrade-banner-eyebrow">Free Plan</div>
+          <div class="upgrade-banner-title">Upgrade to Pro</div>
+          <div class="upgrade-banner-desc">$19/month · 7-day free trial · Cancel anytime</div>
+        </div>
+        <a href="https://buy.stripe.com/test_00wcN57fifQp8wicqW6g800" target="_blank" class="upgrade-btn">Upgrade Now →</a>
+      </div>
       <div class="panel-sub">Your account and profile</div>
 
       <div class="form-section" style="margin-bottom:16px">
@@ -2407,6 +2439,14 @@ function showApp() {
   document.getElementById('auth-screen').classList.remove('active');
   document.getElementById('app-screen').classList.add('active');
   document.getElementById('user-email-display').textContent = currentUser?.email || '';
+  // Show upgrade banner if not pro
+  var plan = currentUser?.user_metadata?.plan || 'free';
+  var isPro = plan === 'pro' || plan === 'trialing';
+  var dashBanner = document.getElementById('dash-upgrade-banner');
+  var settingsBanner = document.getElementById('settings-upgrade-banner');
+  if(dashBanner) dashBanner.style.display = isPro ? 'none' : 'flex';
+  if(settingsBanner) settingsBanner.style.display = isPro ? 'none' : 'flex';
+
   // Show admin link in dropdown if this is the admin account
   var adminBtn = document.getElementById('admin-nav-btn');
   var adminDiv = document.getElementById('admin-nav-divider');
