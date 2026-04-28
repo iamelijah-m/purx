@@ -1074,6 +1074,117 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .mark-posted-btn{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:transparent;color:var(--green);border:1px solid rgba(16,185,129,.3);padding:10px 20px;border-radius:2px;cursor:pointer;transition:all .2s}
 .mark-posted-btn:hover{background:rgba(16,185,129,.08);border-color:var(--green)}
 .mark-posted-btn.done{color:var(--t3);border-color:var(--border);cursor:default}
+
+/* ── ADMIN DASHBOARD ── */
+#sec-admin{display:none}
+.admin-gate{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:24px;text-align:center}
+.admin-gate-logo{font-family:var(--display);font-size:64px;letter-spacing:.04em;color:var(--silver)}
+.admin-gate-sub{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.admin-title{font-family:var(--display);font-size:48px;letter-spacing:.04em;text-transform:uppercase;color:var(--silver)}
+.admin-subtitle{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-top:4px}
+.admin-refresh-btn{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;background:none;border:1px solid var(--border2);color:var(--t3);padding:10px 20px;border-radius:2px;cursor:pointer;transition:all .2s}
+.admin-refresh-btn:hover{color:var(--silver);border-color:var(--border2)}
+.admin-section{margin-bottom:28px}
+.admin-section-label{font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--t3);margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.admin-section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Stat grid */
+.admin-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px}
+.admin-stat-grid.wide{grid-template-columns:repeat(6,1fr)}
+@media(max-width:900px){.admin-stat-grid,.admin-stat-grid.wide{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.admin-stat-grid,.admin-stat-grid.wide{grid-template-columns:repeat(2,1fr)}}
+.admin-stat{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:18px 20px;position:relative;overflow:hidden;transition:border-color .2s}
+.admin-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.admin-stat.purple::before{background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.admin-stat.green::before{background:var(--green)}
+.admin-stat.amber::before{background:var(--amber)}
+.admin-stat.red::before{background:var(--red)}
+.admin-stat.blue::before{background:#3b82f6}
+.admin-stat.silver::before{background:var(--silver)}
+.admin-stat-val{font-family:var(--display);font-size:38px;color:var(--silver);line-height:1;margin-bottom:4px;letter-spacing:.02em}
+.admin-stat-label{font-family:var(--mono);font-size:7px;color:var(--t3);letter-spacing:.16em;text-transform:uppercase}
+.admin-stat-sub{font-family:var(--mono);font-size:9px;margin-top:6px}
+.admin-stat-sub.up{color:var(--green)}
+.admin-stat-sub.warn{color:var(--amber)}
+.admin-stat-sub.danger{color:var(--red)}
+
+/* Revenue banner */
+.admin-revenue-banner{
+  background:linear-gradient(135deg,rgba(109,40,217,.12) 0%,rgba(5,5,7,0) 60%),var(--surface);
+  border:1px solid rgba(109,40,217,.25);border-radius:3px;
+  padding:28px 36px;margin-bottom:10px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:24px;
+  position:relative;overflow:hidden;
+}
+.admin-revenue-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple3))}
+.admin-rev-item{}
+.admin-rev-label{font-family:var(--mono);font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--purple3);margin-bottom:8px}
+.admin-rev-val{font-family:var(--display);font-size:42px;color:var(--silver);line-height:1;letter-spacing:.02em}
+.admin-rev-sub{font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:6px}
+.admin-stripe-btn{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;background:rgba(109,40,217,.15);border:1px solid rgba(109,40,217,.3);color:var(--purple3);padding:8px 18px;border-radius:2px;cursor:pointer;transition:all .2s;margin-top:12px;display:inline-block}
+.admin-stripe-btn:hover{background:rgba(109,40,217,.25);color:var(--purple4)}
+
+/* Tool breakdown */
+.admin-tool-bars{display:flex;flex-direction:column;gap:8px}
+.admin-tool-bar{display:flex;align-items:center;gap:14px}
+.admin-tool-name{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--t2);width:110px;flex-shrink:0}
+.admin-tool-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.admin-tool-fill{height:100%;border-radius:3px;transition:width .8s ease}
+.admin-tool-count{font-family:var(--mono);font-size:9px;color:var(--t3);width:40px;text-align:right;flex-shrink:0}
+
+/* User table */
+.admin-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden}
+.admin-table-top{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border)}
+.admin-search{background:rgba(255,255,255,.04);border:1px solid var(--border2);color:var(--t1);font-family:var(--font);font-size:13px;padding:8px 14px;border-radius:2px;outline:none;width:240px;transition:all .2s}
+.admin-search:focus{border-color:var(--purple2)}
+.admin-search::placeholder{color:var(--t3)}
+.admin-filter-btns{display:flex;gap:6px}
+.admin-filter-btn{font-family:var(--mono);font-size:7px;letter-spacing:.1em;text-transform:uppercase;padding:7px 14px;border-radius:100px;border:1px solid var(--border2);color:var(--t3);background:none;cursor:pointer;transition:all .2s}
+.admin-filter-btn.on{background:rgba(109,40,217,.12);border-color:var(--purple2);color:var(--purple3)}
+.admin-table{width:100%;border-collapse:collapse}
+.admin-table th{font-family:var(--mono);font-size:7px;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);padding:11px 16px;text-align:left;border-bottom:1px solid var(--border);background:var(--bg2);cursor:pointer;user-select:none;white-space:nowrap}
+.admin-table th:hover{color:var(--t2)}
+.admin-table td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--t2);vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table tr:hover td{background:rgba(255,255,255,.02)}
+.admin-table tr{cursor:pointer}
+.admin-badge{font-family:var(--mono);font-size:7px;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;border:1px solid;display:inline-block}
+.admin-badge.active{color:var(--green);border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.08)}
+.admin-badge.new{color:var(--purple3);border-color:rgba(109,40,217,.3);background:rgba(109,40,217,.08)}
+.admin-badge.risk{color:var(--amber);border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.08)}
+.admin-badge.inactive{color:var(--t3);border-color:var(--border)}
+.admin-badge.free{color:var(--t3);border-color:var(--border)}
+.admin-badge.pro{color:var(--amber);border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.08)}
+
+/* Activity feed */
+.admin-activity{display:flex;flex-direction:column;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden}
+.admin-activity-item{display:grid;grid-template-columns:100px 1fr 1fr auto;gap:16px;padding:12px 20px;border-bottom:1px solid var(--border);align-items:center;font-size:12px;color:var(--t2)}
+.admin-activity-item:last-child{border-bottom:none}
+.admin-activity-tool{font-family:var(--mono);font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--purple3)}
+.admin-activity-email{color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admin-activity-time{font-family:var(--mono);font-size:9px;color:var(--t3);text-align:right;white-space:nowrap}
+
+/* User detail modal */
+.admin-user-modal{display:none;position:fixed;inset:0;z-index:500;align-items:center;justify-content:center}
+.admin-user-modal.open{display:flex}
+.admin-user-modal-bg{position:absolute;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px)}
+.admin-user-box{position:relative;z-index:1;background:var(--surface);border:1px solid var(--border2);border-radius:3px;padding:36px;width:100%;max-width:640px;max-height:80vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.8)}
+.admin-user-box-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.admin-close-btn{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:none;border:1px solid var(--border2);color:var(--t3);padding:8px 16px;border-radius:2px;cursor:pointer;transition:all .2s}
+.admin-close-btn:hover{color:var(--silver);border-color:var(--border2)}
+
+/* Alerts */
+.admin-alerts{display:flex;flex-direction:column;gap:8px}
+.admin-alert{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;border-radius:3px;border:1px solid}
+.admin-alert.warn{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.2)}
+.admin-alert.info{background:rgba(109,40,217,.06);border-color:rgba(109,40,217,.2)}
+.admin-alert.success{background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.2)}
+.admin-alert-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.admin-alert-text{font-size:13px;color:var(--t1);line-height:1.6;font-weight:300}
+.admin-alert.warn .admin-alert-text{color:var(--amber)}
+.admin-alert.info .admin-alert-text{color:var(--purple3)}
+.admin-alert.success .admin-alert-text{color:var(--green)}
 </style>
 </head>
 <body>
@@ -1955,9 +2066,190 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
       </div>
     </section>
 
+    <!-- ADMIN DASHBOARD -->
+    <section id="sec-admin" class="tool-panel">
+      <!-- Gate: shown if not admin -->
+      <div class="admin-gate" id="admin-gate">
+        <div class="admin-gate-logo">PURX</div>
+        <div class="admin-gate-sub">Admin Access Required</div>
+        <div style="font-size:13px;color:var(--t3)">This page is restricted to authorized administrators.</div>
+      </div>
+
+      <!-- Dashboard: shown if admin -->
+      <div id="admin-content" style="display:none">
+
+        <!-- Header -->
+        <div class="admin-header">
+          <div>
+            <div class="admin-title">CEO Dashboard</div>
+            <div class="admin-subtitle" id="admin-last-updated">Loading...</div>
+          </div>
+          <button class="admin-refresh-btn" onclick="loadAdminData()">↻ Refresh</button>
+        </div>
+
+        <!-- Alerts -->
+        <div class="admin-section">
+          <div class="admin-section-label">Alerts</div>
+          <div class="admin-alerts" id="admin-alerts">
+            <div class="admin-alert info"><div class="admin-alert-icon">◌</div><div class="admin-alert-text">Loading alerts...</div></div>
+          </div>
+        </div>
+
+        <!-- Revenue -->
+        <div class="admin-section">
+          <div class="admin-section-label">Revenue</div>
+          <div class="admin-revenue-banner">
+            <div class="admin-rev-item">
+              <div class="admin-rev-label">MRR</div>
+              <div class="admin-rev-val" id="admin-mrr">$0</div>
+              <div class="admin-rev-sub">Monthly recurring</div>
+              <div class="admin-stripe-btn" onclick="window.open('https://dashboard.stripe.com','_blank')">Connect Stripe →</div>
+            </div>
+            <div class="admin-rev-item">
+              <div class="admin-rev-label">Total Revenue</div>
+              <div class="admin-rev-val" id="admin-revenue-total">$0</div>
+              <div class="admin-rev-sub">All time</div>
+            </div>
+            <div class="admin-rev-item">
+              <div class="admin-rev-label">Paying Users</div>
+              <div class="admin-rev-val" id="admin-paying">0</div>
+              <div class="admin-rev-sub">Active subscriptions</div>
+            </div>
+            <div class="admin-rev-item">
+              <div class="admin-rev-label">ARPU</div>
+              <div class="admin-rev-val" id="admin-arpu">$0</div>
+              <div class="admin-rev-sub">Avg revenue per user</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Stats -->
+        <div class="admin-section">
+          <div class="admin-section-label">Users</div>
+          <div class="admin-stat-grid wide">
+            <div class="admin-stat purple">
+              <div class="admin-stat-val" id="admin-total-users">—</div>
+              <div class="admin-stat-label">Total Signups</div>
+              <div class="admin-stat-sub up" id="admin-new-users">+0 this week</div>
+            </div>
+            <div class="admin-stat green">
+              <div class="admin-stat-val" id="admin-active7">—</div>
+              <div class="admin-stat-label">Active (7 days)</div>
+              <div class="admin-stat-sub" id="admin-active7-pct"></div>
+            </div>
+            <div class="admin-stat blue">
+              <div class="admin-stat-val" id="admin-active30">—</div>
+              <div class="admin-stat-label">Active (30 days)</div>
+              <div class="admin-stat-sub" id="admin-active30-pct"></div>
+            </div>
+            <div class="admin-stat amber">
+              <div class="admin-stat-val" id="admin-power">—</div>
+              <div class="admin-stat-label">Power Users</div>
+              <div class="admin-stat-sub">10+ generations</div>
+            </div>
+            <div class="admin-stat red">
+              <div class="admin-stat-val" id="admin-churn">—</div>
+              <div class="admin-stat-label">Churn Risk</div>
+              <div class="admin-stat-sub warn">Inactive 30+ days</div>
+            </div>
+            <div class="admin-stat silver">
+              <div class="admin-stat-val" id="admin-retention">—%</div>
+              <div class="admin-stat-label">Retention Rate</div>
+              <div class="admin-stat-sub">Active / Total</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Generation Stats -->
+        <div class="admin-section">
+          <div class="admin-section-label">Product Usage</div>
+          <div class="admin-stat-grid">
+            <div class="admin-stat purple">
+              <div class="admin-stat-val" id="admin-total-gens">—</div>
+              <div class="admin-stat-label">Total Generations</div>
+              <div class="admin-stat-sub up" id="admin-today-gens">0 today</div>
+            </div>
+            <div class="admin-stat green">
+              <div class="admin-stat-val" id="admin-avg-gens">—</div>
+              <div class="admin-stat-label">Avg Gens / User</div>
+              <div class="admin-stat-sub">All time</div>
+            </div>
+            <div class="admin-stat amber">
+              <div class="admin-stat-val" id="admin-top-tool">—</div>
+              <div class="admin-stat-label">Most Used Tool</div>
+              <div class="admin-stat-sub">By generation count</div>
+            </div>
+            <div class="admin-stat blue">
+              <div class="admin-stat-val" id="admin-posted">—</div>
+              <div class="admin-stat-label">Posts Published</div>
+              <div class="admin-stat-sub">Marked as posted</div>
+            </div>
+          </div>
+          <!-- Tool breakdown bars -->
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:20px 24px;margin-top:10px">
+            <div style="font-family:var(--mono);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:16px">Tool Breakdown</div>
+            <div class="admin-tool-bars" id="admin-tool-bars"></div>
+          </div>
+        </div>
+
+        <!-- User Table -->
+        <div class="admin-section">
+          <div class="admin-section-label">All Users</div>
+          <div class="admin-table-wrap">
+            <div class="admin-table-top">
+              <input class="admin-search" id="admin-search" placeholder="Search by email..." oninput="filterAdminUsers()">
+              <div class="admin-filter-btns">
+                <button class="admin-filter-btn on" onclick="setAdminFilter('all',this)">All</button>
+                <button class="admin-filter-btn" onclick="setAdminFilter('active',this)">Active</button>
+                <button class="admin-filter-btn" onclick="setAdminFilter('new',this)">New</button>
+                <button class="admin-filter-btn" onclick="setAdminFilter('risk',this)">At Risk</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="admin-table" id="admin-user-table">
+                <thead>
+                  <tr>
+                    <th onclick="sortAdminUsers('email')">Email ↕</th>
+                    <th onclick="sortAdminUsers('created_at')">Joined ↕</th>
+                    <th onclick="sortAdminUsers('plan')">Plan ↕</th>
+                    <th onclick="sortAdminUsers('total_gens')">Gens ↕</th>
+                    <th onclick="sortAdminUsers('last_active')">Last Active ↕</th>
+                    <th onclick="sortAdminUsers('top_tool')">Top Tool ↕</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-user-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="admin-section">
+          <div class="admin-section-label">Recent Activity</div>
+          <div class="admin-activity" id="admin-activity">
+            <div class="admin-activity-item"><div class="admin-activity-tool">Loading...</div></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 </div>
 
+
+<!-- ADMIN USER MODAL -->
+<div class="admin-user-modal" id="admin-user-modal">
+  <div class="admin-user-modal-bg" onclick="closeAdminUser()"></div>
+  <div class="admin-user-box">
+    <div class="admin-user-box-header">
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3)">User Detail</div>
+      <button class="admin-close-btn" onclick="closeAdminUser()">Close ✕</button>
+    </div>
+    <div id="admin-user-box-content"></div>
+  </div>
+</div>
 
 <!-- ONBOARDING MODAL -->
 <div class="ob-overlay" id="ob-overlay">
@@ -2267,7 +2559,7 @@ document.addEventListener('keydown', e => {
 function showSection(id) {
   document.querySelectorAll('.app-content section').forEach(s=>{s.style.display='none';s.style.animation='none';});
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
-  const sections=['dashboard','caption','hook','hashtag','calendar','history','checker','viral','bioaudit','progress','settings'];
+  const sections=['dashboard','caption','hook','hashtag','calendar','history','checker','viral','bioaudit','progress','settings','admin'];
   const idx=sections.indexOf(id);
   const sec=document.getElementById('sec-'+id);
   if(sec){
@@ -2281,6 +2573,7 @@ function showSection(id) {
   if(id==='history')loadHistory();
   if(id==='settings')loadSettingsForm();
   if(id==='progress')loadProgress();
+  if(id==='admin')initAdmin();
 }
 
 // ── PILLS ──
@@ -5022,6 +5315,243 @@ showSection = function(id) {
   if(tabMap[id]) setMobileTab(tabMap[id]);
 };
 
+
+// ── ADMIN DASHBOARD ──
+var ADMIN_EMAIL = 'elijahfisher51@gmail.com';
+var adminData = null;
+var adminFilter = 'all';
+var adminSort = { key: 'total_gens', dir: -1 };
+
+function isAdmin() {
+  return currentUser && currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+}
+
+async function initAdmin() {
+  var gate = document.getElementById('admin-gate');
+  var content = document.getElementById('admin-content');
+  if(!isAdmin()) {
+    if(gate) gate.style.display = 'flex';
+    if(content) content.style.display = 'none';
+    return;
+  }
+  if(gate) gate.style.display = 'none';
+  if(content) content.style.display = 'block';
+  await loadAdminData();
+}
+
+async function loadAdminData() {
+  if(!isAdmin()) return;
+  var refreshBtn = document.querySelector('.admin-refresh-btn');
+  if(refreshBtn) { refreshBtn.textContent = '↻ Loading...'; refreshBtn.disabled = true; }
+
+  try {
+    var res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'admin_data', email: currentUser.email })
+    });
+    var data = await res.json();
+    if(!data.ok) throw new Error(data.error);
+    adminData = data;
+    renderAdminDashboard(data);
+  } catch(e) {
+    showToast('Admin load error: ' + (e.message || 'Unknown'));
+    console.error('Admin error:', e);
+  }
+
+  if(refreshBtn) { refreshBtn.textContent = '↻ Refresh'; refreshBtn.disabled = false; }
+}
+
+function renderAdminDashboard(data) {
+  var s = data.stats || {};
+  var users = data.users || [];
+  var activity = data.recent_activity || [];
+  var now = new Date();
+
+  // Last updated
+  var el = document.getElementById('admin-last-updated');
+  if(el) el.textContent = 'Last updated: ' + now.toLocaleTimeString();
+
+  // Revenue
+  setText('admin-mrr', '$' + (s.mrr || 0).toLocaleString());
+  setText('admin-revenue-total', '$' + (s.total_revenue || 0).toLocaleString());
+  var paying = users.filter(function(u){ return u.plan && u.plan !== 'free'; }).length;
+  setText('admin-paying', paying);
+  var arpu = paying > 0 ? Math.round((s.total_revenue || 0) / paying) : 0;
+  setText('admin-arpu', '$' + arpu);
+
+  // User stats
+  setText('admin-total-users', s.total_users || 0);
+  setText('admin-new-users', '+' + (s.new_users_7 || 0) + ' this week');
+  setText('admin-active7', s.active_7 || 0);
+  setText('admin-active7-pct', s.total_users ? Math.round((s.active_7||0)/s.total_users*100) + '% of total' : '');
+  setText('admin-active30', s.active_30 || 0);
+  setText('admin-active30-pct', s.total_users ? Math.round((s.active_30||0)/s.total_users*100) + '% of total' : '');
+  setText('admin-power', s.power_users || 0);
+  setText('admin-churn', s.churn_risk || 0);
+  var retention = s.total_users ? Math.round((s.active_30||0)/s.total_users*100) : 0;
+  setText('admin-retention', retention + '%');
+
+  // Generation stats
+  setText('admin-total-gens', (s.total_gens || 0).toLocaleString());
+  setText('admin-today-gens', (s.today_gens || 0) + ' today');
+  var avgGens = s.total_users ? Math.round((s.total_gens||0)/s.total_users) : 0;
+  setText('admin-avg-gens', avgGens);
+  var toolLabels = {caption:'Captions',hook:'Hooks',hashtag:'Hashtags',calendar:'Planner',checker:'Checker',viral:'Viral',bioaudit:'Bio Audit'};
+  var topTool = Object.entries(s.tool_totals||{}).sort(function(a,b){return b[1]-a[1];})[0];
+  setText('admin-top-tool', topTool ? (toolLabels[topTool[0]]||topTool[0]) : '—');
+  var totalPosted = users.reduce(function(sum,u){ return sum + (u.posted||0); }, 0);
+  setText('admin-posted', totalPosted);
+
+  // Tool bars
+  var barsEl = document.getElementById('admin-tool-bars');
+  if(barsEl && s.tool_totals) {
+    var toolColors = {caption:'var(--purple2)',hook:'var(--purple3)',hashtag:'var(--amber)',calendar:'var(--green)',checker:'var(--red)',viral:'var(--amber)',bioaudit:'var(--green)'};
+    var maxTool = Math.max.apply(null, Object.values(s.tool_totals).concat([1]));
+    barsEl.innerHTML = Object.entries(s.tool_totals)
+      .sort(function(a,b){return b[1]-a[1];})
+      .map(function(entry) {
+        var tool = entry[0], count = entry[1];
+        var pct = Math.round(count/maxTool*100);
+        var color = toolColors[tool] || 'var(--purple2)';
+        var label = toolLabels[tool] || tool;
+        return '<div class="admin-tool-bar">' +
+          '<div class="admin-tool-name">' + escH(label) + '</div>' +
+          '<div class="admin-tool-track"><div class="admin-tool-fill" style="width:' + pct + '%;background:' + color + '"></div></div>' +
+          '<div class="admin-tool-count">' + count + '</div>' +
+        '</div>';
+      }).join('');
+  }
+
+  // Alerts
+  var alerts = [];
+  if((s.new_users_7||0) > 0) alerts.push({type:'success',icon:'✓',text:(s.new_users_7)+' new signup'+(s.new_users_7>1?'s':'')+' in the last 7 days'});
+  if((s.today_gens||0) > 0) alerts.push({type:'info',icon:'↗',text:(s.today_gens)+' generation'+(s.today_gens>1?'s':'')+' today across all users'});
+  if((s.churn_risk||0) > 0) alerts.push({type:'warn',icon:'⚠',text:(s.churn_risk)+' user'+(s.churn_risk>1?'s':'')+' inactive for 30+ days — churn risk'});
+  if(paying === 0) alerts.push({type:'warn',icon:'⚠',text:'No paying users yet — connect Stripe to start accepting payments'});
+  if(alerts.length === 0) alerts.push({type:'info',icon:'◌',text:'No alerts right now — everything looks healthy'});
+  var alertsEl = document.getElementById('admin-alerts');
+  if(alertsEl) {
+    alertsEl.innerHTML = alerts.map(function(a) {
+      return '<div class="admin-alert ' + a.type + '"><div class="admin-alert-icon">' + a.icon + '</div><div class="admin-alert-text">' + escH(a.text) + '</div></div>';
+    }).join('');
+  }
+
+  // Render table and activity
+  renderAdminTable(users);
+  renderAdminActivity(activity, users);
+}
+
+function setText(id, val) {
+  var el = document.getElementById(id);
+  if(el) el.textContent = val;
+}
+
+function renderAdminTable(users) {
+  var search = (document.getElementById('admin-search') || {}).value || '';
+  var filtered = users.filter(function(u) {
+    if(search && u.email && u.email.toLowerCase().indexOf(search.toLowerCase()) === -1) return false;
+    if(adminFilter === 'active') return u.is_active_7;
+    if(adminFilter === 'new') return u.is_new;
+    if(adminFilter === 'risk') return u.is_churn_risk;
+    return true;
+  });
+
+  filtered.sort(function(a,b) {
+    var av = a[adminSort.key] || 0, bv = b[adminSort.key] || 0;
+    if(typeof av === 'string') return adminSort.dir * av.localeCompare(bv);
+    return adminSort.dir * (av - bv);
+  });
+
+  var toolLabels = {caption:'Captions',hook:'Hooks',hashtag:'Hashtags',calendar:'Planner',checker:'Checker',viral:'Viral',bioaudit:'Bio Audit'};
+  var tbody = document.getElementById('admin-user-tbody');
+  if(!tbody) return;
+
+  tbody.innerHTML = filtered.slice(0, 100).map(function(u) {
+    var joined = u.created_at ? new Date(u.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}) : '—';
+    var lastActive = u.last_active ? new Date(u.last_active).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
+    var topTool = u.top_tool ? (toolLabels[u.top_tool]||u.top_tool) : '—';
+    var status = u.is_new ? 'new' : (u.is_churn_risk ? 'risk' : (u.is_active_7 ? 'active' : 'inactive'));
+    var statusLabel = {new:'New',risk:'At Risk',active:'Active',inactive:'Inactive'};
+    var plan = u.plan || 'free';
+    return '<tr onclick="openAdminUser(' + JSON.stringify(u.id) + ')">' +
+      '<td style="color:var(--t1);font-size:12px">' + escH(u.email||'Unknown') + '</td>' +
+      '<td>' + joined + '</td>' +
+      '<td><span class="admin-badge ' + plan + '">' + plan.toUpperCase() + '</span></td>' +
+      '<td style="color:var(--silver);font-weight:500">' + (u.total_gens||0) + '</td>' +
+      '<td>' + lastActive + '</td>' +
+      '<td>' + escH(topTool) + '</td>' +
+      '<td><span class="admin-badge ' + status + '">' + (statusLabel[status]||status) + '</span></td>' +
+    '</tr>';
+  }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--t3);padding:32px">No users match</td></tr>';
+}
+
+function renderAdminActivity(activity, users) {
+  var emailMap = {};
+  (users||[]).forEach(function(u){ emailMap[u.id] = u.email; });
+  var toolLabels = {caption:'Caption',hook:'Hook',hashtag:'Hashtags',calendar:'Planner',checker:'Checker',viral:'Viral',bioaudit:'Bio Audit'};
+  var el = document.getElementById('admin-activity');
+  if(!el) return;
+  el.innerHTML = (activity||[]).slice(0,30).map(function(a) {
+    var time = a.created_at ? new Date(a.created_at).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : '—';
+    var email = emailMap[a.user_id] || a.email || 'Unknown';
+    var tool = toolLabels[a.tool] || a.tool;
+    return '<div class="admin-activity-item">' +
+      '<div class="admin-activity-tool">' + escH(tool) + '</div>' +
+      '<div class="admin-activity-email">' + escH(email) + '</div>' +
+      '<div></div>' +
+      '<div class="admin-activity-time">' + escH(time) + '</div>' +
+    '</div>';
+  }).join('') || '<div class="admin-activity-item"><div class="admin-activity-tool">No activity yet</div></div>';
+}
+
+function filterAdminUsers() {
+  if(adminData) renderAdminTable(adminData.users || []);
+}
+
+function setAdminFilter(filter, btn) {
+  adminFilter = filter;
+  document.querySelectorAll('.admin-filter-btn').forEach(function(b){ b.classList.remove('on'); });
+  if(btn) btn.classList.add('on');
+  if(adminData) renderAdminTable(adminData.users || []);
+}
+
+function sortAdminUsers(key) {
+  if(adminSort.key === key) adminSort.dir *= -1;
+  else { adminSort.key = key; adminSort.dir = -1; }
+  if(adminData) renderAdminTable(adminData.users || []);
+}
+
+function openAdminUser(userId) {
+  if(!adminData) return;
+  var user = (adminData.users||[]).find(function(u){ return u.id === userId; });
+  if(!user) return;
+  var toolLabels = {caption:'Captions',hook:'Hooks',hashtag:'Hashtags',calendar:'Planner',checker:'Checker',viral:'Viral',bioaudit:'Bio Audit'};
+  var joined = user.created_at ? new Date(user.created_at).toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}) : '—';
+  var lastActive = user.last_active ? new Date(user.last_active).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}) : '—';
+  var toolBreakdown = Object.entries(user.tool_breakdown||{}).sort(function(a,b){return b[1]-a[1];}).map(function(e){ return (toolLabels[e[0]]||e[0]) + ': ' + e[1]; }).join(' · ');
+  
+  var modal = document.getElementById('admin-user-modal');
+  var box = document.getElementById('admin-user-box-content');
+  if(box) box.innerHTML =
+    '<div style="margin-bottom:6px;font-family:var(--display);font-size:28px;letter-spacing:.04em;text-transform:uppercase;color:var(--silver)">' + escH(user.email||'Unknown') + '</div>' +
+    '<div style="font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:24px">' + escH(user.id) + '</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">' +
+      '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:16px 18px"><div style="font-family:var(--mono);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:6px">Joined</div><div style="font-size:13px;color:var(--t1)">' + escH(joined) + '</div></div>' +
+      '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:16px 18px"><div style="font-family:var(--mono);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:6px">Last Active</div><div style="font-size:13px;color:var(--t1)">' + escH(lastActive) + '</div></div>' +
+      '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:16px 18px"><div style="font-family:var(--mono);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:6px">Total Generations</div><div style="font-family:var(--display);font-size:32px;color:var(--silver);letter-spacing:.04em">' + (user.total_gens||0) + '</div></div>' +
+      '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:16px 18px"><div style="font-family:var(--mono);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:6px">Posts Published</div><div style="font-family:var(--display);font-size:32px;color:var(--silver);letter-spacing:.04em">' + (user.posted||0) + '</div></div>' +
+    '</div>' +
+    (toolBreakdown ? '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:16px 18px;margin-bottom:12px"><div style="font-family:var(--mono);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:8px">Tool Usage</div><div style="font-size:13px;color:var(--t2)">' + escH(toolBreakdown) + '</div></div>' : '') +
+    (user.niche ? '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:16px 18px"><div style="font-family:var(--mono);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:8px">Profile</div><div style="font-size:13px;color:var(--t2)">' + escH([user.name,user.handle,user.niche,user.level,user.followers].filter(Boolean).join(' · ')) + '</div></div>' : '');
+  
+  if(modal) modal.classList.add('open');
+}
+
+function closeAdminUser() {
+  var modal = document.getElementById('admin-user-modal');
+  if(modal) modal.classList.remove('open');
+}
 
 // Init
 showSection('dashboard');
