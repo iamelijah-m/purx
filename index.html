@@ -2698,7 +2698,7 @@ async function handleForgotPassword() {
   if(!email){ msg.className='auth-msg err'; msg.textContent='Enter your email address.'; return; }
   btn.disabled=true; btn.textContent='Sending...';
   const { error } = await sb.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://purx.live/reset-password'
+    redirectTo: 'https://purx.live'
   });
   if(error){
     msg.className='auth-msg err';
@@ -3111,22 +3111,18 @@ function renderHistory() {
   if(countEl) countEl.textContent = filtered.length + ' item' + (filtered.length !== 1 ? 's' : '');
 
   if(!filtered.length) {
-    if (historyFilter !== 'all') {
-      list.innerHTML =
-        '<div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:64px 0">' +
-        '<div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3)">No ' + historyFilter + ' generations yet</div>' +
-        '</div>';
-    } else {
-      list.innerHTML =
-        '<div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px;padding:64px 24px">' +
-        '<div style="font-size:40px">✦</div>' +
-        '<div style="font-family:var(--display);font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;color:var(--silver)">No generations yet</div>' +
-        '<div style="font-size:14px;color:var(--t2);line-height:1.65;max-width:320px">Every caption, hook, hashtag set, and plan you generate gets saved here automatically.</div>' +
-        '<div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px">' +
-        '<button class="gen-btn" style="margin-top:0;font-size:12px;padding:16px" onclick="showSection(\"dashboard\")">Go to Dashboard →</button>' +
-        '</div>' +
-        '</div>';
-    }
+    const isAll = historyFilter === 'all';
+    const filterLabel = historyFilter.charAt(0).toUpperCase() + historyFilter.slice(1);
+    list.innerHTML =
+      '<div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px;padding:64px 24px">' +
+      '<div style="font-family:var(--display);font-size:clamp(28px,4vw,40px);font-weight:900;text-transform:uppercase;letter-spacing:.04em;color:var(--silver);line-height:.9">' +
+      (isAll ? 'No generations<br>yet' : 'No ' + filterLabel + '<br>generations yet') +
+      '</div>' +
+      '<div style="font-size:13px;color:var(--t3);line-height:1.65;max-width:300px;font-family:var(--mono);letter-spacing:.04em">' +
+      (isAll ? 'Every caption, hook, hashtag set, and plan you generate gets saved here automatically.' : 'Generate something with the ' + filterLabel + ' tool and it will appear here.') +
+      '</div>' +
+      (isAll ? '<button class="gen-btn" style="margin-top:0;font-size:12px;padding:16px;max-width:240px" onclick="showSection(\"dashboard\")">Go to Dashboard →</button>' : '') +
+      '</div>';
     return;
   }
 
