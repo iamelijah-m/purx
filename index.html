@@ -3050,7 +3050,14 @@ PURX VERDICT:
 [One sentence. Which caption to post first and the specific reason why — based on this creator's niche and post. No fluff.]
 
 BEST TIME TO POST:
-[Day and time + one-line reason specific to ${niche} audience behavior]
+[Full 7-day posting schedule specific to ${niche} audience behavior. Put EACH DAY ON ITS OWN LINE in exactly this format:
+Monday — 7:00 PM EST — [short reason]
+Tuesday — [time] EST — [reason]
+Wednesday — [time] EST — [reason]
+Thursday — [time] EST — [reason]
+Friday — [time] EST — [reason]
+Saturday — [time] EST — [reason]
+Sunday — [time] EST — [reason]]
 
 Output only the labeled sections. No preamble. No explanation.`,
 
@@ -3087,8 +3094,15 @@ BEST HOOK:
 DELIVERY NOTE:
 [Exactly how to deliver the best hook — pace, energy, on-screen vs spoken, timing — in 2 sentences]
 
-BEST TIME TO POST:
-[Day, time, and one-line reason specific to ${niche} Reels performance]
+REEL POSTING SCHEDULE:
+[Full 7-day Reel posting schedule specific to ${niche} audience behavior. Put EACH DAY ON ITS OWN LINE in exactly this format:
+Monday — 7:00 PM EST — [short reason]
+Tuesday — [time] EST — [reason]
+Wednesday — [time] EST — [reason]
+Thursday — [time] EST — [reason]
+Friday — [time] EST — [reason]
+Saturday — [time] EST — [reason]
+Sunday — [time] EST — [reason]]
 
 Output only the labeled sections. No preamble.`,
 
@@ -3818,7 +3832,7 @@ function renderCaptionOutput(el, lines) {
         (why ? '<div class="cap-insight-card purple"><div class="cap-insight-card-label purple">Why These Work</div><div class="cap-insight-card-val">' + escH(why) + '</div></div>' : '') +
         (tip ? '<div class="cap-insight-card amber"><div class="cap-insight-card-label amber">Do This First</div><div class="cap-insight-card-val">' + escH(tip) + '</div></div>' : '') +
       '</div>' +
-      (schedule ? '<div style="margin-top:10px;background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:14px 20px;display:flex;align-items:center;gap:12px"><span style="font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--green);flex-shrink:0">Best Time to Post</span><span style="font-size:13px;color:var(--t2)">' + escH(schedule) + '</span></div>' : '') +
+      (schedule ? renderScheduleTable(schedule) : '') +
     '</div>';
 }
 
@@ -3832,12 +3846,12 @@ function extractHookType(breakdown) {
 }
 
 function renderHookOutput(el, lines) {
-  const allLabels = ['HOOKS:','HOOK BREAKDOWN:','BEST HOOK:','DELIVERY NOTE:','BEST TIME TO POST:','ACTION SEQUENCE:'];
+  const allLabels = ['HOOKS:','HOOK BREAKDOWN:','BEST HOOK:','DELIVERY NOTE:','REEL POSTING SCHEDULE:'];
   const hooksRaw = getSectionContent(lines, 'HOOKS:', allLabels.slice(1));
   const breakdownRaw = getSectionContent(lines, 'HOOK BREAKDOWN:', allLabels.slice(2));
   const best = getSectionContent(lines, 'BEST HOOK:', allLabels.slice(3));
   const delivery = getSectionContent(lines, 'DELIVERY NOTE:', allLabels.slice(4));
-  const schedule = getSectionContent(lines, 'BEST TIME TO POST:', allLabels.slice(5));
+  const schedule = getSectionContent(lines, 'REEL POSTING SCHEDULE:', []);
   const action = '';
 
   const hookLines = hooksRaw.split(/(?=\d+\.\s)/).map(h => h.trim()).filter(h => h);
@@ -3876,12 +3890,9 @@ function renderHookOutput(el, lines) {
         '<div class="hook-bottom-card-label">Delivery Note</div>' +
         '<div class="hook-bottom-card-val">' + escH(delivery) + '</div>' +
       '</div>' +
-      '<div class="hook-bottom-card green" style="grid-column:1/-1">' +
-        '<div class="hook-bottom-card-label">Reel Posting Schedule</div>' +
-        '<div class="hook-bottom-card-val" style="white-space:pre-line">' + escH(formatSchedule(schedule)) + '</div>' +
       '</div>' +
     '</div>' +
-    '</div>';
+    (schedule ? renderScheduleTable(schedule) : '');
 }
 
 function renderHashtagOutput(el, lines) {
