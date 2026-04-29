@@ -1582,7 +1582,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
         <div class="upgrade-banner-text">
           <div class="upgrade-banner-eyebrow">Free Plan</div>
           <div class="upgrade-banner-title">Upgrade to Pro</div>
-          <div class="upgrade-banner-desc" id="dash-banner-desc">3 free generations left · Then $19/month · 7-day free trial · Cancel anytime</div>
+          <div class="upgrade-banner-desc" id="dash-banner-desc">10 free generations · Then $19/month · Cancel anytime</div>
         </div>
         <a href="https://buy.stripe.com/14AbJ1cDnaQIfmr3EQ9ws00" target="_blank" class="upgrade-btn">Upgrade Now →</a>
       </div>
@@ -1946,7 +1946,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
         <div class="upgrade-banner-text">
           <div class="upgrade-banner-eyebrow">Free Plan</div>
           <div class="upgrade-banner-title">Upgrade to Pro</div>
-          <div class="upgrade-banner-desc">$19/month · 7-day free trial · Cancel anytime</div>
+          <div class="upgrade-banner-desc">$19/month · 10 free generations · Cancel anytime</div>
         </div>
         <a href="https://buy.stripe.com/14AbJ1cDnaQIfmr3EQ9ws00" target="_blank" class="upgrade-btn">Upgrade Now →</a>
       </div>
@@ -3057,7 +3057,7 @@ function updateNextMove(toolCounts, streak, thisWeek, total) {
     {cond: toolCounts.checker === 0, icon: '✦', text: 'Try the Pre-Post Checker — upload a screenshot and get an A–F grade before you post.', cta: 'Open Post Checker', target: 'checker'},
     {cond: toolCounts.calendar === 0, icon: '◆', text: "You haven't built a content calendar yet. Map your whole week in 30 seconds.", cta: 'Build calendar', target: 'calendar'},
     {cond: streak === 0 && total > 0, icon: '🔥', text: 'Your streak reset. Generate something today to keep your momentum alive.', cta: 'Generate now', target: 'caption'},
-    {cond: thisWeek < 3, icon: '⚡', text: "Aim for at least 3 generations this week to stay sharp. You've done " + thisWeek + " so far.", cta: 'Keep going', target: 'caption'},
+    {cond: thisWeek < 3, icon: '⚡', text: "Aim for at least 10 generations this week to stay sharp. You've done " + thisWeek + " so far.", cta: 'Keep going', target: 'caption'},
     {cond: toolCounts.hook < 5, icon: '→', text: 'Build a bank of hooks. Having 5+ options means your reels always open strong.', cta: 'Generate hooks', target: 'hook'},
     {cond: true, icon: '✦', text: 'Check your next post before it goes live — even great content can be better.', cta: 'Open checker', target: 'checker'},
   ];
@@ -5844,7 +5844,7 @@ function closeAdminUser() {
 }
 
 // ── FREE LIMIT / PAYWALL ──
-const FREE_LIMIT = 3;
+const FREE_LIMIT = 10;
 
 function getUserPlan() {
   var plan = currentUser?.user_metadata?.plan || 'free';
@@ -5880,7 +5880,7 @@ function updateBannerState() {
     dashBanner.style.display = pro ? 'none' : 'flex';
     if (!pro && bannerDesc) {
       if (remaining > 0) {
-        bannerDesc.textContent = remaining + ' free generation' + (remaining === 1 ? '' : 's') + ' left · Then $19/month · 7-day free trial · Cancel anytime';
+        bannerDesc.textContent = remaining + ' free generation' + (remaining === 1 ? '' : 's') + ' left · Then $19/month · Cancel anytime';
       } else {
         bannerDesc.textContent = 'You\'ve used all free generations · Upgrade to keep creating';
       }
@@ -5911,13 +5911,13 @@ showSection('dashboard');
 <div id="upgrade-modal" class="upgrade-modal-overlay" onclick="if(event.target===this)closeUpgradeModal()">
   <div class="upgrade-modal-card">
     <div class="upgrade-modal-eyebrow">Free limit reached</div>
-    <div class="upgrade-modal-title">You've used your<br>3 free generations</div>
+    <div class="upgrade-modal-title">You've used your<br>10 free generations</div>
     <div class="upgrade-modal-desc">Upgrade to PURX Pro and get unlimited captions, hooks, hashtags, content planning, post checking, viral analysis, bio audits — everything. Built for creators who are serious about growth.</div>
     <div class="upgrade-modal-price">
       <span class="upgrade-modal-amount">$19</span>
       <span class="upgrade-modal-per">/month</span>
     </div>
-    <div class="upgrade-modal-trial">7-day free trial · Cancel anytime · Instant access</div>
+    <div class="upgrade-modal-trial">10 free generations · Cancel anytime · Instant access</div>
     <a href="https://buy.stripe.com/14AbJ1cDnaQIfmr3EQ9ws00" target="_blank" class="upgrade-modal-btn">Start Free Trial →</a>
     <button class="upgrade-modal-close" onclick="closeUpgradeModal()">Maybe later</button>
   </div>
