@@ -3818,8 +3818,7 @@ function renderCaptionOutput(el, lines) {
         (why ? '<div class="cap-insight-card purple"><div class="cap-insight-card-label purple">Why These Work</div><div class="cap-insight-card-val">' + escH(why) + '</div></div>' : '') +
         (tip ? '<div class="cap-insight-card amber"><div class="cap-insight-card-label amber">Do This First</div><div class="cap-insight-card-val">' + escH(tip) + '</div></div>' : '') +
       '</div>' +
-      (schedule ? renderScheduleTable(schedule) : '') +
-      (action ? renderActionList(action) : '') +
+      (schedule ? '<div style="margin-top:10px;background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:14px 20px;display:flex;align-items:center;gap:12px"><span style="font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--green);flex-shrink:0">Best Time to Post</span><span style="font-size:13px;color:var(--t2)">' + escH(schedule) + '</span></div>' : '') +
     '</div>';
 }
 
