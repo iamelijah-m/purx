@@ -117,6 +117,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 }
 @media(max-width:768px){
   .auth-form-panel{padding:0 24px;border-left:none;border-top:1px solid var(--border);padding-top:40px}
+  .auth-input{font-size:16px!important}
 }
 .auth-form-title{
   font-family:var(--display);font-size:36px;letter-spacing:.06em;
@@ -312,6 +313,14 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
   .app-content{padding:32px 16px 100px}
   .usage-badge{display:none}
   .app-footer{display:none !important}
+  /* iOS zoom prevention — any input <16px causes zoom on focus */
+  .form-input,.form-select,.form-textarea,.auth-input{font-size:16px!important}
+  /* Pill touch targets — boost for thumb taps */
+  .pill{padding:12px 20px;min-height:44px;display:inline-flex;align-items:center}
+  /* Panel back button — larger tap target */
+  .panel-back{padding:12px 24px;min-height:44px}
+  /* Copy/regen buttons */
+  .copy-btn,.regen-btn{padding:12px 22px;min-height:44px}
 }
 @media(min-width:769px){
   .mobile-tab-bar{display:none !important}
@@ -1232,6 +1241,76 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .upgrade-modal-close{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);background:none;border:none;cursor:pointer;padding:8px;transition:color .2s}
 .upgrade-modal-close:hover{color:var(--t1)}
 @media(max-width:480px){.upgrade-modal-card{padding:36px 24px}}
+
+/* ── BUG REPORT ── */
+.bug-fab{
+  position:fixed;bottom:84px;right:16px;z-index:199;
+  background:var(--surface);border:1px solid var(--border2);
+  color:var(--t3);cursor:pointer;
+  display:flex;align-items:center;gap:8px;
+  padding:9px 14px;border-radius:2px;
+  box-shadow:0 4px 24px rgba(0,0,0,.5);
+  transition:all .25s;
+}
+.bug-fab:hover{border-color:var(--border2);background:var(--surface2);color:var(--t2)}
+.bug-fab-dot{width:5px;height:5px;border-radius:50%;background:var(--t3);transition:background .25s;flex-shrink:0}
+.bug-fab:hover .bug-fab-dot{background:var(--purple3)}
+.bug-fab-label{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+@media(min-width:769px){.bug-fab{bottom:24px;right:24px}}
+.bug-modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  display:none;align-items:flex-end;justify-content:center;
+}
+@media(min-width:600px){.bug-modal-overlay{align-items:center}}
+.bug-modal-overlay.open{display:flex}
+.bug-modal{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:0;width:100%;max-width:480px;
+  padding:32px 28px 36px;
+}
+@media(min-width:600px){.bug-modal{border-radius:2px;margin:0 16px}}
+.bug-modal-title{
+  font-family:var(--display);font-size:clamp(36px,6vw,52px);font-weight:900;
+  text-transform:uppercase;letter-spacing:.04em;color:var(--silver);
+  line-height:.9;margin-bottom:16px;
+}
+.bug-modal-sub{
+  font-family:var(--mono);font-size:9px;color:var(--t3);
+  letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border);
+}
+.bug-type-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.bug-submit-btn{
+  font-family:var(--display);font-size:15px;font-weight:900;letter-spacing:.24em;
+  text-transform:uppercase;background:var(--silver);color:var(--bg);
+  border:none;padding:18px;width:100%;cursor:pointer;border-radius:2px;
+  margin-top:20px;transition:all .2s;
+}
+.bug-submit-btn:hover{background:var(--white)}
+.bug-submit-btn:disabled{opacity:.45;cursor:not-allowed}
+.bug-cancel{
+  font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--t3);background:none;border:none;padding:12px;width:100%;
+  cursor:pointer;margin-top:4px;transition:color .2s;
+}
+.bug-cancel:hover{color:var(--t2)}
+
+/* ── PASSWORD RECOVERY MODAL ── */
+.recovery-overlay{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(0,0,0,.88);backdrop-filter:blur(12px);
+  display:none;align-items:center;justify-content:center;padding:24px;
+}
+.recovery-overlay.open{display:flex}
+.recovery-card{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:8px;width:100%;max-width:400px;padding:40px 32px;
+}
+.recovery-title{font-family:var(--display);font-size:32px;font-weight:900;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--silver);margin-bottom:4px}
+.recovery-sub{font-family:var(--mono);font-size:9px;color:var(--t3);
+  letter-spacing:.12em;text-transform:uppercase;margin-bottom:28px}
 </style>
 </head>
 <body>
@@ -2457,6 +2536,11 @@ var lastCheckerGenId = null;
 // ── AUTH STATE ──
 sb.auth.onAuthStateChange((event, session) => {
   currentUser = session?.user ?? null;
+  if (event === 'PASSWORD_RECOVERY') {
+    // User clicked reset link in email — show password set modal
+    document.getElementById('recovery-overlay').classList.add('open');
+    return;
+  }
   if (currentUser) showApp();
   else showAuth();
 });
@@ -2488,11 +2572,13 @@ function showApp() {
   loadStats();
   loadProfile();
   loadTrendPulse(false);
+  showBugFab();
 }
 
 function showAuth() {
   document.getElementById('app-screen').classList.remove('active');
   document.getElementById('auth-screen').classList.add('active');
+  const fab=document.getElementById('bug-fab');if(fab)fab.style.display='none';
 }
 
 // ── AUTH ──
@@ -2633,6 +2719,98 @@ document.addEventListener('keydown', e => {
     else if(!sf.classList.contains('hidden'))handleSignup();
   }
 });
+
+
+
+// ── PASSWORD RECOVERY ──
+async function submitRecovery() {
+  const pass = document.getElementById('recovery-pass').value;
+  const confirm = document.getElementById('recovery-confirm').value;
+  const msg = document.getElementById('recovery-msg');
+  const btn = document.getElementById('recovery-btn');
+  if (!pass || pass.length < 6) { msg.className='auth-msg err'; msg.textContent='Password must be 6+ characters.'; return; }
+  if (pass !== confirm) { msg.className='auth-msg err'; msg.textContent='Passwords do not match.'; return; }
+  btn.disabled = true; btn.textContent = 'Updating...';
+  const { error } = await sb.auth.updateUser({ password: pass });
+  if (error) {
+    msg.className = 'auth-msg err';
+    msg.textContent = error.message;
+    btn.disabled = false; btn.textContent = 'Set Password →';
+  } else {
+    msg.className = 'auth-msg ok';
+    msg.textContent = 'Password updated! Signing you in...';
+    setTimeout(() => {
+      document.getElementById('recovery-overlay').classList.remove('open');
+      showApp();
+    }, 1500);
+  }
+}
+
+// ── BUG REPORT ──
+function openBugModal() {
+  document.getElementById('bug-modal-overlay').classList.add('open');
+  document.getElementById('bug-desc').focus();
+}
+function closeBugModal() {
+  document.getElementById('bug-modal-overlay').classList.remove('open');
+  document.getElementById('bug-desc').value = '';
+  // Reset pills
+  document.querySelectorAll('[data-bug-type]').forEach(p => p.classList.remove('on'));
+  document.querySelector('[data-bug-type="Bug"]').classList.add('on');
+}
+
+// Bug type pill selection
+document.addEventListener('click', e => {
+  const pill = e.target.closest('[data-bug-type]');
+  if (!pill) return;
+  document.querySelectorAll('[data-bug-type]').forEach(p => p.classList.remove('on'));
+  pill.classList.add('on');
+});
+
+async function submitBugReport() {
+  const desc = document.getElementById('bug-desc').value.trim();
+  if (!desc) { showToast('Describe the issue first.'); return; }
+  const type = document.querySelector('[data-bug-type].on')?.dataset.bugType || 'Bug';
+  const btn = document.getElementById('bug-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  
+  const report = {
+    action: 'bug_report',
+    type,
+    description: desc,
+    user: currentUser?.email || 'Unknown',
+    tool: document.querySelector('.tool-panel.active')?.id?.replace('sec-','') || 'dashboard',
+    timestamp: new Date().toISOString(),
+    userAgent: navigator.userAgent.slice(0, 150),
+  };
+  
+  try {
+    const res = await fetch('https://purx-api.elijahfisher51.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(report),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      showToast('Bug report sent — thanks!');
+      closeBugModal();
+    } else {
+      throw new Error(data.error);
+    }
+  } catch(e) {
+    showToast('Failed to send — try again.');
+    console.error('Bug report error:', e);
+  }
+  
+  btn.disabled = false;
+  btn.textContent = 'Send Report →';
+}
+
+function showBugFab() {
+  const fab = document.getElementById('bug-fab');
+  if (fab) fab.style.display = 'flex';
+}
 
 // ── NAV ──
 function showSection(id) {
@@ -2933,13 +3111,22 @@ function renderHistory() {
   if(countEl) countEl.textContent = filtered.length + ' item' + (filtered.length !== 1 ? 's' : '');
 
   if(!filtered.length) {
-    list.innerHTML =
-      '<div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:64px 0">' +
-      '<div style="font-family:var(--display);font-size:48px;font-weight:900;color:var(--t4)">0</div>' +
-      '<div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3)">' +
-      (historyFilter === 'all' ? 'No generations yet' : 'No ' + historyFilter + ' generations') + '</div>' +
-      (historyFilter === 'all' ? '<button class="copy-btn" style="font-size:9px;padding:10px 20px" onclick="showSection(&apos;dashboard&apos;)">Go to Dashboard →</button>' : '') +
-      '</div>';
+    if (historyFilter !== 'all') {
+      list.innerHTML =
+        '<div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:64px 0">' +
+        '<div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3)">No ' + historyFilter + ' generations yet</div>' +
+        '</div>';
+    } else {
+      list.innerHTML =
+        '<div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px;padding:64px 24px">' +
+        '<div style="font-size:40px">✦</div>' +
+        '<div style="font-family:var(--display);font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;color:var(--silver)">No generations yet</div>' +
+        '<div style="font-size:14px;color:var(--t2);line-height:1.65;max-width:320px">Every caption, hook, hashtag set, and plan you generate gets saved here automatically.</div>' +
+        '<div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px">' +
+        '<button class="gen-btn" style="margin-top:0;font-size:12px;padding:16px" onclick="showSection(\"dashboard\")">Go to Dashboard →</button>' +
+        '</div>' +
+        '</div>';
+    }
     return;
   }
 
@@ -3461,7 +3648,7 @@ function renderDay(day, container) {
           <span class="planner-tp-pill">Pillar · ${escH(tp.pillar)}</span>
           <span class="planner-tp-pill">Role · ${escH(tp.role_description)}</span>
         </div>
-        <div class="planner-tp-hook" style="font-family:Inter,sans-serif!important;color:#e8e8f0!important;font-size:16px!important;letter-spacing:.01em!important;line-height:1.8!important;font-weight:300!important">${escH(tp.hook_direction)}</div>
+        <div class="planner-tp-hook">${escH(tp.hook_direction)}</div>
         <div class="planner-tp-caption-starter">
           <div class="planner-tp-caption-label">Caption Starter</div>
           ${escH(tp.caption_starter)}
@@ -3578,7 +3765,7 @@ function renderPlanner(data) {
             <span class="planner-tp-pill">Role · ${escH(tp.role_description)}</span>
           </div>
 
-          <div class="planner-tp-hook" style="font-family:Inter,sans-serif!important;color:#e8e8f0!important;font-size:16px!important;letter-spacing:.01em!important;line-height:1.8!important;font-weight:300!important">${escH(tp.hook_direction)}</div>
+          <div class="planner-tp-hook">${escH(tp.hook_direction)}</div>
 
           <div class="planner-tp-caption-starter" style="font-family:Inter,sans-serif!important;color:#a78bfa!important;font-size:14px!important;font-weight:300!important;font-style:italic!important">
             <div class="planner-tp-caption-label">Caption Starter</div>
@@ -5737,6 +5924,51 @@ showSection('dashboard');
     <div class="upgrade-modal-trial">7-day free trial · Cancel anytime · Instant access</div>
     <a href="https://buy.stripe.com/14AbJ1cDnaQIfmr3EQ9ws00" target="_blank" class="upgrade-modal-btn">Start Free Trial →</a>
     <button class="upgrade-modal-close" onclick="closeUpgradeModal()">Maybe later</button>
+  </div>
+</div>
+
+
+<!-- BUG REPORT FAB -->
+<button class="bug-fab" id="bug-fab" onclick="openBugModal()" style="display:none">
+  <span class="bug-fab-dot"></span>
+  <span class="bug-fab-label">Report issue</span>
+</button>
+
+<!-- BUG REPORT MODAL -->
+<div class="bug-modal-overlay" id="bug-modal-overlay" onclick="e=>e.target===this&&closeBugModal()">
+  <div class="bug-modal" onclick="event.stopPropagation()">
+    <div class="bug-modal-title">Report<br>Issue</div>
+    <div class="bug-modal-sub">Goes straight to the team</div>
+    <label class="form-label" style="margin-top:0">Issue type</label>
+    <div class="bug-type-row">
+      <button class="pill on" data-bug-type="Bug">Bug</button>
+      <button class="pill" data-bug-type="UI Issue">UI Issue</button>
+      <button class="pill" data-bug-type="AI Output">AI Output</button>
+      <button class="pill" data-bug-type="Feature Request">Feature</button>
+    </div>
+    <label class="form-label" style="margin-top:16px">Description</label>
+    <textarea class="form-textarea" id="bug-desc" placeholder="What happened? What tool were you on, what did you expect, what went wrong..." style="min-height:120px"></textarea>
+    <button class="bug-submit-btn" id="bug-submit-btn" onclick="submitBugReport()">Send Report →</button>
+    <button class="bug-cancel" onclick="closeBugModal()">Cancel</button>
+  </div>
+</div>
+
+
+<!-- PASSWORD RECOVERY MODAL -->
+<div class="recovery-overlay" id="recovery-overlay">
+  <div class="recovery-card">
+    <div class="recovery-title">Set New<br>Password</div>
+    <div class="recovery-sub">Reset your PURX password</div>
+    <div class="field-wrap" style="margin-bottom:14px">
+      <div class="field-label">New Password</div>
+      <input class="auth-input" id="recovery-pass" type="password" placeholder="Min 6 characters" autocomplete="new-password">
+    </div>
+    <div class="field-wrap">
+      <div class="field-label">Confirm Password</div>
+      <input class="auth-input" id="recovery-confirm" type="password" placeholder="Repeat password" autocomplete="new-password">
+    </div>
+    <button class="auth-btn" id="recovery-btn" onclick="submitRecovery()" style="margin-top:20px">Set Password →</button>
+    <div class="auth-msg" id="recovery-msg" style="margin-top:8px"></div>
   </div>
 </div>
 
