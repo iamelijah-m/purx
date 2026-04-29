@@ -300,6 +300,145 @@ footer{border-top:1px solid var(--border);padding:24px 52px;display:flex;align-i
   .cfsb-div{width:100%;height:1px}
   .wm-title,.wm-ghost{font-size:clamp(100px,22vw,200px)}
 }
+
+/* ── PURX DEMO (replaces tool rotator) ── */
+.purx-demo{position:relative;width:100%}
+.purx-demo-label{position:absolute;top:-28px;right:0;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t3);letter-spacing:.1em}
+
+.purx-demo-tabs{display:flex;gap:0;border-bottom:1px solid var(--border2);margin-bottom:0;background:#090909;border:1px solid var(--border2);border-bottom:none}
+.purx-demo-tab{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);background:transparent;border:none;border-bottom:2px solid transparent;padding:12px 18px;cursor:pointer;transition:all .2s;margin-bottom:-1px}
+.purx-demo-tab.active{color:var(--pl);border-bottom-color:var(--purple2)}
+.purx-demo-tab:hover:not(.active){color:var(--t2)}
+
+.purx-demo-panel{display:none;border:1px solid var(--border2);background:#090909;padding:20px}
+.purx-demo-panel.active{display:block}
+
+.purx-demo-rec{
+  background:rgba(109,40,217,.1);border:1px solid rgba(109,40,217,.2);
+  border-left:2px solid var(--purple2);
+  padding:12px 16px;margin-bottom:16px;
+  font-size:12px;color:var(--t2);line-height:1.6;
+  display:flex;align-items:flex-start;gap:10px;
+}
+.purx-demo-rec-dot{color:var(--purple3);flex-shrink:0;font-size:10px;margin-top:1px}
+
+.purx-demo-card{background:var(--surface);border:1px solid var(--border);margin-bottom:10px;last-child:{margin-bottom:0}}
+.purx-demo-card-top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border)}
+.purx-demo-card-body{padding:14px;font-size:13px;color:var(--t1);line-height:1.75}
+
+.purx-badge{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px}
+.purx-badge-reach{background:rgba(109,40,217,.12);border:1px solid rgba(109,40,217,.25);color:#a78bfa}
+.purx-badge-engage{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);color:#34d399}
+.purx-badge-saves{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:#fbbf24}
+
+.purx-copy-btn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;background:var(--surface2);border:1px solid var(--border2);color:var(--t3);padding:5px 12px;cursor:pointer;transition:all .2s}
+.purx-copy-btn:hover{color:var(--t1);border-color:var(--t3)}
+
+/* Hooks */
+.purx-hooks-list{display:flex;flex-direction:column;gap:2px}
+.purx-hook-row{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);position:relative}
+.purx-hook-row:last-child{border-bottom:none}
+.purx-hook-highlight{background:rgba(109,40,217,.05);padding:14px;margin:0 -14px;border-left:2px solid var(--purple2);border-bottom:none}
+.purx-hook-num{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.1em;flex-shrink:0;margin-top:1px}
+.purx-hook-text{font-size:13px;color:var(--t1);line-height:1.6;flex:1}
+.purx-hook-rec{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--purple3);background:rgba(109,40,217,.1);border:1px solid rgba(109,40,217,.2);padding:2px 8px;flex-shrink:0}
+
+/* Hashtags */
+.purx-ht-tier{padding:16px;margin-bottom:8px;border-radius:2px}
+.purx-ht-broad{background:rgba(109,40,217,.06);border:1px solid rgba(109,40,217,.15)}
+.purx-ht-mid{background:rgba(16,185,129,.04);border:1px solid rgba(16,185,129,.12)}
+.purx-ht-niche{background:rgba(245,158,11,.04);border:1px solid rgba(245,158,11,.12)}
+.purx-ht-tier-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--t2);margin-bottom:10px}
+.purx-ht-tier-label span{color:var(--t3);margin-left:8px;letter-spacing:.06em;text-transform:none;font-size:9px}
+.purx-ht-tags{font-size:13px;color:var(--t1);line-height:1.8;letter-spacing:.01em}
+.purx-ht-broad .purx-ht-tier-label{color:#a78bfa}
+.purx-ht-mid .purx-ht-tier-label{color:#34d399}
+.purx-ht-niche .purx-ht-tier-label{color:#fbbf24}
+
+/* ── PURX DEMO: PLANNER PANEL ── */
+.purx-planner-day-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;background:var(--surface);border:1px solid var(--border2);
+  border-bottom:none;margin-bottom:0;
+}
+.purx-planner-day-left{display:flex;align-items:center;gap:16px}
+.purx-planner-day-num{
+  font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;
+  color:var(--t4);line-height:1;
+}
+.purx-planner-day-name{
+  font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--t1);
+}
+.purx-planner-day-sub{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t3);letter-spacing:.06em;margin-top:2px}
+.purx-planner-day-badge{
+  font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;
+  text-transform:uppercase;padding:5px 12px;background:var(--bg);
+  border:1px solid var(--border2);color:var(--t3);
+}
+
+.purx-planner-post{
+  border:1px solid var(--border2);border-left:3px solid var(--purple2);
+  background:#090909;padding:16px;
+}
+.purx-planner-post-meta{
+  display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;
+}
+.purx-planner-time{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t2);letter-spacing:.06em}
+.purx-planner-format{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;background:var(--bg2);border:1px solid var(--border);color:var(--t3)}
+.purx-planner-slot{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:100px;border:1px solid}
+.purx-slot-morning{color:#fbbf24;border-color:rgba(245,158,11,.25);background:rgba(245,158,11,.06)}
+.purx-slot-awareness{color:var(--t3);border-color:var(--border)}
+.purx-planner-score{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.06em;margin-left:auto}
+
+.purx-planner-title{
+  font-family:'Barlow Condensed',sans-serif;font-size:clamp(16px,2vw,22px);
+  font-weight:900;text-transform:uppercase;letter-spacing:.04em;
+  color:var(--white);line-height:1;margin-bottom:8px;
+}
+.purx-planner-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.purx-planner-pill{
+  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.1em;
+  text-transform:uppercase;padding:3px 10px;
+  background:rgba(109,40,217,.06);border:1px solid rgba(109,40,217,.15);color:var(--t3);
+}
+.purx-planner-hook-box{
+  font-size:13px;color:var(--t1);line-height:1.6;
+  padding:12px 16px;background:var(--surface);border:1px solid var(--border);
+  margin-bottom:10px;font-family:'Inter',sans-serif;font-weight:300;
+}
+.purx-planner-caption-box{
+  padding:12px 16px;background:rgba(109,40,217,.06);
+  border:1px solid rgba(109,40,217,.15);margin-bottom:12px;
+}
+.purx-planner-caption-label{
+  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--purple2);margin-bottom:6px;
+}
+.purx-planner-caption-text{font-size:13px;color:#a78bfa;line-height:1.6;font-style:italic}
+
+.purx-planner-detail-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;
+}
+@media(max-width:600px){.purx-planner-detail-grid{grid-template-columns:1fr}}
+.purx-planner-detail{
+  background:var(--surface);border:1px solid var(--border);
+  padding:10px 12px;
+}
+.purx-planner-detail-label{
+  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--t3);margin-bottom:4px;
+}
+.purx-planner-detail-val{font-size:11px;color:var(--t2);line-height:1.55}
+
+.purx-planner-bottom{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media(max-width:600px){.purx-planner-bottom{grid-template-columns:1fr}}
+.purx-planner-signal{background:var(--surface);border:1px solid var(--border);padding:10px 12px}
+.purx-planner-signal-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:4px}
+.purx-planner-signal-val{font-size:11px;color:var(--t2);line-height:1.55}
+.purx-planner-redflag{background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.15);padding:10px 12px}
+.purx-planner-redflag-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:#ef4444;margin-bottom:4px}
+.purx-planner-redflag-val{font-size:11px;color:var(--t2);line-height:1.55}
 </style>
 </head>
 <body>
@@ -358,125 +497,170 @@ footer{border-top:1px solid var(--border);padding:24px 52px;display:flex;align-i
     <div class="c2-left r fl2">
       <div class="c2-tag">001 / What PURX actually does for you</div>
       <h2 class="c2-headline">Your content,<br>sharper than<br><em>you thought possible.</em></h2>
-      <div class="tool-pills" id="tool-pills">
-        <div class="tool-pill on" data-tool="caption" onclick="switchTool(this)">Caption Generator</div>
-        <div class="tool-pill" data-tool="hook" onclick="switchTool(this)">Reel Hooks</div>
-        <div class="tool-pill" data-tool="hashtag" onclick="switchTool(this)">Hashtag Strategy</div>
-        <div class="tool-pill" data-tool="calendar" onclick="switchTool(this)">Content Calendar</div>
-      </div>
+
     </div>
 
-    <div class="tool-rotator r fr2 d2" style="position:relative">
-      <div style="position:absolute;top:-28px;right:0;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t3);letter-spacing:.1em">← live AI demo · try it yourself</div>
-      <div class="tr-topbar">
-        <div class="tr-tabs" id="tr-tabs">
-          <button class="tr-tab on" data-t="caption" onclick="switchTool2(this)">Caption</button>
-          <button class="tr-tab" data-t="hook" onclick="switchTool2(this)">Hooks</button>
-          <button class="tr-tab" data-t="hashtag" onclick="switchTool2(this)">Hashtags</button>
-          <button class="tr-tab" data-t="calendar" onclick="switchTool2(this)">Calendar</button>
-        </div>
-        <div class="tr-live"><div class="tr-ld"></div>Live AI</div>
+    <div class="purx-demo r fr2 d2">
+  <div class="purx-demo-label">← live preview · this is what you get</div>
+
+  <!-- Tool switcher tabs -->
+  <div class="purx-demo-tabs">
+    <button class="purx-demo-tab active" onclick="demoSwitch('caption',this)">Captions</button>
+    <button class="purx-demo-tab" onclick="demoSwitch('hooks',this)">Hooks</button>
+    <button class="purx-demo-tab" onclick="demoSwitch('hashtags',this)">Hashtags</button>
+    <button class="purx-demo-tab" onclick="demoSwitch('planner',this)">Planner</button>
+  </div>
+
+  <!-- CAPTION OUTPUT -->
+  <div class="purx-demo-panel active" id="demo-caption">
+    <div class="purx-demo-rec">
+      <span class="purx-demo-rec-dot">✦</span>
+      post caption 2 first — motivation angle triggers saves from people who feel stuck. highest share potential for a car niche micro creator.
+    </div>
+    <div class="purx-demo-card">
+      <div class="purx-demo-card-top">
+        <span class="purx-badge purx-badge-reach">🚀 Grow Reach</span>
+        <button class="purx-copy-btn">Copy</button>
       </div>
+      <div class="purx-demo-card-body">the walk back to your car hits different when you actually like what you're driving.<br><br>took me years to get here. but that turn around at the pump never gets old.<br><br>tampacars #carlifestyle #firstcarpov #carenthusiast</div>
+    </div>
+    <div class="purx-demo-card">
+      <div class="purx-demo-card-top">
+        <span class="purx-badge purx-badge-engage">💬 Drive Engagement</span>
+        <button class="purx-copy-btn">Copy</button>
+      </div>
+      <div class="purx-demo-card-body">tag someone who needs to upgrade their gas station walk.<br><br>you know that feeling when you park, handle your business, and still catch yourself looking back.<br><br>gasstation #carculture #tampabay #dailydriver</div>
+    </div>
+    <div class="purx-demo-card">
+      <div class="purx-demo-card-top">
+        <span class="purx-badge purx-badge-saves">💎 Get Saves</span>
+        <button class="purx-copy-btn">Copy</button>
+      </div>
+      <div class="purx-demo-card-body">the car is just a reminder that you can actually become the person you said you would.<br><br>work in silence, let the reveal do the talking.<br><br>motivationdaily #carlover #lifestyledesign #tampalife #successmindset</div>
+    </div>
+  </div>
 
-      <!-- Caption -->
-      <div class="tr-panel on" id="tp-caption">
-        <div class="tr-input-area">
-          <span class="tr-input-label">Your Setup</span>
-          <div class="tr-input-row">
-            <select class="tr-sel" id="cap-niche"><option>Lifestyle</option><option>Cars</option><option>Fashion</option><option>Fitness</option><option>Travel</option><option>Business</option></select>
-            <input class="tr-inp" id="cap-goal" placeholder="vibe / goal (optional)">
-          </div>
-          <span class="tr-input-label">Describe Your Post</span>
-          <textarea class="tr-sel tr-txt" id="cap-brief">5am. dark gym. nobody else there. just the work.</textarea>
-          <button class="tr-run" id="cap-btn" onclick="runTool('caption')">Generate Caption ↗</button>
-        </div>
-        <div class="tr-output-area">
-          <span class="tr-out-label">Output — Caption Generator</span>
-          <div class="tr-out" id="cap-out"><span style="white-space:pre-wrap;font-style:italic">5am hits different when nobody's watching.
+  <!-- HOOKS OUTPUT -->
+  <div class="purx-demo-panel" id="demo-hooks">
+    <div class="purx-demo-rec">
+      <span class="purx-demo-rec-dot">✦</span>
+      5 scroll-stopping hooks — hook 3 has the highest retention pattern for your niche. leads with relatability before the flex.
+    </div>
+    <div class="purx-hooks-list">
+      <div class="purx-hook-row">
+        <span class="purx-hook-num">01</span>
+        <div class="purx-hook-text">the car you drive says more about your discipline than your taste.</div>
+      </div>
+      <div class="purx-hook-row">
+        <span class="purx-hook-num">02</span>
+        <div class="purx-hook-text">nobody talks about what it actually takes to get the car you want.</div>
+      </div>
+      <div class="purx-hook-row purx-hook-highlight">
+        <span class="purx-hook-num" style="color:var(--purple2)">03</span>
+        <div class="purx-hook-text">i used to scroll past people with cars like this. now i'm the one posting.</div>
+        <span class="purx-hook-rec">best</span>
+      </div>
+      <div class="purx-hook-row">
+        <span class="purx-hook-num">04</span>
+        <div class="purx-hook-text">this is what happens when you stop spending and start stacking.</div>
+      </div>
+      <div class="purx-hook-row">
+        <span class="purx-hook-num">05</span>
+        <div class="purx-hook-text">the version of you that wanted this is watching. don't let them down.</div>
+      </div>
+    </div>
+  </div>
 
-#discipline #fitnessjourney #earlymorning</span></div>
-          <div class="tr-loader" id="cap-ld"><div class="trl"></div><div class="trl"></div><div class="trl"></div><span style="margin-left:5px">writing</span></div>
-          <div class="tr-tags" id="cap-tags" style="display:flex"><span class="tr-tag">Voice-Matched</span><span class="tr-tag">Ready to Post</span><span class="tr-tag">3 Variations</span></div>
+  <!-- PLANNER OUTPUT -->
+  <div class="purx-demo-panel" id="demo-planner">
+    <div class="purx-demo-rec">
+      <span class="purx-demo-rec-dot">✦</span>
+      day 1 of 7 · 2 touchpoints planned · primary objective: reach · this is one post brief out of 14 this week
+    </div>
+
+    <!-- Day header -->
+    <div class="purx-planner-day-header">
+      <div class="purx-planner-day-left">
+        <div class="purx-planner-day-num">1</div>
+        <div>
+          <div class="purx-planner-day-name">DAY 1 · MONDAY</div>
+          <div class="purx-planner-day-sub">Primary: Reach · Secondary: Visits</div>
         </div>
       </div>
+      <div class="purx-planner-day-badge">2 Planned Touchpoints</div>
+    </div>
 
-      <!-- Hook -->
-      <div class="tr-panel" id="tp-hook">
-        <div class="tr-input-area">
-          <span class="tr-input-label">Your Setup</span>
-          <div class="tr-input-row">
-            <select class="tr-sel" id="hook-niche"><option>Lifestyle</option><option>Cars</option><option>Fashion</option><option>Fitness</option><option>Travel</option></select>
-            <select class="tr-sel" id="hook-goal"><option>Grow Followers</option><option>Boost Engagement</option><option>Go Viral</option><option>Build Brand</option></select>
-          </div>
-          <span class="tr-input-label">What's the Reel?</span>
-          <textarea class="tr-sel tr-txt" id="hook-brief">sunday meal prep. kitchen. natural light. making it look easy.</textarea>
-          <button class="tr-run" id="hook-btn" onclick="runTool('hook')">Generate 5 Hooks ↗</button>
+    <!-- Post card -->
+    <div class="purx-planner-post">
+      <div class="purx-planner-post-meta">
+        <span class="purx-planner-time">9:00 AM</span>
+        <span class="purx-planner-format">REEL</span>
+        <span class="purx-planner-slot purx-slot-morning">Morning</span>
+        <span class="purx-planner-slot purx-slot-awareness">Awareness</span>
+        <span class="purx-planner-score">88/100</span>
+      </div>
+      <div class="purx-planner-title">POV: YOU DIDN'T TAKE YOUR CAR ON A SINGLE SUMMER ROAD TRIP</div>
+      <div class="purx-planner-pills">
+        <span class="purx-planner-pill">Pillar · Lifestyle Relatability</span>
+        <span class="purx-planner-pill">Role · Viral Pattern Interrupt</span>
+      </div>
+      <div class="purx-planner-hook-box">Trigger FOMO and regret in first 0.5 seconds with empty car</div>
+      <div class="purx-planner-caption-box">
+        <div class="purx-planner-caption-label">Caption Starter</div>
+        <div class="purx-planner-caption-text">Vulnerable confession: The car sat ready. I just never left the driveway.</div>
+      </div>
+      <div class="purx-planner-detail-grid">
+        <div class="purx-planner-detail">
+          <div class="purx-planner-detail-label">Visual Direction</div>
+          <div class="purx-planner-detail-val">Static shot of clean car in driveway, dust on dashboard, summer sunset</div>
         </div>
-        <div class="tr-output-area">
-          <span class="tr-out-label">Output — Hook Generator</span>
-          <div class="tr-out" id="hook-out"><span style="white-space:pre-wrap;font-style:italic">1. the sunday reset that actually works.
-2. what i eat when i'm being serious about it.
-3. meal prep doesn't have to be boring — here's proof.
-4. the only sunday routine you need.
-5. this is how i stay consistent when motivation is gone.</span></div>
-          <div class="tr-loader" id="hook-ld"><div class="trl"></div><div class="trl"></div><div class="trl"></div><span style="margin-left:5px">writing</span></div>
-          <div class="tr-tags" id="hook-tags" style="display:flex"><span class="tr-tag">5 Hooks</span><span class="tr-tag">High Retention</span><span class="tr-tag">Goal-Targeted</span></div>
+        <div class="purx-planner-detail">
+          <div class="purx-planner-detail-label">Story Companion</div>
+          <div class="purx-planner-detail-val">Poll: Did you take your dream summer drive? Yes or Still Planning</div>
+        </div>
+        <div class="purx-planner-detail">
+          <div class="purx-planner-detail-label">Save Trigger</div>
+          <div class="purx-planner-detail-val">Reminds them to plan fall coastal drives before season ends</div>
+        </div>
+        <div class="purx-planner-detail">
+          <div class="purx-planner-detail-label">DM Prompt</div>
+          <div class="purx-planner-detail-val">Drop your dream road trip destination you missed this summer</div>
         </div>
       </div>
-
-      <!-- Hashtag -->
-      <div class="tr-panel" id="tp-hashtag">
-        <div class="tr-input-area">
-          <span class="tr-input-label">Your Setup</span>
-          <div class="tr-input-row">
-            <select class="tr-sel" id="ht-niche"><option>Lifestyle</option><option>Cars</option><option>Fashion</option><option>Fitness</option><option>Travel</option></select>
-            <input class="tr-inp" id="ht-detail" placeholder="post detail (optional)">
-          </div>
-          <span class="tr-input-label">Post Description</span>
-          <textarea class="tr-sel tr-txt" id="ht-brief">thrift flip outfit. muted tones. city street. minimal.</textarea>
-          <button class="tr-run" id="ht-btn" onclick="runTool('hashtag')">Generate Strategy ↗</button>
+      <div class="purx-planner-bottom">
+        <div class="purx-planner-signal">
+          <div class="purx-planner-signal-label">Performance Signal</div>
+          <div class="purx-planner-signal-val">Reach: 8500 · Saves: 45 · Comments: 38 · Followers: 12</div>
         </div>
-        <div class="tr-output-area">
-          <span class="tr-out-label">Output — Hashtag Strategy</span>
-          <div class="tr-out" id="ht-out"><span style="white-space:pre-wrap;font-style:italic">BROAD (1M+ posts)
-#fashion #streetwear #outfitoftheday #ootd #style
-
-MID-TIER (100K–1M)
-#thriftedfit #thriftflip #sustainablefashion #slowfashion #thriftstyle
-
-NICHE (under 100K)
-#thriftedstreetwear #minimalstreetfit #quietluxurystyle #mutedootd #consciousfashion</span></div>
-          <div class="tr-loader" id="ht-ld"><div class="trl"></div><div class="trl"></div><div class="trl"></div><span style="margin-left:5px">building strategy</span></div>
-          <div class="tr-tags" id="ht-tags" style="display:flex"><span class="tr-tag">3 Tiers</span><span class="tr-tag">15 Tags</span><span class="tr-tag">Reach-Optimized</span></div>
-        </div>
-      </div>
-
-      <!-- Calendar -->
-      <div class="tr-panel" id="tp-calendar">
-        <div class="tr-input-area">
-          <span class="tr-input-label">Your Setup</span>
-          <div class="tr-input-row">
-            <select class="tr-sel" id="cal-niche"><option>Lifestyle</option><option>Cars</option><option>Fashion</option><option>Fitness</option><option>Travel</option></select>
-            <select class="tr-sel" id="cal-goal"><option>Grow Followers</option><option>Boost Engagement</option><option>Go Viral</option><option>Build Brand</option></select>
-          </div>
-          <span class="tr-input-label">Theme This Week</span>
-          <textarea class="tr-sel tr-txt" id="cal-brief">building in public. showing the process. growth week.</textarea>
-          <button class="tr-run" id="cal-btn" onclick="runTool('calendar')">Build My Week ↗</button>
-        </div>
-        <div class="tr-output-area">
-          <span class="tr-out-label">Output — Content Calendar</span>
-          <div class="tr-out" id="cal-out"><span style="white-space:pre-wrap;font-style:italic">MON · Reel · "the one habit that changed everything" · 7am
-TUE · Carousel · 3 things nobody tells you about growing · 12pm
-WED · Photo · behind the work, no filter · 6pm
-THU · Reel · process video, raw cuts · 7am
-FRI · Story series · Q&amp;A — ask me anything · 3pm
-SAT · Photo · the week in one shot · 11am
-SUN · Rest or repost your best performer</span></div>
-          <div class="tr-loader" id="cal-ld"><div class="trl"></div><div class="trl"></div><div class="trl"></div><span style="margin-left:5px">building your week</span></div>
-          <div class="tr-tags" id="cal-tags" style="display:flex"><span class="tr-tag">7 Days</span><span class="tr-tag">Hooks Included</span><span class="tr-tag">Best Times Set</span></div>
+        <div class="purx-planner-redflag">
+          <div class="purx-planner-redflag-label">Red Flag</div>
+          <div class="purx-planner-redflag-val">Too sad without solution tease, poor lighting ruins nostalgic vibe</div>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- HASHTAGS OUTPUT -->
+  <div class="purx-demo-panel" id="demo-hashtags">
+    <div class="purx-demo-rec">
+      <span class="purx-demo-rec-dot">✦</span>
+      15 tags across 3 tiers — broad for discovery, mid for community, niche for algorithm positioning.
+    </div>
+    <div class="purx-ht-tier purx-ht-broad">
+      <div class="purx-ht-tier-label">Broad <span>1M+ posts · max discovery</span></div>
+      <div class="purx-ht-tags">#cars #carlife #automotive #carsofinstagram #carlovers</div>
+    </div>
+    <div class="purx-ht-tier purx-ht-mid">
+      <div class="purx-ht-tier-label">Mid-Tier <span>100K–1M · community reach</span></div>
+      <div class="purx-ht-tags">#corvette #c8corvette #americanmuscle #tampacar #floridacars</div>
+    </div>
+    <div class="purx-ht-tier purx-ht-niche">
+      <div class="purx-ht-tier-label">Niche <span>under 100K · algorithm positioning</span></div>
+      <div class="purx-ht-tags">#c8life #corvettecommunity #tampacarscene #midenginecorvette #carreveal</div>
+    </div>
+  </div>
+
+</div>
   </div>
 </section>
 
@@ -751,19 +935,24 @@ document.querySelectorAll('.r').forEach(el=>ro.observe(el));
 const c1glow=document.querySelector('.c1-glow');
 window.addEventListener('scroll',()=>{if(c1glow)c1glow.style.transform=`translate(-50%,-52%) translateY(${scrollY*.25}px)`});
 
-// Tool tab switching
-function switchTool(pill){
-  const t=pill.dataset.tool;
-  document.querySelectorAll('.tool-pill').forEach(p=>p.classList.toggle('on',p.dataset.tool===t));
-  document.querySelectorAll('.tr-tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
-  document.querySelectorAll('.tr-panel').forEach(p=>p.classList.toggle('on',p.id==='tp-'+t));
+// Demo tab switching
+function demoSwitch(tool, btn) {
+  document.querySelectorAll('.purx-demo-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.purx-demo-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('demo-' + tool).classList.add('active');
 }
-function switchTool2(btn){
-  const t=btn.dataset.t;
-  document.querySelectorAll('.tr-tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
-  document.querySelectorAll('.tr-panel').forEach(p=>p.classList.toggle('on',p.id==='tp-'+t));
-  document.querySelectorAll('.tool-pill').forEach(p=>p.classList.toggle('on',p.dataset.tool===t));
-}
+
+// Copy button interaction
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('purx-copy-btn')) {
+    const card = e.target.closest('.purx-demo-card');
+    const text = card ? card.querySelector('.purx-demo-card-body').textContent : '';
+    navigator.clipboard.writeText(text).catch(() => {});
+    e.target.textContent = 'Copied!';
+    setTimeout(() => e.target.textContent = 'Copy', 1500);
+  }
+});
 
 // Demo AI — calls PURX worker
 const WORKER='https://purx-api.elijahfisher51.workers.dev';
