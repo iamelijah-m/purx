@@ -439,6 +439,26 @@ footer{border-top:1px solid var(--border);padding:24px 52px;display:flex;align-i
 .purx-planner-redflag{background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.15);padding:10px 12px}
 .purx-planner-redflag-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:#ef4444;margin-bottom:4px}
 .purx-planner-redflag-val{font-size:11px;color:var(--t2);line-height:1.55}
+
+/* ── DEMO INPUT BLOCK ── */
+.purx-demo-input-block{
+  background:rgba(255,255,255,.02);border:1px solid var(--border2);
+  border-left:2px solid var(--border2);
+  padding:12px 16px;margin-bottom:8px;
+}
+.purx-demo-input-label{
+  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--t3);margin-bottom:6px;
+}
+.purx-demo-input-text{
+  font-size:13px;color:var(--t2);line-height:1.55;font-style:italic;
+}
+.purx-demo-arrow{
+  font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--purple2);
+  padding:6px 0 10px;display:flex;align-items:center;gap:8px;
+}
+.purx-demo-arrow::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(109,40,217,.3),transparent)}
 </style>
 </head>
 <body>
@@ -513,6 +533,12 @@ footer{border-top:1px solid var(--border);padding:24px 52px;display:flex;align-i
 
   <!-- CAPTION OUTPUT -->
   <div class="purx-demo-panel active" id="demo-caption">
+    
+    <div class="purx-demo-input-block">
+      <div class="purx-demo-input-label">Your prompt</div>
+      <div class="purx-demo-input-text">"just got home from a 12 hour shift. exhausted but still showing up. lifestyle / motivation"</div>
+    </div>
+    <div class="purx-demo-arrow">&#8595; PURX output</div>
     <div class="purx-demo-rec">
       <span class="purx-demo-rec-dot">✦</span>
       post caption 2 first — motivation angle triggers saves from people who feel stuck. highest share potential for a car niche micro creator.
@@ -542,55 +568,68 @@ footer{border-top:1px solid var(--border);padding:24px 52px;display:flex;align-i
 
   <!-- HOOKS OUTPUT -->
   <div class="purx-demo-panel" id="demo-hooks">
+    <div class="purx-demo-input-block">
+      <div class="purx-demo-input-label">Your prompt</div>
+      <div class="purx-demo-input-text">"morning routine reel, 6am, coffee, gym, getting ready. want it to feel real not staged"</div>
+    </div>
+    <div class="purx-demo-arrow">&#8595; PURX output</div>
     <div class="purx-demo-rec">
-      <span class="purx-demo-rec-dot">✦</span>
-      5 scroll-stopping hooks — hook 3 has the highest retention pattern for your niche. leads with relatability before the flex.
+      <span class="purx-demo-rec-dot">&#10022;</span>
+      hook 3 has the highest scroll-stop rate — leads with an uncomfortable truth before the routine. viewers feel called out and keep watching.
     </div>
     <div class="purx-hooks-list">
       <div class="purx-hook-row">
         <span class="purx-hook-num">01</span>
-        <div class="purx-hook-text">the car you drive says more about your discipline than your taste.</div>
+        <div class="purx-hook-text">6am hits different when you actually have a reason to get up.</div>
       </div>
       <div class="purx-hook-row">
         <span class="purx-hook-num">02</span>
-        <div class="purx-hook-text">nobody talks about what it actually takes to get the car you want.</div>
+        <div class="purx-hook-text">nobody wants to see your perfect morning. they want to see your real one.</div>
       </div>
       <div class="purx-hook-row purx-hook-highlight">
         <span class="purx-hook-num" style="color:var(--purple2)">03</span>
-        <div class="purx-hook-text">i used to scroll past people with cars like this. now i'm the one posting.</div>
+        <div class="purx-hook-text">i used to wake up and go straight to my phone. now i go straight to work. here is what changed.</div>
         <span class="purx-hook-rec">best</span>
       </div>
       <div class="purx-hook-row">
         <span class="purx-hook-num">04</span>
-        <div class="purx-hook-text">this is what happens when you stop spending and start stacking.</div>
+        <div class="purx-hook-text">the first hour of your day is either working for you or against you. this is mine.</div>
       </div>
       <div class="purx-hook-row">
         <span class="purx-hook-num">05</span>
-        <div class="purx-hook-text">the version of you that wanted this is watching. don't let them down.</div>
+        <div class="purx-hook-text">most people are still asleep right now. that is the whole point.</div>
       </div>
     </div>
   </div>
 
-  <!-- PLANNER OUTPUT -->
-  <div class="purx-demo-panel" id="demo-planner">
-    <div class="purx-demo-rec">
-      <span class="purx-demo-rec-dot">✦</span>
-      day 1 of 7 · 2 touchpoints planned · primary objective: reach · this is one post brief out of 14 this week
+  <!-- HASHTAGS OUTPUT -->
+  <div class="purx-demo-panel" id="demo-hashtags">
+    <div class="purx-demo-input-block">
+      <div class="purx-demo-input-label">Your prompt</div>
+      <div class="purx-demo-input-text">"outfit of the day, neutral tones, city street, minimal aesthetic. fashion niche"</div>
     </div>
 
-    <!-- Day header -->
+  <!-- PLANNER OUTPUT -->
+  <div class="purx-demo-panel" id="demo-planner">
+    <div class="purx-demo-input-block">
+      <div class="purx-demo-input-label">Your prompt</div>
+      <div class="purx-demo-input-text">"lifestyle creator, want to grow this week, mix of motivation and day in the life content"</div>
+    </div>
+    <div class="purx-demo-arrow">&#8595; PURX output &mdash; 1 of 14 posts this week</div>
+    <div class="purx-demo-rec">
+      <span class="purx-demo-rec-dot">&#10022;</span>
+      day 1 of 7 &middot; 2 touchpoints planned &middot; primary: reach &middot; this is one post brief out of 14 generated for your week
+    </div>
     <div class="purx-planner-day-header">
       <div class="purx-planner-day-left">
         <div class="purx-planner-day-num">1</div>
         <div>
-          <div class="purx-planner-day-name">DAY 1 · MONDAY</div>
-          <div class="purx-planner-day-sub">Primary: Reach · Secondary: Visits</div>
+          <div class="purx-planner-day-name">DAY 1 &middot; MONDAY</div>
+          <div class="purx-planner-day-sub">Primary: Reach &middot; Secondary: Visits</div>
         </div>
       </div>
       <div class="purx-planner-day-badge">2 Planned Touchpoints</div>
     </div>
-
-    <!-- Post card -->
     <div class="purx-planner-post">
       <div class="purx-planner-post-meta">
         <span class="purx-planner-time">9:00 AM</span>
@@ -601,8 +640,8 @@ footer{border-top:1px solid var(--border);padding:24px 52px;display:flex;align-i
       </div>
       <div class="purx-planner-title">POV: YOU DIDN'T TAKE YOUR CAR ON A SINGLE SUMMER ROAD TRIP</div>
       <div class="purx-planner-pills">
-        <span class="purx-planner-pill">Pillar · Lifestyle Relatability</span>
-        <span class="purx-planner-pill">Role · Viral Pattern Interrupt</span>
+        <span class="purx-planner-pill">Pillar &middot; Lifestyle Relatability</span>
+        <span class="purx-planner-pill">Role &middot; Viral Pattern Interrupt</span>
       </div>
       <div class="purx-planner-hook-box">Trigger FOMO and regret in first 0.5 seconds with empty car</div>
       <div class="purx-planner-caption-box">
@@ -630,7 +669,7 @@ footer{border-top:1px solid var(--border);padding:24px 52px;display:flex;align-i
       <div class="purx-planner-bottom">
         <div class="purx-planner-signal">
           <div class="purx-planner-signal-label">Performance Signal</div>
-          <div class="purx-planner-signal-val">Reach: 8500 · Saves: 45 · Comments: 38 · Followers: 12</div>
+          <div class="purx-planner-signal-val">Reach: 8500 &middot; Saves: 45 &middot; Comments: 38 &middot; Followers: 12</div>
         </div>
         <div class="purx-planner-redflag">
           <div class="purx-planner-redflag-label">Red Flag</div>
@@ -639,369 +678,23 @@ footer{border-top:1px solid var(--border);padding:24px 52px;display:flex;align-i
       </div>
     </div>
   </div>
-
-  <!-- HASHTAGS OUTPUT -->
-  <div class="purx-demo-panel" id="demo-hashtags">
+    <div class="purx-demo-arrow">&#8595; PURX output</div>
     <div class="purx-demo-rec">
-      <span class="purx-demo-rec-dot">✦</span>
-      15 tags across 3 tiers — broad for discovery, mid for community, niche for algorithm positioning.
+      <span class="purx-demo-rec-dot">&#10022;</span>
+      15 tags across 3 tiers — broad for discovery, mid for community, niche to position you in the algorithm for quiet luxury and minimal fashion.
     </div>
     <div class="purx-ht-tier purx-ht-broad">
-      <div class="purx-ht-tier-label">Broad <span>1M+ posts · max discovery</span></div>
-      <div class="purx-ht-tags">#cars #carlife #automotive #carsofinstagram #carlovers</div>
+      <div class="purx-ht-tier-label">Broad <span>1M+ posts &middot; max discovery</span></div>
+      <div class="purx-ht-tags">#fashion #ootd #streetstyle #outfitoftheday #style</div>
     </div>
     <div class="purx-ht-tier purx-ht-mid">
-      <div class="purx-ht-tier-label">Mid-Tier <span>100K–1M · community reach</span></div>
-      <div class="purx-ht-tags">#corvette #c8corvette #americanmuscle #tampacar #floridacars</div>
+      <div class="purx-ht-tier-label">Mid-Tier <span>100K-1M &middot; community reach</span></div>
+      <div class="purx-ht-tags">#minimalfashion #neutraloutfit #quietluxury #citystyle #slowfashion</div>
     </div>
     <div class="purx-ht-tier purx-ht-niche">
-      <div class="purx-ht-tier-label">Niche <span>under 100K · algorithm positioning</span></div>
-      <div class="purx-ht-tags">#c8life #corvettecommunity #tampacarscene #midenginecorvette #carreveal</div>
+      <div class="purx-ht-tier-label">Niche <span>under 100K &middot; algorithm positioning</span></div>
+      <div class="purx-ht-tags">#quietluxurystyle #minimalistootd #neutralaesthetic #urbanminimalist #cleangirloutfit</div>
     </div>
   </div>
 
-</div>
-  </div>
-</section>
-
-<!-- ── SCENE 3: NUMBERS ── -->
-<section id="c3">
-  <div class="c3-inner">
-    <div class="c3-statement r">
-      The accounts<br>you're watching grow<br><em>aren't working harder.</em><br><span>they just stopped winging it.</span>
-    </div>
-    <div class="c3-row">
-      <div class="c3-cell r d1">
-        <div class="c3-num">8</div>
-        <div class="c3-desc">tools. one platform. zero excuses.</div>
-        <p class="c3-quote">Captions. Hooks. Hashtags. Content planning. Post grading. Viral analysis. Bio audits. Progress tracking. Everything you need to stop guessing and start growing — in one place.</p>
-        <div class="c3-who">All included · $19/month · nothing extra</div>
-      </div>
-      <div class="c3-cell r d2">
-        <div class="c3-num">3x</div>
-        <div class="c3-desc">more consistent. more intentional.</div>
-        <p class="c3-quote">When you have a system, you stop staring at a blank screen. You stop posting just to post. Every piece of content has a purpose — and PURX builds that plan for you in minutes.</p>
-        <div class="c3-who">Content Calendar · Built in under 2 minutes</div>
-      </div>
-      <div class="c3-cell r d3">
-        <div class="c3-num">$19</div>
-        <div class="c3-desc">the whole stack. not a single tool.</div>
-        <p class="c3-quote">Most creators piece together 4-5 different tools and still get mediocre results. PURX is the whole operation — writing, planning, analysis, optimization — for less than a dinner out.</p>
-        <div class="c3-who">Everything unlocked · Cancel anytime</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CINEMATIC BREAK ── -->
-<section id="cbreak">
-  <div class="cbreak-inner">
-    <div class="cbreak-bg"></div>
-    <div class="cbreak-content r">
-      <div class="cbreak-line">the work you're already doing</div>
-      <div class="cbreak-line accent">deserves better results.</div>
-      <div class="cbreak-sub">you're not failing because you're lazy or untalented.<br>you're failing because you're doing everything manually, alone, with no system.<br>that ends here.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ── SCENE 4: TRUTH ── -->
-<section id="c4">
-  <div class="c4-inner r">
-    <div class="c4-q">Built for the creator<br><em>who's done guessing.</em></div>
-    <div class="c4-honest">
-      <div class="c4-col">
-        <span class="c4-col-label yes">This is who PURX is built for</span>
-        <div class="c4-item"><span class="ci y">✓</span>You post 3-5x a week and still feel like you're not gaining traction</div>
-        <div class="c4-item"><span class="ci y">✓</span>You spend more time thinking about what to post than actually creating</div>
-        <div class="c4-item"><span class="ci y">✓</span>You've watched smaller accounts blow past you and couldn't figure out why</div>
-        <div class="c4-item"><span class="ci y">✓</span>You know your content is good — you just need it to reach more people</div>
-        <div class="c4-item"><span class="ci y">✓</span>You're serious about this — it's not a hobby, it's a career</div>
-      </div>
-      <div class="c4-col" style="background:rgba(255,255,255,.01)">
-        <span class="c4-col-label no">If this sounds like you, keep reading</span>
-        <div class="c4-item"><span class="ci n">→</span>You're in the lifestyle, cars, fashion, fitness, or business space</div>
-        <div class="c4-item"><span class="ci n">→</span>You're between 1K and 500K followers and you want more</div>
-        <div class="c4-item"><span class="ci n">→</span>You treat your page like a brand, not a diary</div>
-        <div class="c4-item"><span class="ci n">→</span>You're willing to put in the work — you just want the work to actually convert</div>
-        <div class="c4-item"><span class="ci n">→</span>You're ready to stop winging it and start winning</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── SCENE 5: ALL THE TOOLS ── -->
-<section id="c5">
-  <div class="c5-inner">
-    <div class="c5-head">
-      <div class="r">
-        <div class="c5-tag">002 / Full Tool Suite</div>
-        <h2 class="c5-h">8 Tools.<br><em>Every Gap Covered.</em></h2>
-      </div>
-      <p class="c5-sub r d2">Not one tool. Not a feature. A complete intelligence layer for your Instagram — from captions to viral analysis to profile optimization. <strong>Everything you need. Nothing you don't.</strong></p>
-    </div>
-
-    <div class="tools-split">
-      <div class="tools-col r fl2">
-        <div class="tools-col-header">
-          <span class="tools-col-tier pro-tier">Content Creation</span>
-          <span class="tools-col-count">4 tools</span>
-        </div>
-        <div class="tl-row">
-          <div class="tl-icon">✦</div>
-          <div><div class="tl-name">Caption Generator</div><div class="tl-desc">3 distinct AI captions per post. Voice-matched to your niche and goal.</div></div>
-        </div>
-        <div class="tl-row">
-          <div class="tl-icon">✦</div>
-          <div><div class="tl-name">Hook Generator</div><div class="tl-desc">5 scroll-stopping opening lines for your next reel. Built to hold attention in the first second.</div></div>
-        </div>
-        <div class="tl-row">
-          <div class="tl-icon">✦</div>
-          <div><div class="tl-name">Hashtag Strategy</div><div class="tl-desc">15 hashtags across 3 tiers — broad, mid, and niche. Strategically tiered for maximum reach.</div></div>
-        </div>
-        <div class="tl-row" style="border-bottom:none">
-          <div class="tl-icon">✦</div>
-          <div><div class="tl-name">Content Calendar</div><div class="tl-desc">Your full week planned from one prompt — what to post, when, and why it works.</div></div>
-        </div>
-      </div>
-
-      <div class="tools-col r fr2 d2">
-        <div class="tools-col-header">
-          <span class="tools-col-tier pro-tier">Intelligence & Analysis</span>
-          <span class="tools-col-count">4 tools</span>
-        </div>
-        <div class="tl-row">
-          <div class="tl-icon">◈</div>
-          <div><div class="tl-name">Pre-Post Checker</div><div class="tl-desc">Upload your content before posting. AI grades it and tells you exactly what to fix.</div></div>
-        </div>
-        <div class="tl-row">
-          <div class="tl-icon">◈</div>
-          <div><div class="tl-name">Viral Post Analyzer</div><div class="tl-desc">Upload any viral post. AI breaks down exactly why it worked and how to replicate it.</div></div>
-        </div>
-        <div class="tl-row">
-          <div class="tl-icon">◈</div>
-          <div><div class="tl-name">Bio Audit</div><div class="tl-desc">Upload your profile screenshot. Get your bio rewritten and a clear action plan to convert more followers.</div></div>
-        </div>
-        <div class="tl-row" style="border-bottom:none">
-          <div class="tl-icon">◈</div>
-          <div><div class="tl-name">Progress Tracking</div><div class="tl-desc">Every generation tracked. Every post marked. See your streak, grades, and momentum score build.</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── FOUNDER ── -->
-<section id="cfounder">
-  <div class="cfounder-inner">
-    <div class="cfounder-left r fl2">
-      <div class="cfounder-tag">from the builder</div>
-      <div class="cfounder-quote r d1">
-        "i spent months posting every single day and watching accounts that posted twice a week pull three times my numbers.<br><br>
-        i bought the courses. used the tools. read the playbooks. none of it was built for the way i actually work.<br><br>
-        so i built PURX. not for the creator with a team and a budget. for the one doing everything alone, trying to make every post count, wondering why the work isn't converting the way it should.<br><br>
-        this is the tool i needed two years ago. seven days free. use it on your next post. if you don't feel the difference, walk away — nothing lost."
-      </div>
-      <div class="cfounder-sig r d2">
-        <div class="cfounder-name">Elijah</div>
-        <div class="cfounder-role">Founder · Creator · Tampa, FL</div>
-      </div>
-    </div>
-    <div class="cfounder-right r fr2 d2">
-      <div class="cfounder-stat-block">
-        <div class="cfsb-item">
-          <div class="cfsb-num">8</div>
-          <div class="cfsb-label">AI tools<br>in one platform</div>
-        </div>
-        <div class="cfsb-div"></div>
-        <div class="cfsb-item">
-          <div class="cfsb-num">7</div>
-          <div class="cfsb-label">days<br>free trial</div>
-        </div>
-        <div class="cfsb-div"></div>
-        <div class="cfsb-item">
-          <div class="cfsb-num">$19</div>
-          <div class="cfsb-label">per month<br>everything included</div>
-        </div>
-      </div>
-      <div class="cfounder-cta-block">
-        <a href="https://purx.live" class="cfounder-cta">Start Free — 10 Generations ↗</a>
-        <div class="cfounder-fine">7-day free trial · $19/month after · cancel anytime</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── SCENE 6: PRICE ── -->
-<section id="c6">
-  <div class="c6-inner">
-    <div class="c6-head r">
-      <div class="c6-tag">003 / Pricing</div>
-      <h2 class="c6-h">One price.<br><em>Everything included.</em></h2>
-    </div>
-    <div class="r d1">
-      <div class="rate">
-        <div class="rate-grid">
-          <div class="r-left">
-            <div class="r-badge">PURX Pro</div>
-            <div class="r-name">Full Access</div>
-            <div class="r-for">All 8 tools · Unlimited generations</div>
-          </div>
-          <div class="r-mid">
-            <div class="r-feat">Caption Generator</div>
-            <div class="r-feat">Hook Generator</div>
-            <div class="r-feat">Hashtag Strategy</div>
-            <div class="r-feat">Content Calendar</div>
-            <div class="r-feat">Pre-Post Checker</div>
-            <div class="r-feat">Viral Post Analyzer</div>
-            <div class="r-feat">Bio Audit</div>
-            <div class="r-feat">Progress Tracking</div>
-          </div>
-          <div class="r-right">
-            <div class="r-price"><span class="r-cur">$</span>19<span class="r-per">/mo</span></div>
-            <div class="r-trial">10 free generations to start</div>
-            <a href="https://buy.stripe.com/14AbJ1cDnaQIfmr3EQ9ws00" class="r-btn">Go Pro Now →</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <p class="rate-note r d2">post once with PURX and feel the difference — or cancel in under 60 seconds · no contracts · no fine print · just results</p>
-  </div>
-</section>
-
-<!-- ── SCENE 7: CLOSE ── -->
-<section id="c7">
-  <div class="c7-left r fl2">
-    <h2 class="c7-h">The gap between<br>you and them<br><em>is a system.</em></h2>
-    <p class="c7-p">You already have the work ethic. You already have the content. PURX gives you the intelligence layer that makes it all click — the captions that sound like you, the plan that keeps you consistent, the analysis that shows you what's actually working. Seven days. See for yourself.</p>
-    <a href="https://purx.live" class="c7-cta">Start Free →</a>
-      <a href="https://buy.stripe.com/14AbJ1cDnaQIfmr3EQ9ws00" style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t2);text-decoration:none;margin-top:4px;display:inline-block;transition:color .25s" onmouseover="this.style.color='var(--t1)'" onmouseout="this.style.color='var(--t2)'">Skip free tier — go Pro now →</a>
-    <div class="c7-note">10 free generations · $19/month after · cancel anytime</div>
-    <div class="wl-social">
-      <div class="wl-av" style="background:rgba(124,58,237,.15)">JR</div>
-      <div class="wl-av" style="background:rgba(16,185,129,.1)">MK</div>
-      <div class="wl-av" style="background:rgba(245,158,11,.1)">TW</div>
-      <div class="wl-av" style="background:rgba(124,58,237,.1)">AL</div>
-      <div class="wl-av" style="background:rgba(16,185,129,.08)">DS</div>
-      <span class="wl-avt">Join the creators already <strong>building smarter</strong></span>
-    </div>
-  </div>
-  <div class="c7-right r fr2 d2">
-    <div class="urg">
-      <div class="urg-top"><div class="urg-dot"></div><span class="urg-label">Live Now</span></div>
-      <div class="urg-h">Start free. Upgrade when ready.</div>
-      <p class="urg-p">Start at <span>purx.live</span>. Run your first caption. Feel the difference immediately. Then decide if $19/month is worth never staring at a blank screen again.</p>
-    </div>
-    <div class="guarantees">
-      <div class="guar"><div class="guar-ck">✓</div>10 free generations the moment you sign up — no card required</div>
-      <div class="guar"><div class="guar-ck">✓</div>Every tool unlocked from day one — not drip-fed over time</div>
-      <div class="guar"><div class="guar-ck">✓</div>If it doesn't make your content process better, cancel in 60 seconds</div>
-      <div class="guar"><div class="guar-ck">✓</div>$19/month is less than what most creators waste on tools that don't work together</div>
-    </div>
-    <div class="c7-bigword">PURX</div>
-  </div>
-</section>
-
-<footer>
-  <a href="#" class="fl">PURX</a>
-  <div class="flinks">
-    <a href="#">Privacy</a>
-    <a href="#">Terms</a>
-    <a href="mailto:hello@purx.live">Contact</a>
-  </div>
-  <span class="fc">© 2026 PURX · Tampa, FL</span>
-</footer>
-
-<script>
-// Cursor
-const cur=document.getElementById('cur');
-let mx=0,my=0,cx=0,cy=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
-(function lp(){cx+=(mx-cx)*.13;cy+=(my-cy)*.13;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(lp)})();
-document.querySelectorAll('a,button,.tool-pill').forEach(el=>{
-  el.addEventListener('mouseenter',()=>cur.classList.add('big'));
-  el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
-});
-
-// Nav
-const nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>nav.classList.toggle('on',scrollY>60));
-
-// Scroll reveal
-const ro=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.06});
-document.querySelectorAll('.r').forEach(el=>ro.observe(el));
-
-// Parallax glow
-const c1glow=document.querySelector('.c1-glow');
-window.addEventListener('scroll',()=>{if(c1glow)c1glow.style.transform=`translate(-50%,-52%) translateY(${scrollY*.25}px)`});
-
-// Demo tab switching
-function demoSwitch(tool, btn) {
-  document.querySelectorAll('.purx-demo-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.purx-demo-panel').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('demo-' + tool).classList.add('active');
-}
-
-// Copy button interaction
-document.addEventListener('click', e => {
-  if (e.target.classList.contains('purx-copy-btn')) {
-    const card = e.target.closest('.purx-demo-card');
-    const text = card ? card.querySelector('.purx-demo-card-body').textContent : '';
-    navigator.clipboard.writeText(text).catch(() => {});
-    e.target.textContent = 'Copied!';
-    setTimeout(() => e.target.textContent = 'Copy', 1500);
-  }
-});
-
-// Demo AI — calls PURX worker
-const WORKER='https://purx-api.elijahfisher51.workers.dev';
-const PROMPTS={
-  caption:(n,g,b)=>`You are PURX, a premium Instagram growth platform. Generate ONE Instagram caption for a ${n} creator. ${g?'Goal: '+g+'.':''} Post: "${b||'premium lifestyle content, aspirational aesthetic'}". Style: lowercase, effortless, understated — cool and minimal. 1-2 short sentences max. Include 3 sharp relevant hashtags. Output ONLY the caption — no quotes, no explanation.`,
-  hook:(n,g,b)=>`You are PURX. Generate exactly 5 high-retention Reel opening hooks for a ${n} creator. Goal: ${g}. Reel: "${b||'premium lifestyle content'}". Each hook: punchy, scroll-stopping, 1-2 sentences. Numbered 1-5. Make them feel human. Output hooks only — no intro, no explanation.`,
-  hashtag:(n,d,b)=>`You are PURX. Generate a strategic 15-hashtag set for a ${n} creator. Post: "${b||'premium aesthetic content'}". Organize into exactly 3 groups: BROAD (5 tags, 1M+ posts), MID-TIER (5 tags, 100K-1M), NICHE (5 tags, under 100K). Output hashtags only — no explanation.`,
-  calendar:(n,g,b)=>`You are PURX. Build a 7-day Instagram content calendar for a ${n} creator. Goal: ${g}. Theme: "${b||'lifestyle and growth content'}". For each day: post type, concept/hook idea, best time to post. Format clean and scannable. Output only.`
-};
-
-async function runTool(tool){
-  const configs={
-    caption:{n:'cap-niche',g:'cap-goal',b:'cap-brief',btn:'cap-btn',out:'cap-out',ld:'cap-ld',tags:'cap-tags'},
-    hook:{n:'hook-niche',g:'hook-goal',b:'hook-brief',btn:'hook-btn',out:'hook-out',ld:'hook-ld',tags:'hook-tags'},
-    hashtag:{n:'ht-niche',g:'ht-detail',b:'ht-brief',btn:'ht-btn',out:'ht-out',ld:'ht-ld',tags:'ht-tags'},
-    calendar:{n:'cal-niche',g:'cal-goal',b:'cal-brief',btn:'cal-btn',out:'cal-out',ld:'cal-ld',tags:'cal-tags'}
-  };
-  const c=configs[tool];
-  const n=document.getElementById(c.n).value;
-  const g=document.getElementById(c.g)?document.getElementById(c.g).value:'';
-  const b=document.getElementById(c.b).value.trim();
-  const btn=document.getElementById(c.btn);
-  const out=document.getElementById(c.out);
-  const ld=document.getElementById(c.ld);
-  const tags=document.getElementById(c.tags);
-  btn.disabled=true;btn.textContent='Generating...';
-  out.innerHTML='';ld.classList.add('on');tags.style.display='none';
-  try{
-    const res=await fetch(WORKER,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({prompt:PROMPTS[tool](n,g,b)})
-    });
-    const data=await res.json();
-    const text=data.ok?data.text:'Something went wrong — try again.';
-    out.innerHTML='<span style="white-space:pre-wrap;font-style:italic">'+text.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span>';
-    tags.style.display='flex';
-  }catch(e){
-    out.innerHTML='<span style="color:var(--red);font-size:11px;font-style:normal">Connection error — try again.</span>';
-  }
-  ld.classList.remove('on');
-  const labels={caption:'Generate Caption ↗',hook:'Generate 5 Hooks ↗',hashtag:'Generate Strategy ↗',calendar:'Build My Week ↗'};
-  btn.disabled=false;btn.textContent=labels[tool];
-}
-
-// Magnetic CTAs
-document.querySelectorAll('.btn-w,.nb,.r-btn,.c7-cta,.cfounder-cta').forEach(btn=>{
-  btn.addEventListener('mousemove',e=>{const r=btn.getBoundingClientRect();btn.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.09}px,${(e.clientY-r.top-r.height/2)*.09}px)`});
-  btn.addEventListener('mouseleave',()=>btn.style.transform='');
-});
-</script>
-</body>
-</html>
+  
