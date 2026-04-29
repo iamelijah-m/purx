@@ -3113,42 +3113,26 @@ ACTION SEQUENCE:
 Output only the formatted sections above. No preamble.`,
 
   hashtag:(niche,brief,profileCtx)=>
-    `You are PURX — an Instagram growth strategist who understands how hashtag discovery actually works right now. You know that hashtag strategy is not about volume — it is about precision. The right tags put your content in front of the right people at the right moment. The wrong tags bury it instantly.
+    `You are PURX. Generate a strategic Instagram hashtag set for a ${niche} creator.
+POST: "${brief || 'premium ' + niche + ' content'}"
+${profileCtx ? 'CREATOR: ' + profileCtx : ''}
 
-CREATOR PROFILE: ${profileCtx || 'A serious Instagram creator'}
+Return ONLY this exact format with no other text:
 
-TASK: Generate a strategic 15-hashtag set for this ${niche} creator. Post: "${brief || 'premium ' + niche + ' content'}".
+BROAD (1M-5M posts):
+#tag1 #tag2 #tag3 #tag4 #tag5
 
-Format EXACTLY like this:
-
-BROAD (1M–5M posts):
-[5 hashtags]
-STRATEGY: [Who finds your post here, what the competition looks like, and what engagement signal you need in the first 30 minutes to stay visible in this tier]
-
-MID-TIER (50K–500K posts):
-[5 hashtags]
-STRATEGY: [Why this tier is the highest-value play for a ${niche} creator, who actively searches these tags, and how long your post stays discoverable here]
+MID-TIER (50K-500K posts):
+#tag1 #tag2 #tag3 #tag4 #tag5
 
 NICHE (under 50K posts):
-[5 hashtags]
-STRATEGY: [The specific type of follower who lives in these tags, why they convert to loyal followers at a higher rate, and why this tier protects your account from bot engagement]
+#tag1 #tag2 #tag3 #tag4 #tag5
 
-POSTING SCHEDULE:
-[Best days and times for hashtag discovery. Put EACH DAY ON ITS OWN LINE. Format exactly:
-Monday — 7:00 PM EST — [reason]
-Tuesday — [time] — [reason]
-Cover at least 4 days. Specific to ${niche} content discovery patterns.]
+AVOID:
+#badtag1 #badtag2 #badtag3
 
-POSTING ORDER TIP:
-[Caption vs first comment — what works best for ${niche} content right now and exactly why it matters for reach]
-
-HASHTAGS TO AVOID:
-[3 specific hashtags that seem relevant but will hurt this post — with a precise reason for each: bot activity, oversaturation, wrong audience, or algorithm penalty]
-
-ACTION SEQUENCE:
-[3 steps: 1) What to do with hashtags right at posting, 2) What to check 1 hour after posting, 3) How to use these hashtags in stories to compound reach]
-
-Every hashtag must be real, active, and directly relevant to ${niche} and this specific post. Output only the formatted sections above.`
+POSTING TIP:
+[One sentence on when and how to use these tags for maximum reach]`
 };async function runTool(tool) {
   const configs = {
     caption:{
@@ -3715,7 +3699,7 @@ function renderRichOutput(textId, rawText) {
   // Detect tool type — broad matching to handle Haiku formatting variations
   const isCap = upper.includes('CAPTION 1') || upper.includes('CAPTION 2') || upper.includes('PURX VERDICT') || upper.includes('WHY THIS WORKS') || (upper.includes('POSTING SCHEDULE') && upper.includes('ACTION SEQUENCE') && !upper.includes('HOOKS:'));
   const isHook = upper.includes('HOOKS:') || upper.includes('HOOK BREAKDOWN') || upper.includes('BEST HOOK FOR REACH') || upper.includes('DELIVERY NOTE');
-  const isHash = (upper.includes('BROAD') && upper.includes('MID-TIER')) || (upper.includes('BROAD') && upper.includes('NICHE') && upper.includes('#'));
+  const isHash = (upper.includes('BROAD') && upper.includes('MID-TIER')) || (upper.includes('BROAD') && upper.includes('NICHE') && upper.includes('#')) || (upper.includes('MID-TIER') && upper.includes('NICHE'));
 
   if (isCap) renderCaptionOutput(el, lines);
   else if (isHook) renderHookOutput(el, lines);
@@ -3928,42 +3912,52 @@ function renderHookOutput(el, lines) {
 function renderHashtagOutput(el, lines) {
   const text = lines.join('\n');
 
-  function getTier(label, nextLabel) {
-    const idx = text.toUpperCase().indexOf(label.toUpperCase());
-    if (idx === -1) return { tags: '', strategy: '' };
-    const nextIdx = nextLabel ? text.toUpperCase().indexOf(nextLabel.toUpperCase()) : text.length;
-    const chunk = text.substring(idx + label.length, nextIdx > idx ? nextIdx : text.length);
-    const chunkLines = chunk.split('\n').map(l => l.trim()).filter(l => l);
-    let tags = '', strategy = '';
-    chunkLines.forEach(l => {
-      const up = l.toUpperCase();
-      if (up.startsWith('STRATEGY:')) strategy = l.substring(9).trim();
-      else if (l.includes('#')) tags += (tags ? ' ' : '') + l;
+  function getTags(label, nextLabels) {
+    const up = text.toUpperCase();
+    const idx = up.indexOf(label.toUpperCase());
+    if (idx === -1) return '';
+    let end = text.length;
+    nextLabels.forEach(function(nl) {
+      const ni = up.indexOf(nl.toUpperCase());
+      if (ni > idx && ni < end) end = ni;
     });
-    return { tags, strategy };
+    const chunk = text.substring(idx + label.length, end);
+    // Extract all hashtags from this chunk
+    const tags = chunk.match(/#[\w]+/g);
+    return tags ? tags.join(' ') : '';
   }
 
-  const broad = getTier('BROAD', 'MID-TIER');
-  const mid = getTier('MID-TIER', 'NICHE');
-  const niche = getTier('NICHE', 'POSTING SCHEDULE');
-  const schedule = getSectionContent(lines, 'POSTING SCHEDULE:', ['POSTING ORDER TIP:']);
-  const posting = getSectionContent(lines, 'POSTING ORDER TIP:', ['HASHTAGS TO AVOID:']);
-  const avoid = getSectionContent(lines, 'HASHTAGS TO AVOID:', ['ACTION SEQUENCE:']);
-  const action = getSectionContent(lines, 'ACTION SEQUENCE:', []);
+  function getText(label, nextLabels) {
+    const up = text.toUpperCase();
+    const idx = up.indexOf(label.toUpperCase());
+    if (idx === -1) return '';
+    let end = text.length;
+    nextLabels.forEach(function(nl) {
+      const ni = up.indexOf(nl.toUpperCase());
+      if (ni > idx && ni < end) end = ni;
+    });
+    return text.substring(idx + label.length, end).replace(/#[\w]+/g, '').trim().split('\n').map(function(l){ return l.trim(); }).filter(Boolean).join(' ');
+  }
+
+  const broad = getTags('BROAD', ['MID-TIER', 'NICHE', 'AVOID', 'POSTING']);
+  const mid   = getTags('MID-TIER', ['NICHE', 'AVOID', 'POSTING']);
+  const niche = getTags('NICHE', ['AVOID', 'POSTING']);
+  const avoid = getTags('AVOID', ['POSTING']);
+  const tip   = getText('POSTING TIP:', []);
 
   el.innerHTML =
     '<div class="ht-output-wrap">' +
     '<div class="ht-tier-grid">' +
-      htTier('broad', 'BROAD', '1M to 5M posts', broad.tags, broad.strategy) +
-      htTier('mid', 'MID-TIER', '50K to 500K posts', mid.tags, mid.strategy) +
-      htTier('niche', 'NICHE', 'Under 50K posts', niche.tags, niche.strategy) +
+      htTier('broad', 'BROAD', '1M–5M posts', broad, '') +
+      htTier('mid',   'MID-TIER', '50K–500K posts', mid, '') +
+      htTier('niche', 'NICHE', 'Under 50K posts', niche, '') +
     '</div>' +
-    '<div class="ht-bottom-grid">' +
-      '<div class="ht-bottom-card amber" style="grid-column:1/-1"><div class="ht-bottom-card-label">Posting Schedule</div><div class="ht-bottom-card-val" style="white-space:pre-line">' + escH(formatSchedule(schedule)) + '</div></div>' +
-      '<div class="ht-bottom-card amber"><div class="ht-bottom-card-label">Posting Order Tip</div><div class="ht-bottom-card-val">' + escH(posting) + '</div></div>' +
-      '<div class="ht-bottom-card red"><div class="ht-bottom-card-label">Hashtags to Avoid</div><div class="ht-bottom-card-val">' + escH(avoid) + '</div></div>' +
-      '<div class="ht-bottom-card amber" style="grid-column:1/-1"><div class="ht-bottom-card-label">Action Sequence — Do This Now</div><div class="ht-bottom-card-val" style="white-space:pre-line">' + escH(formatSchedule(action)) + '</div></div>' +
-    '</div>' +
+    (avoid ? '<div class="ht-bottom-card red" style="margin-top:10px"><div class="ht-bottom-card-label">Hashtags to Avoid</div><div class="ht-tier-tags">' +
+      avoid.split(/\s+/).filter(function(t){ return t.startsWith('#'); }).map(function(t){
+        return '<span class="ht-tag-pill" style="background:rgba(239,68,68,.08);color:var(--red);border-color:rgba(239,68,68,.2)">' + escH(t) + '</span>';
+      }).join('') +
+    '</div></div>' : '') +
+    (tip ? '<div class="ht-bottom-card amber" style="margin-top:10px"><div class="ht-bottom-card-label">Posting Tip</div><div class="ht-bottom-card-val">' + escH(tip) + '</div></div>' : '') +
     '</div>';
 }
 
