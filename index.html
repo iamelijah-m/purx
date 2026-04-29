@@ -3704,19 +3704,33 @@ function stripMd(str) {
 function renderRichOutput(textId, rawText) {
   const el = document.getElementById(textId);
   const text = stripMd(rawText);
+  const upper = text.toUpperCase();
   const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
-  // Detect tool type by looking for key section labels
-  const isCap = text.includes('CAPTION 1') || text.includes('CAPTION 2') || text.includes('PURX VERDICT:') || text.includes('WHY THIS WORKS:') || text.includes('POSTING SCHEDULE:');
-  const isHook = text.includes('HOOKS:') || text.includes('HOOK BREAKDOWN:');
-  const isHash = text.includes('BROAD') && text.includes('MID-TIER');
+  // Detect tool type — broad matching to handle Haiku formatting variations
+  const isCap = upper.includes('CAPTION 1') || upper.includes('CAPTION 2') || upper.includes('PURX VERDICT') || upper.includes('WHY THIS WORKS') || (upper.includes('POSTING SCHEDULE') && upper.includes('ACTION SEQUENCE') && !upper.includes('HOOKS:'));
+  const isHook = upper.includes('HOOKS:') || upper.includes('HOOK BREAKDOWN') || upper.includes('BEST HOOK FOR REACH') || upper.includes('DELIVERY NOTE');
+  const isHash = (upper.includes('BROAD') && upper.includes('MID-TIER')) || (upper.includes('BROAD') && upper.includes('NICHE') && upper.includes('#'));
 
   if (isCap) renderCaptionOutput(el, lines);
   else if (isHook) renderHookOutput(el, lines);
   else if (isHash) renderHashtagOutput(el, lines);
   else {
-    // Fallback: plain text
-    el.innerHTML = '<div style="font-size:14px;color:var(--t1);line-height:1.75;white-space:pre-wrap">' + escH(text) + '</div>';
+    // Fallback: clean styled sections instead of raw pre-wrap
+    const rendered = text.split('\n').map(line => {
+      const t = line.trim();
+      if (!t) return '';
+      // Section headers (ALL CAPS ending in colon)
+      if (/^[A-Z][A-Z\s]+:$/.test(t)) {
+        return '<div style="font-family:var(--mono);font-size:9px;color:var(--purple3);letter-spacing:.18em;text-transform:uppercase;margin-top:20px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)">' + escH(t) + '</div>';
+      }
+      // Numbered items
+      if (/^\d+[\.\)]\s/.test(t)) {
+        return '<div style="font-size:14px;color:var(--t1);line-height:1.7;padding:6px 0 6px 16px;border-left:2px solid var(--purple);margin-bottom:6px">' + escH(t) + '</div>';
+      }
+      return '<div style="font-size:14px;color:var(--t2);line-height:1.75;padding:3px 0">' + escH(t) + '</div>';
+    }).filter(Boolean).join('');
+    el.innerHTML = '<div style="padding:4px 0">' + rendered + '</div>';
   }
 }
 
@@ -4773,7 +4787,8 @@ async function runVpa() {
     output.style.display = 'flex';
     setTimeout(function(){ output.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
     // Save to history
-    saveGeneration('viral', raw);
+    await saveGeneration('viral', raw);
+    loadStats();
   } catch(e) {
     showToast('Could not analyze — check your connection and try again');
     console.error('VPA error:', e);
@@ -5029,7 +5044,8 @@ async function runBioAudit() {
     renderBioOutput(data, output);
     output.style.display = 'flex';
     setTimeout(function(){ output.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
-    saveGeneration('bioaudit', raw);
+    await saveGeneration('bioaudit', raw);
+    loadStats();
   } catch(e) {
     showToast('Could not audit — try again');
     console.error('Bio audit error:', e);
