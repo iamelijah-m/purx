@@ -3880,10 +3880,6 @@ function renderHookOutput(el, lines) {
         '<div class="hook-bottom-card-label">Reel Posting Schedule</div>' +
         '<div class="hook-bottom-card-val" style="white-space:pre-line">' + escH(formatSchedule(schedule)) + '</div>' +
       '</div>' +
-      '<div class="hook-bottom-card amber" style="grid-column:1/-1">' +
-        '<div class="hook-bottom-card-label">Action Sequence — Do This Now</div>' +
-        '<div class="hook-bottom-card-val" style="white-space:pre-line">' + escH(formatSchedule(action)) + '</div>' +
-      '</div>' +
     '</div>' +
     '</div>';
 }
@@ -5302,22 +5298,6 @@ function addMarkPostedBtn(container, genId) {
 }
 
 
-
-function renderActionList(action) {
-  var lines = action.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
-  if(!lines.length) return '';
-  var items = lines.map(function(line, i) {
-    var text = line.replace(/^\d+[.)\s]+/, '').trim();
-    return '<div style="display:flex;gap:14px;padding:14px 18px;border-bottom:1px solid var(--border);align-items:flex-start">' +
-      '<div style="font-family:var(--display);font-size:22px;font-weight:900;color:var(--purple2);flex-shrink:0;line-height:1.1;min-width:22px">' + (i+1) + '</div>' +
-      '<div style="font-size:13px;color:var(--t2);line-height:1.65;padding-top:3px">' + escH(text) + '</div>' +
-    '</div>';
-  }).join('');
-  return '<div style="margin-top:10px;background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden">' +
-    '<div style="padding:12px 18px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--purple3)">Do This Now</div>' +
-    items +
-  '</div>';
-}
 
 function renderScheduleTable(schedule) {
   var dayNames = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
