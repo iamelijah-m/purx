@@ -3783,8 +3783,8 @@ function renderCaptionOutput(el, lines) {
   var verdict = getSectionContent(lines, 'PURX VERDICT:', ['BEST TIME TO POST:','WHY THIS WORKS:','POSTING SCHEDULE:']);
   var why = getSectionContent(lines, 'WHY THIS WORKS:', ['BEST TIME TO POST:','POSTING SCHEDULE:','PERFORMANCE TIP:']);
   var schedule = getSectionContent(lines, 'BEST TIME TO POST:', ['ACTION SEQUENCE:','PERFORMANCE TIP:']);
-  var tip = getSectionContent(lines, 'PERFORMANCE TIP:', ['ACTION SEQUENCE:','CAPTION VOICE NOTE:']);
-  var action = getSectionContent(lines, 'ACTION SEQUENCE:', ['CAPTION VOICE NOTE:']);
+  var tip = getSectionContent(lines, 'PERFORMANCE TIP:', ['CAPTION VOICE NOTE:']);
+  var action = '';
 
   function makeCard(text, cls, label, icon, num) {
     if(!text) return '';
