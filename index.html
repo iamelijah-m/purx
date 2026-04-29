@@ -3022,95 +3022,75 @@ function copyModal(){
 // ── AI TOOLS ──
 const PROMPTS = {
   caption:(niche,goal,brief,profileCtx)=>
-    `You are PURX — an elite Instagram strategist. Generate 3 distinct captions for this ${niche} creator, each targeting a different goal.
+    `You are PURX — an elite Instagram copywriter who has studied thousands of viral posts in the ${niche} space. You understand that the best captions don't sound like marketing — they sound like a real person who is confident, specific, and doesn't try too hard.
 
-CREATOR PROFILE: ${profileCtx || 'A serious Instagram creator'}
-POST: "${brief || 'premium lifestyle content'}"
+CREATOR: ${profileCtx || 'A serious ' + niche + ' creator building a personal brand on Instagram'}
+POST: "${brief || 'premium ' + niche + ' content, clean and intentional'}"
 
-Write all 3 in all lowercase. 2-3 lines max each. Tight, human, no filler. End each with a question or saveable line. 4-5 hashtags below each caption.
+Write 3 captions. Each one must feel completely different — different angle, different emotional trigger, different length. None of them should sound like they came from an AI or a template.
 
-Use EXACTLY these labels:
+RULES:
+- All lowercase. No exclamation marks. No cringe.
+- Specific beats vague — reference actual details from the post description
+- The best line comes first — don't bury the hook
+- Each caption should make someone either stop scrolling, save it, or want to send it to someone
+- Sound like the creator, not like a brand account
+- 4-5 tight relevant hashtags at the end of each, no generic ones
 
-CAPTION 1 — GROW REACH:
-[Caption to maximize reach and new followers. Hook pulls in people who don't follow yet.]
+CAPTION 1 — REACH (pulls in people who don't follow yet):
+[Write it]
 
-CAPTION 2 — DRIVE ENGAGEMENT:
-[Caption to spark comments. Asks something people actually want to answer.]
+CAPTION 2 — ENGAGEMENT (makes current followers comment or tag someone):
+[Write it]
 
-CAPTION 3 — GET SAVES:
-[Caption to earn saves and shares. A line people want to keep or send to someone.]
+CAPTION 3 — SAVES (something worth keeping — a line, a truth, a feeling):
+[Write it]
 
 PURX VERDICT:
-[One sentence. Which of the 3 to post first and exactly why. Strategist voice, not AI.]
+[One sentence. Which caption to post first and the specific reason why — based on this creator's niche and post. No fluff.]
 
-WHY THIS WORKS:
-[2 sentences max. Specific psychological reason these stop the scroll for ${niche}.]
+BEST TIME TO POST:
+[Day and time + one-line reason specific to ${niche} audience behavior]
 
-POSTING SCHEDULE:
-[All 7 days. Best time each day. One per line:
-Monday — 7:00 PM EST — [2-4 word reason]
-Tuesday — [time] — [reason]
-Wednesday — [time] — [reason]
-Thursday — [time] — [reason]
-Friday — [time] — [reason]
-Saturday — [time] — [reason]
-Sunday — [time] — [reason]]
-
-PERFORMANCE TIP:
-[One sentence. Most important thing in the first 30 minutes after posting.]
-
-ACTION SEQUENCE:
-[3 steps. One sentence each. What to do right now.]
-
-Output ONLY the labeled sections above. No preamble. No extra text.`,
+Output only the labeled sections. No preamble. No explanation.`,
 
   hook:(niche,brief,style,profileCtx)=>
-    `You are PURX — an elite Instagram Reels strategist who understands the real mechanics of why people stop scrolling and keep watching. You think about attention as a finite resource and you know that the first 1-2 seconds of a reel determine everything — whether it gets pushed or buried.
+    `You are PURX — a Reels strategist who knows that the first 2 seconds determine everything. You've studied what actually stops the scroll in the ${niche} space — not what sounds good in theory, but what works right now.
 
-CREATOR PROFILE: ${profileCtx || 'A serious Instagram creator'}
+CREATOR: ${profileCtx || 'A serious ' + niche + ' creator'}
+REEL: "${brief || 'a premium, intentional ' + niche + ' moment'}"
+STYLE: ${style}
 
-TASK: Generate 5 scroll-stopping Reel opening hooks for this ${niche} creator. Hook style: ${style}. Reel concept: "${brief || 'a premium, aspirational lifestyle moment'}".
+Write 5 hooks. Each one must be completely different — different structure, different emotional trigger, different length. Every hook should feel like it was written by someone who lives in the ${niche} space, not by an AI.
 
-HOOK REQUIREMENTS:
-- Each hook lands in the first 1-2 seconds — spoken or on-screen text
-- Written the way a real person in the ${niche} space actually talks
-- Creates an open loop, tension, or pattern interrupt immediately
-- Specific enough to feel real — vague hooks get skipped
-- Each one uses a different emotional trigger and angle
-- Never use: "Nobody tells you this", "I need to talk about", "Here's what I learned", "POV:" alone — these are dead
+DEAD hooks (never use these patterns): "Nobody tells you this", "POV:" alone, "Here's what I learned", "I need to talk about", "This changed everything"
 
-Format EXACTLY like this:
+What makes a hook work: specificity, tension, an open loop the viewer has to close, or a statement so true it feels personal.
 
 HOOKS:
-1. [hook]
+1. [hook — 1-2 sentences max, spoken or on-screen text]
 2. [hook]
 3. [hook]
 4. [hook]
 5. [hook]
 
 HOOK BREAKDOWN:
-1. [One sentence: the mechanism + why it works for ${niche} now]
-2. [One sentence]
-3. [One sentence]
-4. [One sentence]
-5. [One sentence]
+1. [Why this works — the specific mechanism, in one sentence]
+2. [Why this works]
+3. [Why this works]
+4. [Why this works]
+5. [Why this works]
 
-BEST HOOK FOR REACH:
-[Hook number + one sentence why it wins for ${niche}. That's it.]
-
-POSTING SCHEDULE:
-[Full week Reel posting schedule. Put EACH DAY ON ITS OWN LINE. Format exactly:
-Monday — 7:00 PM EST — [reason]
-Tuesday — [time] — [reason]
-Cover at least 4 days. Specific to ${niche} audience behavior.]
+BEST HOOK:
+[Number + one sentence on why it wins for this specific reel in the ${niche} space]
 
 DELIVERY NOTE:
-[Exactly how to deliver this hook on camera or as text — pace, placement, energy, timing — to maximize the first 2 seconds]
+[Exactly how to deliver the best hook — pace, energy, on-screen vs spoken, timing — in 2 sentences]
 
-ACTION SEQUENCE:
-[3 steps: 1) What to do right before posting the reel, 2) What to do within the first hour, 3) What to do 24 hours later to push the algorithm again]
+BEST TIME TO POST:
+[Day, time, and one-line reason specific to ${niche} Reels performance]
 
-Output only the formatted sections above. No preamble.`,
+Output only the labeled sections. No preamble.`,
 
   hashtag:(niche,brief,profileCtx)=>
     `You are PURX. Generate a strategic Instagram hashtag set for a ${niche} creator.
@@ -3697,8 +3677,8 @@ function renderRichOutput(textId, rawText) {
   const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
   // Detect tool type — broad matching to handle Haiku formatting variations
-  const isCap = upper.includes('CAPTION 1') || upper.includes('CAPTION 2') || upper.includes('PURX VERDICT') || upper.includes('WHY THIS WORKS') || (upper.includes('POSTING SCHEDULE') && upper.includes('ACTION SEQUENCE') && !upper.includes('HOOKS:'));
-  const isHook = upper.includes('HOOKS:') || upper.includes('HOOK BREAKDOWN') || upper.includes('BEST HOOK FOR REACH') || upper.includes('DELIVERY NOTE');
+  const isCap = upper.includes('CAPTION 1') || upper.includes('CAPTION 2') || upper.includes('PURX VERDICT') || upper.includes('CAPTION 3');
+  const isHook = upper.includes('HOOKS:') || upper.includes('HOOK BREAKDOWN') || upper.includes('BEST HOOK FOR REACH') || upper.includes('DELIVERY NOTE') || upper.includes('BEST HOOK:');
   const isHash = (upper.includes('BROAD') && upper.includes('MID-TIER')) || (upper.includes('BROAD') && upper.includes('NICHE') && upper.includes('#')) || (upper.includes('MID-TIER') && upper.includes('NICHE'));
 
   if (isCap) renderCaptionOutput(el, lines);
@@ -3800,9 +3780,9 @@ function renderCaptionOutput(el, lines) {
   var cap1 = getCaption(1);
   var cap2 = getCaption(2);
   var cap3 = getCaption(3);
-  var verdict = getSectionContent(lines, 'PURX VERDICT:', ['WHY THIS WORKS:','POSTING SCHEDULE:']);
-  var why = getSectionContent(lines, 'WHY THIS WORKS:', ['POSTING SCHEDULE:','PERFORMANCE TIP:']);
-  var schedule = getSectionContent(lines, 'POSTING SCHEDULE:', ['PERFORMANCE TIP:','ACTION SEQUENCE:']);
+  var verdict = getSectionContent(lines, 'PURX VERDICT:', ['BEST TIME TO POST:','WHY THIS WORKS:','POSTING SCHEDULE:']);
+  var why = getSectionContent(lines, 'WHY THIS WORKS:', ['BEST TIME TO POST:','POSTING SCHEDULE:','PERFORMANCE TIP:']);
+  var schedule = getSectionContent(lines, 'BEST TIME TO POST:', ['ACTION SEQUENCE:','PERFORMANCE TIP:']);
   var tip = getSectionContent(lines, 'PERFORMANCE TIP:', ['ACTION SEQUENCE:','CAPTION VOICE NOTE:']);
   var action = getSectionContent(lines, 'ACTION SEQUENCE:', ['CAPTION VOICE NOTE:']);
 
@@ -3853,13 +3833,13 @@ function extractHookType(breakdown) {
 }
 
 function renderHookOutput(el, lines) {
-  const allLabels = ['HOOKS:','HOOK BREAKDOWN:','BEST HOOK FOR REACH:','POSTING SCHEDULE:','DELIVERY NOTE:','ACTION SEQUENCE:'];
+  const allLabels = ['HOOKS:','HOOK BREAKDOWN:','BEST HOOK:','DELIVERY NOTE:','BEST TIME TO POST:','ACTION SEQUENCE:'];
   const hooksRaw = getSectionContent(lines, 'HOOKS:', allLabels.slice(1));
   const breakdownRaw = getSectionContent(lines, 'HOOK BREAKDOWN:', allLabels.slice(2));
-  const best = getSectionContent(lines, 'BEST HOOK FOR REACH:', allLabels.slice(3));
-  const schedule = getSectionContent(lines, 'POSTING SCHEDULE:', allLabels.slice(4));
-  const delivery = getSectionContent(lines, 'DELIVERY NOTE:', allLabels.slice(5));
-  const action = getSectionContent(lines, 'ACTION SEQUENCE:', []);
+  const best = getSectionContent(lines, 'BEST HOOK:', allLabels.slice(3));
+  const delivery = getSectionContent(lines, 'DELIVERY NOTE:', allLabels.slice(4));
+  const schedule = getSectionContent(lines, 'BEST TIME TO POST:', allLabels.slice(5));
+  const action = '';
 
   const hookLines = hooksRaw.split(/(?=\d+\.\s)/).map(h => h.trim()).filter(h => h);
   const breakdownLines = breakdownRaw.split(/(?=\d+\.\s)/).map(b => b.trim()).filter(b => b);
