@@ -313,13 +313,9 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
   .app-content{padding:32px 16px 100px}
   .usage-badge{display:none}
   .app-footer{display:none !important}
-  /* iOS zoom prevention — any input <16px causes zoom on focus */
   .form-input,.form-select,.form-textarea,.auth-input{font-size:16px!important}
-  /* Pill touch targets — boost for thumb taps */
   .pill{padding:12px 20px;min-height:44px;display:inline-flex;align-items:center}
-  /* Panel back button — larger tap target */
   .panel-back{padding:12px 24px;min-height:44px}
-  /* Copy/regen buttons */
   .copy-btn,.regen-btn{padding:12px 22px;min-height:44px}
 }
 @media(min-width:769px){
@@ -1295,7 +1291,6 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
   cursor:pointer;margin-top:4px;transition:color .2s;
 }
 .bug-cancel:hover{color:var(--t2)}
-
 /* ── PASSWORD RECOVERY MODAL ── */
 .recovery-overlay{
   position:fixed;inset:0;z-index:600;
@@ -1946,7 +1941,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
         <div class="upgrade-banner-text">
           <div class="upgrade-banner-eyebrow">Free Plan</div>
           <div class="upgrade-banner-title">Upgrade to Pro</div>
-          <div class="upgrade-banner-desc">$19/month · 10 free generations · Cancel anytime</div>
+          <div class="upgrade-banner-desc">$19/month · Cancel anytime</div>
         </div>
         <a href="https://buy.stripe.com/14AbJ1cDnaQIfmr3EQ9ws00" target="_blank" class="upgrade-btn">Upgrade Now →</a>
       </div>
@@ -1970,8 +1965,10 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 
       <div class="form-section" style="margin-bottom:16px">
         <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)">Change Password</div>
-        <label class="form-label" style="margin-top:0">New password</label>
-        <input class="form-input" id="settings-new-pass" type="password" placeholder="Min 6 characters">
+        <label class="form-label" style="margin-top:0">Current password</label>
+        <input class="form-input" id="settings-current-pass" type="password" placeholder="Your current password" autocomplete="current-password">
+        <label class="form-label">New password</label>
+        <input class="form-input" id="settings-new-pass" type="password" placeholder="Min 6 characters" autocomplete="new-password">
         <label class="form-label">Confirm new password</label>
         <input class="form-input" id="settings-confirm-pass" type="password" placeholder="Repeat password">
         <button class="gen-btn" onclick="changePassword()" style="margin-top:24px">Update Password →</button>
@@ -2537,7 +2534,6 @@ var lastCheckerGenId = null;
 sb.auth.onAuthStateChange((event, session) => {
   currentUser = session?.user ?? null;
   if (event === 'PASSWORD_RECOVERY') {
-    // User clicked reset link in email — show password set modal
     document.getElementById('recovery-overlay').classList.add('open');
     return;
   }
@@ -2578,7 +2574,6 @@ function showApp() {
 function showAuth() {
   document.getElementById('app-screen').classList.remove('active');
   document.getElementById('auth-screen').classList.add('active');
-  const fab=document.getElementById('bug-fab');if(fab)fab.style.display='none';
 }
 
 // ── AUTH ──
@@ -2656,22 +2651,34 @@ async function saveSettings() {
 }
 
 async function changePassword() {
+  const currentPass = document.getElementById('settings-current-pass').value;
   const newPass = document.getElementById('settings-new-pass').value;
   const confirmPass = document.getElementById('settings-confirm-pass').value;
   const msg = document.getElementById('settings-pass-msg');
-  const btn = event.target;
-  if(!newPass || newPass.length < 6) { msg.style.color='var(--red)'; msg.textContent='Password must be 6+ characters.'; return; }
+  const btn = document.querySelector('[onclick="changePassword()"]');
+  if(!currentPass) { msg.style.color='var(--red)'; msg.textContent='Enter your current password.'; return; }
+  if(!newPass || newPass.length < 6) { msg.style.color='var(--red)'; msg.textContent='New password must be 6+ characters.'; return; }
   if(newPass !== confirmPass) { msg.style.color='var(--red)'; msg.textContent='Passwords do not match.'; return; }
+  if(currentPass === newPass) { msg.style.color='var(--red)'; msg.textContent='New password must be different.'; return; }
   btn.disabled=true; btn.textContent='Updating...';
+  const email = currentUser?.email;
+  const {error: reAuthError} = await sb.auth.signInWithPassword({email, password: currentPass});
+  if(reAuthError) {
+    msg.style.color='var(--red)';
+    msg.textContent='Current password is incorrect.';
+    btn.disabled=false; btn.textContent='Update Password →';
+    return;
+  }
   const {error} = await sb.auth.updateUser({password: newPass});
   if(error) { msg.style.color='var(--red)'; msg.textContent=error.message; }
   else {
     msg.style.color='var(--green)'; msg.textContent='Password updated ✓';
+    document.getElementById('settings-current-pass').value='';
     document.getElementById('settings-new-pass').value='';
     document.getElementById('settings-confirm-pass').value='';
   }
   btn.disabled=false; btn.textContent='Update Password →';
-  setTimeout(() => { msg.textContent=''; }, 3000);
+  setTimeout(() => { msg.style.color=''; msg.textContent=''; }, 3000);
 }
 
 function loadSettingsForm() {
@@ -2719,98 +2726,6 @@ document.addEventListener('keydown', e => {
     else if(!sf.classList.contains('hidden'))handleSignup();
   }
 });
-
-
-
-// ── PASSWORD RECOVERY ──
-async function submitRecovery() {
-  const pass = document.getElementById('recovery-pass').value;
-  const confirm = document.getElementById('recovery-confirm').value;
-  const msg = document.getElementById('recovery-msg');
-  const btn = document.getElementById('recovery-btn');
-  if (!pass || pass.length < 6) { msg.className='auth-msg err'; msg.textContent='Password must be 6+ characters.'; return; }
-  if (pass !== confirm) { msg.className='auth-msg err'; msg.textContent='Passwords do not match.'; return; }
-  btn.disabled = true; btn.textContent = 'Updating...';
-  const { error } = await sb.auth.updateUser({ password: pass });
-  if (error) {
-    msg.className = 'auth-msg err';
-    msg.textContent = error.message;
-    btn.disabled = false; btn.textContent = 'Set Password →';
-  } else {
-    msg.className = 'auth-msg ok';
-    msg.textContent = 'Password updated! Signing you in...';
-    setTimeout(() => {
-      document.getElementById('recovery-overlay').classList.remove('open');
-      showApp();
-    }, 1500);
-  }
-}
-
-// ── BUG REPORT ──
-function openBugModal() {
-  document.getElementById('bug-modal-overlay').classList.add('open');
-  document.getElementById('bug-desc').focus();
-}
-function closeBugModal() {
-  document.getElementById('bug-modal-overlay').classList.remove('open');
-  document.getElementById('bug-desc').value = '';
-  // Reset pills
-  document.querySelectorAll('[data-bug-type]').forEach(p => p.classList.remove('on'));
-  document.querySelector('[data-bug-type="Bug"]').classList.add('on');
-}
-
-// Bug type pill selection
-document.addEventListener('click', e => {
-  const pill = e.target.closest('[data-bug-type]');
-  if (!pill) return;
-  document.querySelectorAll('[data-bug-type]').forEach(p => p.classList.remove('on'));
-  pill.classList.add('on');
-});
-
-async function submitBugReport() {
-  const desc = document.getElementById('bug-desc').value.trim();
-  if (!desc) { showToast('Describe the issue first.'); return; }
-  const type = document.querySelector('[data-bug-type].on')?.dataset.bugType || 'Bug';
-  const btn = document.getElementById('bug-submit-btn');
-  btn.disabled = true;
-  btn.textContent = 'Sending...';
-  
-  const report = {
-    action: 'bug_report',
-    type,
-    description: desc,
-    user: currentUser?.email || 'Unknown',
-    tool: document.querySelector('.tool-panel.active')?.id?.replace('sec-','') || 'dashboard',
-    timestamp: new Date().toISOString(),
-    userAgent: navigator.userAgent.slice(0, 150),
-  };
-  
-  try {
-    const res = await fetch('https://purx-api.elijahfisher51.workers.dev', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(report),
-    });
-    const data = await res.json();
-    if (data.ok) {
-      showToast('Bug report sent — thanks!');
-      closeBugModal();
-    } else {
-      throw new Error(data.error);
-    }
-  } catch(e) {
-    showToast('Failed to send — try again.');
-    console.error('Bug report error:', e);
-  }
-  
-  btn.disabled = false;
-  btn.textContent = 'Send Report →';
-}
-
-function showBugFab() {
-  const fab = document.getElementById('bug-fab');
-  if (fab) fab.style.display = 'flex';
-}
 
 // ── NAV ──
 function showSection(id) {
@@ -3057,7 +2972,7 @@ function updateNextMove(toolCounts, streak, thisWeek, total) {
     {cond: toolCounts.checker === 0, icon: '✦', text: 'Try the Pre-Post Checker — upload a screenshot and get an A–F grade before you post.', cta: 'Open Post Checker', target: 'checker'},
     {cond: toolCounts.calendar === 0, icon: '◆', text: "You haven't built a content calendar yet. Map your whole week in 30 seconds.", cta: 'Build calendar', target: 'calendar'},
     {cond: streak === 0 && total > 0, icon: '🔥', text: 'Your streak reset. Generate something today to keep your momentum alive.', cta: 'Generate now', target: 'caption'},
-    {cond: thisWeek < 3, icon: '⚡', text: "Aim for at least 10 generations this week to stay sharp. You've done " + thisWeek + " so far.", cta: 'Keep going', target: 'caption'},
+    {cond: thisWeek < 3, icon: '⚡', text: "Aim for at least 3 generations this week to stay sharp. You've done " + thisWeek + " so far.", cta: 'Keep going', target: 'caption'},
     {cond: toolCounts.hook < 5, icon: '→', text: 'Build a bank of hooks. Having 5+ options means your reels always open strong.', cta: 'Generate hooks', target: 'hook'},
     {cond: true, icon: '✦', text: 'Check your next post before it goes live — even great content can be better.', cta: 'Open checker', target: 'checker'},
   ];
@@ -3113,17 +3028,18 @@ function renderHistory() {
   if(!filtered.length) {
     const isAll = historyFilter === 'all';
     const filterLabel = historyFilter.charAt(0).toUpperCase() + historyFilter.slice(1);
-    list.innerHTML =
-      '<div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px;padding:64px 24px">' +
-      '<div style="font-family:var(--display);font-size:clamp(28px,4vw,40px);font-weight:900;text-transform:uppercase;letter-spacing:.04em;color:var(--silver);line-height:.9">' +
-      (isAll ? 'No generations<br>yet' : 'No ' + filterLabel + '<br>generations yet') +
-      '</div>' +
-      '<div style="font-size:13px;color:var(--t3);line-height:1.65;max-width:300px;font-family:var(--mono);letter-spacing:.04em">' +
-      (isAll ? 'Every caption, hook, hashtag set, and plan you generate gets saved here automatically.' : 'Generate something with the ' + filterLabel + ' tool and it will appear here.') +
-      '</div>' +
-      (isAll ? '<button class="gen-btn" style="margin-top:0;font-size:12px;padding:16px;max-width:240px" onclick="showSection(\"dashboard\")">Go to Dashboard →</button>' : '') +
-      '</div>';
-    return;
+    if (isAll) {
+      list.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px;padding:64px 24px">' +
+        '<div style="font-family:var(--display);font-size:36px;font-weight:900;text-transform:uppercase;color:var(--silver);line-height:.9">No generations<br>yet</div>' +
+        '<div style="font-size:13px;color:var(--t3);line-height:1.65;max-width:300px;font-family:var(--mono)">Every caption, hook, hashtag set, and plan you generate gets saved here automatically.</div>' +
+        '<button class="gen-btn" style="margin-top:0;font-size:12px;padding:16px;max-width:240px" onclick="showSection(\'dashboard\')">Go to Dashboard →</button>' +
+        '</div>';
+    } else {
+      list.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding:64px 24px">' +
+        '<div style="font-family:var(--display);font-size:28px;font-weight:900;text-transform:uppercase;color:var(--silver)">No ' + filterLabel + '<br>generations yet</div>' +
+        '<div style="font-size:13px;color:var(--t3);line-height:1.65;max-width:280px;font-family:var(--mono)">Generate something with the ' + filterLabel + ' tool and it will appear here.</div>' +
+        '</div>';
+    }    return;
   }
 
   list.innerHTML = '';
@@ -5905,6 +5821,79 @@ function closeUpgradeModal() {
 showSection('dashboard');
 
 
+
+// ── PASSWORD RECOVERY ──
+async function submitRecovery() {
+  const pass = document.getElementById('recovery-pass').value;
+  const confirm = document.getElementById('recovery-confirm').value;
+  const msg = document.getElementById('recovery-msg');
+  const btn = document.getElementById('recovery-btn');
+  if (!pass || pass.length < 6) { msg.className='auth-msg err'; msg.textContent='Password must be 6+ characters.'; return; }
+  if (pass !== confirm) { msg.className='auth-msg err'; msg.textContent='Passwords do not match.'; return; }
+  btn.disabled = true; btn.textContent = 'Updating...';
+  const { error } = await sb.auth.updateUser({ password: pass });
+  if (error) {
+    msg.className = 'auth-msg err';
+    msg.textContent = error.message;
+    btn.disabled = false; btn.textContent = 'Set Password →';
+  } else {
+    msg.className = 'auth-msg ok';
+    msg.textContent = 'Password updated! Signing you in...';
+    setTimeout(() => {
+      document.getElementById('recovery-overlay').classList.remove('open');
+      showApp();
+    }, 1500);
+  }
+}
+
+// ── BUG REPORT ──
+function openBugModal() {
+  document.getElementById('bug-modal-overlay').classList.add('open');
+  document.getElementById('bug-desc').focus();
+}
+function closeBugModal() {
+  document.getElementById('bug-modal-overlay').classList.remove('open');
+  document.getElementById('bug-desc').value = '';
+  document.querySelectorAll('[data-bug-type]').forEach(p => p.classList.remove('on'));
+  document.querySelector('[data-bug-type="Bug"]').classList.add('on');
+}
+document.addEventListener('click', e => {
+  const pill = e.target.closest('[data-bug-type]');
+  if (!pill) return;
+  document.querySelectorAll('[data-bug-type]').forEach(p => p.classList.remove('on'));
+  pill.classList.add('on');
+});
+async function submitBugReport() {
+  const desc = document.getElementById('bug-desc').value.trim();
+  if (!desc) { showToast('Describe the issue first.'); return; }
+  const type = document.querySelector('[data-bug-type].on')?.dataset.bugType || 'Bug';
+  const btn = document.getElementById('bug-submit-btn');
+  btn.disabled = true; btn.textContent = 'Sending...';
+  const report = {
+    action: 'bug_report', type, description: desc,
+    user: currentUser?.email || 'Unknown',
+    tool: document.querySelector('.tool-panel.active')?.id?.replace('sec-','') || 'dashboard',
+    timestamp: new Date().toISOString(),
+    userAgent: navigator.userAgent.slice(0, 150),
+  };
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(report),
+    });
+    const data = await res.json();
+    if (data.ok) { showToast('Bug report sent — thanks!'); closeBugModal(); }
+    else throw new Error(data.error);
+  } catch(e) {
+    showToast('Failed to send — try again.');
+  }
+  btn.disabled = false; btn.textContent = 'Send Report →';
+}
+function showBugFab() {
+  const fab = document.getElementById('bug-fab');
+  if (fab) fab.style.display = 'flex';
+}
+
 </script>
 
 <!-- UPGRADE MODAL -->
@@ -5931,7 +5920,7 @@ showSection('dashboard');
 </button>
 
 <!-- BUG REPORT MODAL -->
-<div class="bug-modal-overlay" id="bug-modal-overlay" onclick="e=>e.target===this&&closeBugModal()">
+<div class="bug-modal-overlay" id="bug-modal-overlay" onclick="if(event.target===this)closeBugModal()">
   <div class="bug-modal" onclick="event.stopPropagation()">
     <div class="bug-modal-title">Report<br>Issue</div>
     <div class="bug-modal-sub">Goes straight to the team</div>
@@ -5948,7 +5937,6 @@ showSection('dashboard');
     <button class="bug-cancel" onclick="closeBugModal()">Cancel</button>
   </div>
 </div>
-
 
 <!-- PASSWORD RECOVERY MODAL -->
 <div class="recovery-overlay" id="recovery-overlay">
