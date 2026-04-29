@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PURX — Creator Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,800;0,900;1,900&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060606;
+  --bg2:#0e0e0e;
+  --surface:#141414;
+  --border:#252525;
+  --border2:#333;
+  --purple:#7c3aed;
+  --purple2:#9d5cf6;
+  --pl:#c4b5fd;
+  --green:#10b981;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  --white:#fff;
+  --cream:#f0ece3;
+  --t1:#f0f0f0;
+  --t2:#b8b8b8;
+  --t3:#707070;
+  --t4:#404040;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* cursor */
+#cur{position:fixed;width:7px;height:7px;background:var(--white);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .3s,height .3s}
+#cur.big{width:36px;height:36px}
+
+/* nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:26px 52px;transition:all .5s}
+nav.on{background:rgba(6,6,6,.96);backdrop-filter:blur(20px);padding:18px 52px;border-bottom:1px solid var(--border)}
+.nl{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:.18em;color:var(--white);text-decoration:none;text-transform:uppercase}
+.nr{display:flex;align-items:center;gap:40px}
+.na{font-size:11px;color:var(--t3);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .25s}
+.na:hover{color:var(--t1)}
+.nb{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--bg);background:var(--white);border:none;padding:10px 24px;cursor:pointer;text-decoration:none;transition:background .25s;display:inline-block}
+.nb:hover{background:var(--cream)}
+
+/* ── SCENE 1: HERO ── */
+#c1{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;text-align:center}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse 70% 60% at 50% 50%,black 20%,transparent 72%);pointer-events:none}
+.scanline{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(124,58,237,.85) 45%,rgba(157,92,246,.5) 55%,transparent);box-shadow:0 0 16px rgba(124,58,237,.35);animation:scan 14s ease-in-out infinite;pointer-events:none}
+@keyframes scan{0%{top:10%;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:90%;opacity:0}}
+.c1-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:900px;height:900px;background:radial-gradient(circle,rgba(124,58,237,.13) 0%,transparent 62%);pointer-events:none;animation:gb 8s ease-in-out infinite}
+@keyframes gb{0%,100%{transform:translate(-50%,-52%) scale(1)}50%{transform:translate(-50%,-52%) scale(1.07)}}
+.cm{position:absolute;width:16px;height:16px;border-color:rgba(255,255,255,.14);border-style:solid}
+.cm.tl{top:28px;left:52px;border-width:1px 0 0 1px}
+.cm.tr{top:28px;right:52px;border-width:1px 1px 0 0}
+.cm.bl{bottom:28px;left:52px;border-width:0 0 1px 1px}
+.cm.br{bottom:28px;right:52px;border-width:0 1px 1px 0}
+.ctxt{position:absolute;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t4);letter-spacing:.1em}
+.ctxt.tl{top:48px;left:52px}
+.ctxt.br{bottom:48px;right:52px}
+.side-ind{position:absolute;top:50%;left:52px;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;opacity:0;animation:fi 1s ease forwards 2.2s}
+.si-row{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t3);letter-spacing:.1em}
+.si-dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(16,185,129,.5);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.wm{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center}
+.wm-eye{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.3em;text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fi 1s ease forwards .5s;display:flex;align-items:center;gap:14px}
+.wm-eye::before,.wm-eye::after{content:'';width:32px;height:1px;background:var(--t4)}
+.wm-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(140px,22vw,300px);line-height:.78;letter-spacing:-.04em;text-transform:uppercase;color:var(--white);opacity:0;animation:ta 1.6s cubic-bezier(.16,1,.3,1) forwards .1s}
+.wm-ghost{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(140px,22vw,300px);line-height:.78;letter-spacing:-.04em;text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.08);opacity:0;animation:ta 1.6s cubic-bezier(.16,1,.3,1) forwards .28s;margin-top:-.05em}
+@keyframes ta{from{opacity:0;transform:skewY(5deg) translateY(110px) scale(.96)}to{opacity:1;transform:none}}
+.wm-sub{font-size:13px;font-weight:400;color:var(--t2);letter-spacing:.12em;text-transform:uppercase;margin-top:24px;opacity:0;animation:fi 1s ease forwards 1.4s}
+.wm-sub2{font-size:15px;font-weight:300;color:var(--t3);letter-spacing:.02em;margin-top:12px;line-height:1.7;opacity:0;animation:fi 1s ease forwards 1.3s;max-width:460px;text-align:center}
+.wm-cta{margin-top:32px;display:flex;align-items:center;justify-content:center;gap:12px;opacity:0;animation:fi 1s ease forwards 1.7s}
+.btn-w{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--bg);background:var(--white);border:none;padding:15px 42px;cursor:pointer;text-decoration:none;display:inline-block;transition:background .3s}
+.btn-w:hover{background:var(--cream)}
+.btn-ghost{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.1em;text-decoration:none;transition:color .25s}
+.btn-ghost:hover{color:var(--t2)}
+.wm-proof{margin-top:16px;display:flex;gap:18px;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t4);letter-spacing:.12em;text-transform:uppercase;justify-content:center;flex-wrap:wrap;opacity:0;animation:fi 1s ease forwards 2s}
+.wm-trust{margin-top:12px;opacity:0;animation:fi 1s ease forwards 2s;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t4);letter-spacing:.1em;text-align:center}
+.sc{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fi 1s ease forwards 2.4s}
+.sc-l{width:1px;height:40px;background:linear-gradient(var(--t4),transparent);animation:sp 2.2s ease-in-out infinite}
+@keyframes sp{0%,100%{opacity:.3;transform:scaleY(1)}50%{opacity:.9;transform:scaleY(1.3)}}
+.sc-t{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--t4);letter-spacing:.22em;text-transform:uppercase}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+
+/* ── SCENE 2: PRODUCT LIVE ── */
+#c2{min-height:100vh;display:flex;align-items:center;border-top:1px solid var(--border);position:relative;overflow:hidden}
+.c2-bg{position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 30% 50%,rgba(124,58,237,.06) 0%,transparent 65%);pointer-events:none}
+.c2-inner{max-width:1200px;margin:0 auto;padding:120px 52px;display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:center;width:100%}
+.c2-left .c2-tag{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t4);letter-spacing:.2em;text-transform:uppercase;margin-bottom:24px}
+.c2-headline{font-family:'Barlow Condensed',sans-serif;font-size:clamp(52px,5.5vw,84px);font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;color:var(--white);margin-bottom:32px}
+.c2-headline em{font-style:italic;color:var(--pl)}
+.tool-rotator{background:var(--bg2);border:1px solid var(--border2);overflow:hidden;position:relative}
+.tool-rotator::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,.55),rgba(16,185,129,.25),transparent)}
+.tr-topbar{background:#090909;border-bottom:1px solid var(--border);padding:11px 18px;display:flex;align-items:center;justify-content:space-between}
+.tr-tabs{display:flex;gap:0}
+.tr-tab{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);background:transparent;border:none;border-bottom:2px solid transparent;padding:8px 14px;cursor:pointer;transition:all .2s}
+.tr-tab.on{color:var(--pl);border-bottom-color:var(--purple2)}
+.tr-tab:hover:not(.on){color:var(--t3)}
+.tr-live{display:flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--green);letter-spacing:.1em}
+.tr-ld{width:4px;height:4px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(16,185,129,.5);animation:pulse 2s ease-in-out infinite}
+.tr-panel{display:none;flex-direction:column}
+.tr-panel.on{display:flex}
+.tr-input-area{padding:16px 18px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.015)}
+.tr-input-label{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--t3);letter-spacing:.18em;text-transform:uppercase;margin-bottom:7px;display:block}
+.tr-input-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.tr-sel,.tr-inp{background:rgba(255,255,255,.03);border:1px solid var(--border2);padding:8px 11px;color:var(--t1);font-size:12px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;width:100%;-webkit-appearance:none}
+.tr-sel:focus,.tr-inp:focus{border-color:rgba(124,58,237,.45)}
+.tr-sel{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M1 3l4 4 4-4' stroke='%23555' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.tr-txt{resize:none;min-height:64px;line-height:1.6;font-size:12px}
+.tr-run{width:100%;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--bg);background:var(--white);border:none;padding:11px;cursor:pointer;transition:background .25s;margin-top:8px}
+.tr-run:hover:not(:disabled){background:var(--cream)}
+.tr-run:disabled{opacity:.4;cursor:not-allowed}
+.tr-output-area{padding:16px 18px;min-height:130px;position:relative}
+.tr-out-label{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--t3);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;display:block}
+.tr-out{font-size:13px;color:var(--t1);line-height:1.8;white-space:pre-wrap;font-style:italic}
+.tr-loader{display:none;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);margin-top:8px}
+.tr-loader.on{display:flex}
+.trl{width:4px;height:4px;border-radius:50%;background:var(--purple2);animation:trl 1.2s ease-in-out infinite}
+.trl:nth-child(2){animation-delay:.18s}.trl:nth-child(3){animation-delay:.36s}
+@keyframes trl{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.tr-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.tr-tag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--pl);background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.16);padding:2px 7px}
+.tool-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.tool-pill{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);border:1px solid var(--border);padding:5px 12px;cursor:pointer;transition:all .2s;background:transparent}
+.tool-pill:hover,.tool-pill.on{color:var(--t1);border-color:var(--border2);background:var(--surface)}
+
+/* ── SCENE 3: NUMBERS ── */
+#c3{min-height:80vh;border-top:1px solid var(--border);display:flex;align-items:center}
+.c3-inner{max-width:1200px;margin:0 auto;padding:120px 52px;width:100%}
+.c3-statement{font-family:'Barlow Condensed',sans-serif;font-size:clamp(56px,7vw,110px);font-weight:900;text-transform:uppercase;line-height:.85;letter-spacing:-.03em;color:var(--white);margin-bottom:80px}
+.c3-statement em{font-style:italic;-webkit-text-stroke:1.5px rgba(255,255,255,.2);color:transparent}
+.c3-statement span{color:var(--pl)}
+.c3-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.c3-cell{background:var(--bg);padding:48px 40px;position:relative;overflow:hidden;transition:background .35s;cursor:default}
+.c3-cell:hover{background:var(--bg2)}
+.c3-cell::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,.35),transparent);transform:scaleX(0);transition:transform .5s;transform-origin:left}
+.c3-cell:hover::after{transform:scaleX(1)}
+.c3-num{font-family:'Barlow Condensed',sans-serif;font-size:clamp(64px,7vw,96px);font-weight:900;color:var(--green);line-height:.85;letter-spacing:-.02em;margin-bottom:10px}
+.c3-desc{font-size:12px;color:var(--t3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px;font-family:'JetBrains Mono',monospace}
+.c3-quote{font-size:14px;color:var(--t2);line-height:1.8;font-style:italic}
+.c3-who{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.08em}
+
+/* ── CINEMATIC BREAK ── */
+#cbreak{position:relative;overflow:hidden;border-top:1px solid var(--border)}
+.cbreak-inner{min-height:60vh;display:flex;align-items:center;justify-content:center;position:relative;padding:120px 52px;text-align:center}
+.cbreak-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 50%,rgba(124,58,237,.09) 0%,transparent 65%)}
+.cbreak-content{position:relative;z-index:2}
+.cbreak-line{font-family:'Barlow Condensed',sans-serif;font-size:clamp(52px,7vw,96px);font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:.88;color:var(--t2)}
+.cbreak-line.accent{color:var(--white)}
+.cbreak-sub{font-size:16px;font-weight:300;color:var(--t3);line-height:1.8;margin-top:28px;max-width:520px;margin-left:auto;margin-right:auto}
+
+/* ── SCENE 4: TRUTH ── */
+#c4{border-top:1px solid var(--border);padding:160px 52px;text-align:center;position:relative;overflow:hidden}
+#c4::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 65% at 50% 50%,rgba(124,58,237,.07) 0%,transparent 68%);pointer-events:none}
+.c4-inner{max-width:800px;margin:0 auto;position:relative}
+.c4-q{font-family:'Barlow Condensed',sans-serif;font-size:clamp(40px,5.5vw,74px);font-weight:900;text-transform:uppercase;line-height:.9;letter-spacing:-.02em;color:var(--white);margin-bottom:40px}
+.c4-q em{font-style:italic;-webkit-text-stroke:1.5px rgba(196,181,253,.6);color:transparent}
+.c4-honest{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);text-align:left}
+.c4-col{background:var(--bg2);padding:36px 32px}
+.c4-col-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:20px;display:block}
+.c4-col-label.yes{color:var(--green)}
+.c4-col-label.no{color:var(--t3)}
+.c4-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--t2);line-height:1.65;margin-bottom:12px}
+.c4-item:last-child{margin-bottom:0}
+.c4-item .ci{font-size:11px;margin-top:2px;flex-shrink:0}
+.ci.y{color:var(--green)}.ci.n{color:var(--t4)}
+
+/* ── SCENE 5: TOOLS ── */
+#c5{border-top:1px solid var(--border);padding:160px 52px}
+.c5-inner{max-width:1100px;margin:0 auto}
+.c5-head{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;margin-bottom:72px}
+.c5-tag{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t4);letter-spacing:.2em;text-transform:uppercase;margin-bottom:22px}
+.c5-h{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,5vw,76px);font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;color:var(--white)}
+.c5-h em{font-style:italic;color:var(--pl)}
+.c5-sub{font-size:15px;font-weight:300;color:var(--t2);line-height:1.85}
+.c5-sub strong{color:var(--t1);font-weight:400}
+.tools-split{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.tools-col{background:var(--bg);padding:0}
+.tools-col-header{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg2)}
+.tools-col-tier{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.pro-tier{color:var(--pl)}
+.tools-col-count{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t4);letter-spacing:.1em}
+.tl-row{display:flex;align-items:flex-start;gap:14px;padding:18px 28px;border-bottom:1px solid var(--border);transition:background .25s;cursor:default}
+.tl-row:hover{background:var(--bg2)}
+.tl-icon{width:28px;height:28px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:2px;border-color:rgba(124,58,237,.2);color:rgba(124,58,237,.6)}
+.tl-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--t1);margin-bottom:4px}
+.tl-desc{font-size:11px;color:var(--t3);line-height:1.6}
+
+/* ── FOUNDER ── */
+#cfounder{border-top:1px solid var(--border);padding:120px 52px}
+.cfounder-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:start}
+.cfounder-tag{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t4);letter-spacing:.2em;text-transform:uppercase;margin-bottom:28px}
+.cfounder-quote{font-size:15px;font-weight:300;color:var(--t2);line-height:1.95;font-style:italic;border-left:2px solid var(--border2);padding-left:24px}
+.cfounder-sig{margin-top:36px;padding-top:24px;border-top:1px solid var(--border)}
+.cfounder-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--white)}
+.cfounder-role{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.1em;margin-top:4px}
+.cfounder-stat-block{display:flex;align-items:center;gap:0;border:1px solid var(--border2);margin-bottom:28px}
+.cfsb-item{flex:1;padding:28px 24px;text-align:center}
+.cfsb-div{width:1px;background:var(--border);align-self:stretch}
+.cfsb-num{font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;color:var(--white);line-height:1;letter-spacing:-.01em}
+.cfsb-label{font-size:11px;color:var(--t3);line-height:1.45;margin-top:6px;letter-spacing:.03em}
+.cfounder-cta-block{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.cfounder-cta{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--bg);background:var(--white);padding:14px 32px;text-decoration:none;display:inline-block;transition:background .25s}
+.cfounder-cta:hover{background:var(--cream)}
+.cfounder-fine{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t4);letter-spacing:.1em}
+
+/* ── SCENE 6: PRICE ── */
+#c6{border-top:1px solid var(--border);padding:160px 52px;position:relative}
+.c6-inner{max-width:900px;margin:0 auto}
+.c6-head{margin-bottom:52px}
+.c6-tag{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t4);letter-spacing:.2em;text-transform:uppercase;margin-bottom:20px}
+.c6-h{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,5vw,72px);font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;color:var(--white)}
+.c6-h em{font-style:italic;color:var(--pl)}
+.rate{border:1px solid rgba(124,58,237,.3);background:linear-gradient(135deg,rgba(14,9,24,1) 0%,rgba(8,8,8,1) 60%);position:relative;overflow:hidden}
+.rate::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(124,58,237,.7),rgba(157,92,246,.4),transparent)}
+.rate::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(167,139,250,.04),transparent);animation:sh 6s ease-in-out infinite;pointer-events:none}
+@keyframes sh{0%{left:-80%}100%{left:160%}}
+.rate-grid{display:grid;grid-template-columns:220px 1fr 200px;align-items:center}
+.r-left{padding:40px 32px;border-right:1px solid var(--border)}
+.r-badge{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:var(--pl);border:1px solid rgba(124,58,237,.22);padding:3px 10px;display:inline-block;margin-bottom:10px}
+.r-name{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--white);line-height:1}
+.r-for{font-size:11px;color:var(--t3);margin-top:6px;letter-spacing:.03em}
+.r-mid{padding:32px;border-right:1px solid var(--border);display:flex;flex-wrap:wrap;gap:6px 20px}
+.r-feat{font-size:12px;color:var(--t1);display:flex;align-items:center;gap:8px;width:calc(50% - 10px);line-height:1.4}
+.r-feat::before{content:'';width:3px;height:3px;border-radius:50%;background:var(--purple2);flex-shrink:0}
+.r-right{padding:32px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.r-price{font-family:'Barlow Condensed',sans-serif;font-size:64px;font-weight:900;color:var(--white);line-height:1;letter-spacing:-.02em}
+.r-cur{font-size:24px;vertical-align:super;color:var(--t2);margin-right:2px}
+.r-per{font-size:14px;color:var(--t3);font-family:'JetBrains Mono',monospace;font-weight:400}
+.r-trial{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--amber);letter-spacing:.08em;text-align:center}
+.r-btn{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--bg);background:var(--white);border:none;padding:14px 28px;cursor:pointer;text-decoration:none;transition:all .25s;display:inline-block;margin-top:4px;width:100%;text-align:center}
+.r-btn:hover{background:var(--cream)}
+.rate-note{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t4);letter-spacing:.1em;text-align:center;margin-top:24px}
+
+/* ── SCENE 7: CLOSE ── */
+#c7{border-top:1px solid var(--border);min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+.c7-left{padding:100px 72px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--border);position:relative}
+.c7-left::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 20% 50%,rgba(124,58,237,.07) 0%,transparent 65%);pointer-events:none}
+.c7-h{font-family:'Barlow Condensed',sans-serif;font-size:clamp(56px,5.5vw,84px);font-weight:900;text-transform:uppercase;line-height:.86;letter-spacing:-.02em;color:var(--white);margin-bottom:20px;position:relative}
+.c7-h em{font-style:italic;color:var(--pl)}
+.c7-p{font-size:15px;font-weight:300;color:var(--t2);line-height:1.85;margin-bottom:36px;max-width:360px;position:relative}
+.c7-cta{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--bg);background:var(--white);border:none;padding:18px 40px;cursor:pointer;text-decoration:none;transition:background .25s;display:inline-block}
+.c7-cta:hover{background:var(--cream)}
+.c7-note{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t4);letter-spacing:.1em;margin-top:14px}
+.wl-social{margin-top:32px;display:flex;align-items:center}
+.wl-av{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--bg);font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:-5px}
+.wl-av:first-child{margin-left:0}
+.wl-avt{font-size:12px;color:var(--t3);margin-left:10px}
+.wl-avt strong{color:var(--t2);font-weight:400}
+.c7-right{padding:100px 72px;display:flex;flex-direction:column;justify-content:center;background:var(--bg2);position:relative;overflow:hidden}
+.urg{background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.15);padding:24px;position:relative;z-index:2;margin-bottom:28px}
+.urg-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.urg-dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 7px rgba(16,185,129,.5);animation:pulse 2s ease-in-out infinite;flex-shrink:0}
+.urg-label{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--green);letter-spacing:.14em;text-transform:uppercase}
+.urg-h{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;text-transform:uppercase;color:var(--white);letter-spacing:.04em;margin-bottom:5px}
+.urg-p{font-size:12px;color:var(--t3);line-height:1.65}
+.urg-p span{color:var(--amber)}
+.guarantees{display:flex;flex-direction:column;gap:10px;position:relative;z-index:2}
+.guar{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--t2);line-height:1.55}
+.guar-ck{width:14px;height:14px;border:1px solid rgba(16,185,129,.22);background:rgba(16,185,129,.05);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-size:8px;color:var(--green)}
+.c7-bigword{position:absolute;bottom:48px;right:48px;font-family:'Barlow Condensed',sans-serif;font-size:clamp(80px,9vw,130px);font-weight:900;text-transform:uppercase;letter-spacing:-.03em;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.05);user-select:none;pointer-events:none}
+
+footer{border-top:1px solid var(--border);padding:24px 52px;display:flex;align-items:center;justify-content:space-between}
+.fl{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--t4);text-decoration:none;transition:color .25s}
+.fl:hover{color:var(--t3)}
+.flinks{display:flex;gap:24px}
+.flinks a{font-size:10px;color:var(--t4);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .25s}
+.flinks a:hover{color:var(--t3)}
+.fc{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t4);letter-spacing:.08em}
+
+/* scroll reveal */
+.r{opacity:0;transform:translateY(28px);transition:opacity .95s cubic-bezier(.16,1,.3,1),transform .95s cubic-bezier(.16,1,.3,1)}
+.r.in{opacity:1;transform:none}
+.r.fl2{transform:translateX(-28px)}.r.fr2{transform:translateX(28px)}
+.r.in.fl2,.r.in.fr2{transform:none}
+.d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}
+
+/* mobile */
+@media(max-width:960px){
+  nav{padding:18px 20px}.na{display:none}
+  #c2 .c2-inner{grid-template-columns:1fr;padding:80px 20px;gap:48px}
+  #c3,#c4,#c5,#c6{padding:80px 20px}
+  .c3-row,#c4 .c4-honest,#c5 .c5-head{grid-template-columns:1fr}
+  .c5-head{gap:24px}
+  .tools-split{grid-template-columns:1fr}
+  .rate-grid{grid-template-columns:1fr}.r-left,.r-mid,.r-right{border:none!important;padding:20px!important}
+  .r-mid{border-top:1px solid var(--border)!important;border-bottom:1px solid var(--border)!important}
+  #c7{grid-template-columns:1fr}
+  .c7-left,.c7-right{padding:60px 20px}
+  .c7-bigword{display:none}
+  footer{flex-direction:column;gap:14px;text-align:center;padding:20px}
+  .side-ind{display:none}
+  .cfounder-inner{grid-template-columns:1fr;gap:48px}
+  #cfounder{padding:80px 20px}
+  #cbreak .cbreak-inner{padding:80px 20px;min-height:40vh}
+  .cfounder-stat-block{flex-direction:column}
+  .cfsb-div{width:100%;height:1px}
+  .wm-title,.wm-ghost{font-size:clamp(100px,22vw,200px)}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+
+<nav id="nav">
+  <a href="#" class="nl">PURX</a>
+  <div class="nr">
+    <a href="#c5" class="na">Tools</a>
+    <a href="#c6" class="na">Pricing</a>
+    <a href="https://purx.live" class="na">Log In</a>
+    <a href="https://purx.live" class="nb">Start Free Trial</a>
+  </div>
+</nav>
+
+<!-- ── SCENE 1: HERO ── -->
+<section id="c1">
+  <div class="bg-grid"></div>
+  <div class="scanline"></div>
+  <div class="c1-glow"></div>
+  <div class="cm tl"></div><div class="cm tr"></div>
+  <div class="cm bl"></div><div class="cm br"></div>
+  <div class="ctxt tl">28.077°N · 82.498°W</div>
+  <div class="ctxt br">PURX / V1.0 / 2026</div>
+  <div class="side-ind">
+    <div class="si-row"><div class="si-dot"></div>AI Active</div>
+    <div class="si-row" style="color:var(--t4)">8 Tools Online</div>
+  </div>
+  <div class="wm">
+    <div class="wm-eye">The tool you needed six months ago</div>
+    <div class="wm-title">PURX</div>
+    <div class="wm-ghost">PURX</div>
+    <p class="wm-sub">Stop leaving results on the table</p>
+    <p class="wm-sub2">You're already doing the hard part. Showing up. Creating. Posting. PURX makes sure that work actually pays off — with AI that writes your captions, plans your week, grades your posts, and tells you exactly what to fix before you ever hit publish.</p>
+    <div class="wm-cta">
+      <a href="https://purx.live" class="btn-w">Start 7-day free trial</a>
+      <a href="#c2" class="btn-ghost">See how it works ↓</a>
+    </div>
+    <div class="wm-proof">
+      <span>Lifestyle · Cars · Fashion · Fitness · Business creators</span>
+      <span>8 tools · $19/month · 7-day free trial</span>
+    </div>
+    <div class="wm-trust">built in Tampa by a creator who got tired of posting into the void · cancel anytime, no drama</div>
+  </div>
+  <div class="sc">
+    <div class="sc-t">Scroll</div>
+    <div class="sc-l"></div>
+  </div>
+</section>
+
+<!-- ── SCENE 2: THE PRODUCT LIVE ── -->
+<section id="c2">
+  <div class="c2-bg"></div>
+  <div class="c2-inner">
+    <div class="c2-left r fl2">
+      <div class="c2-tag">001 / What PURX actually does for you</div>
+      <h2 class="c2-headline">Your content,<br>sharper than<br><em>you thought possible.</em></h2>
+      <div class="tool-pills" id="tool-pills">
+        <div class="tool-pill on" data-tool="caption" onclick="switchTool(this)">Caption Generator</div>
+        <div class="tool-pill" data-tool="hook" onclick="switchTool(this)">Reel Hooks</div>
+        <div class="tool-pill" data-tool="hashtag" onclick="switchTool(this)">Hashtag Strategy</div>
+        <div class="tool-pill" data-tool="calendar" onclick="switchTool(this)">Content Calendar</div>
+      </div>
+    </div>
+
+    <div class="tool-rotator r fr2 d2" style="position:relative">
+      <div style="position:absolute;top:-28px;right:0;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--t3);letter-spacing:.1em">← live AI demo · try it yourself</div>
+      <div class="tr-topbar">
+        <div class="tr-tabs" id="tr-tabs">
+          <button class="tr-tab on" data-t="caption" onclick="switchTool2(this)">Caption</button>
+          <button class="tr-tab" data-t="hook" onclick="switchTool2(this)">Hooks</button>
+          <button class="tr-tab" data-t="hashtag" onclick="switchTool2(this)">Hashtags</button>
+          <button class="tr-tab" data-t="calendar" onclick="switchTool2(this)">Calendar</button>
+        </div>
+        <div class="tr-live"><div class="tr-ld"></div>Live AI</div>
+      </div>
+
+      <!-- Caption -->
+      <div class="tr-panel on" id="tp-caption">
+        <div class="tr-input-area">
+          <span class="tr-input-label">Your Setup</span>
+          <div class="tr-input-row">
+            <select class="tr-sel" id="cap-niche"><option>Lifestyle</option><option>Cars</option><option>Fashion</option><option>Fitness</option><option>Travel</option><option>Business</option></select>
+            <input class="tr-inp" id="cap-goal" placeholder="vibe / goal (optional)">
+          </div>
+          <span class="tr-input-label">Describe Your Post</span>
+          <textarea class="tr-sel tr-txt" id="cap-brief">5am. dark gym. nobody else there. just the work.</textarea>
+          <button class="tr-run" id="cap-btn" onclick="runTool('caption')">Generate Caption ↗</button>
+        </div>
+        <div class="tr-output-area">
+          <span class="tr-out-label">Output — Caption Generator</span>
+          <div class="tr-out" id="cap-out"><span style="white-space:pre-wrap;font-style:italic">5am hits different when nobody's watching.
+
+#discipline #fitnessjourney #earlymorning</span></div>
+          <div class="tr-loader" id="cap-ld"><div class="trl"></div><div class="trl"></div><div class="trl"></div><span style="margin-left:5px">writing</span></div>
+          <div class="tr-tags" id="cap-tags" style="display:flex"><span class="tr-tag">Voice-Matched</span><span class="tr-tag">Ready to Post</span><span class="tr-tag">3 Variations</span></div>
+        </div>
+      </div>
+
+      <!-- Hook -->
+      <div class="tr-panel" id="tp-hook">
+        <div class="tr-input-area">
+          <span class="tr-input-label">Your Setup</span>
+          <div class="tr-input-row">
+            <select class="tr-sel" id="hook-niche"><option>Lifestyle</option><option>Cars</option><option>Fashion</option><option>Fitness</option><option>Travel</option></select>
+            <select class="tr-sel" id="hook-goal"><option>Grow Followers</option><option>Boost Engagement</option><option>Go Viral</option><option>Build Brand</option></select>
+          </div>
+          <span class="tr-input-label">What's the Reel?</span>
+          <textarea class="tr-sel tr-txt" id="hook-brief">sunday meal prep. kitchen. natural light. making it look easy.</textarea>
+          <button class="tr-run" id="hook-btn" onclick="runTool('hook')">Generate 5 Hooks ↗</button>
+        </div>
+        <div class="tr-output-area">
+          <span class="tr-out-label">Output — Hook Generator</span>
+          <div class="tr-out" id="hook-out"><span style="white-space:pre-wrap;font-style:italic">1. the sunday reset that actually works.
+2. what i eat when i'm being serious about it.
+3. meal prep doesn't have to be boring — here's proof.
+4. the only sunday routine you need.
+5. this is how i stay consistent when motivation is gone.</span></div>
+          <div class="tr-loader" id="hook-ld"><div class="trl"></div><div class="trl"></div><div class="trl"></div><span style="margin-left:5px">writing</span></div>
+          <div class="tr-tags" id="hook-tags" style="display:flex"><span class="tr-tag">5 Hooks</span><span class="tr-tag">High Retention</span><span class="tr-tag">Goal-Targeted</span></div>
+        </div>
+      </div>
+
+      <!-- Hashtag -->
+      <div class="tr-panel" id="tp-hashtag">
+        <div class="tr-input-area">
+          <span class="tr-input-label">Your Setup</span>
+          <div class="tr-input-row">
+            <select class="tr-sel" id="ht-niche"><option>Lifestyle</option><option>Cars</option><option>Fashion</option><option>Fitness</option><option>Travel</option></select>
+            <input class="tr-inp" id="ht-detail" placeholder="post detail (optional)">
+          </div>
+          <span class="tr-input-label">Post Description</span>
+          <textarea class="tr-sel tr-txt" id="ht-brief">thrift flip outfit. muted tones. city street. minimal.</textarea>
+          <button class="tr-run" id="ht-btn" onclick="runTool('hashtag')">Generate Strategy ↗</button>
+        </div>
+        <div class="tr-output-area">
+          <span class="tr-out-label">Output — Hashtag Strategy</span>
+          <div class="tr-out" id="ht-out"><span style="white-space:pre-wrap;font-style:italic">BROAD (1M+ posts)
+#fashion #streetwear #outfitoftheday #ootd #style
+
+MID-TIER (100K–1M)
+#thriftedfit #thriftflip #sustainablefashion #slowfashion #thriftstyle
+
+NICHE (under 100K)
+#thriftedstreetwear #minimalstreetfit #quietluxurystyle #mutedootd #consciousfashion</span></div>
+          <div class="tr-loader" id="ht-ld"><div class="trl"></div><div class="trl"></div><div class="trl"></div><span style="margin-left:5px">building strategy</span></div>
+          <div class="tr-tags" id="ht-tags" style="display:flex"><span class="tr-tag">3 Tiers</span><span class="tr-tag">15 Tags</span><span class="tr-tag">Reach-Optimized</span></div>
+        </div>
+      </div>
+
+      <!-- Calendar -->
+      <div class="tr-panel" id="tp-calendar">
+        <div class="tr-input-area">
+          <span class="tr-input-label">Your Setup</span>
+          <div class="tr-input-row">
+            <select class="tr-sel" id="cal-niche"><option>Lifestyle</option><option>Cars</option><option>Fashion</option><option>Fitness</option><option>Travel</option></select>
+            <select class="tr-sel" id="cal-goal"><option>Grow Followers</option><option>Boost Engagement</option><option>Go Viral</option><option>Build Brand</option></select>
+          </div>
+          <span class="tr-input-label">Theme This Week</span>
+          <textarea class="tr-sel tr-txt" id="cal-brief">building in public. showing the process. growth week.</textarea>
+          <button class="tr-run" id="cal-btn" onclick="runTool('calendar')">Build My Week ↗</button>
+        </div>
+        <div class="tr-output-area">
+          <span class="tr-out-label">Output — Content Calendar</span>
+          <div class="tr-out" id="cal-out"><span style="white-space:pre-wrap;font-style:italic">MON · Reel · "the one habit that changed everything" · 7am
+TUE · Carousel · 3 things nobody tells you about growing · 12pm
+WED · Photo · behind the work, no filter · 6pm
+THU · Reel · process video, raw cuts · 7am
+FRI · Story series · Q&amp;A — ask me anything · 3pm
+SAT · Photo · the week in one shot · 11am
+SUN · Rest or repost your best performer</span></div>
+          <div class="tr-loader" id="cal-ld"><div class="trl"></div><div class="trl"></div><div class="trl"></div><span style="margin-left:5px">building your week</span></div>
+          <div class="tr-tags" id="cal-tags" style="display:flex"><span class="tr-tag">7 Days</span><span class="tr-tag">Hooks Included</span><span class="tr-tag">Best Times Set</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SCENE 3: NUMBERS ── -->
+<section id="c3">
+  <div class="c3-inner">
+    <div class="c3-statement r">
+      The accounts<br>you're watching grow<br><em>aren't working harder.</em><br><span>they just stopped winging it.</span>
+    </div>
+    <div class="c3-row">
+      <div class="c3-cell r d1">
+        <div class="c3-num">8</div>
+        <div class="c3-desc">tools. one platform. zero excuses.</div>
+        <p class="c3-quote">Captions. Hooks. Hashtags. Content planning. Post grading. Viral analysis. Bio audits. Progress tracking. Everything you need to stop guessing and start growing — in one place.</p>
+        <div class="c3-who">All included · $19/month · nothing extra</div>
+      </div>
+      <div class="c3-cell r d2">
+        <div class="c3-num">3x</div>
+        <div class="c3-desc">more consistent. more intentional.</div>
+        <p class="c3-quote">When you have a system, you stop staring at a blank screen. You stop posting just to post. Every piece of content has a purpose — and PURX builds that plan for you in minutes.</p>
+        <div class="c3-who">Content Calendar · Built in under 2 minutes</div>
+      </div>
+      <div class="c3-cell r d3">
+        <div class="c3-num">$19</div>
+        <div class="c3-desc">the whole stack. not a single tool.</div>
+        <p class="c3-quote">Most creators piece together 4-5 different tools and still get mediocre results. PURX is the whole operation — writing, planning, analysis, optimization — for less than a dinner out.</p>
+        <div class="c3-who">Everything unlocked · Cancel anytime</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CINEMATIC BREAK ── -->
+<section id="cbreak">
+  <div class="cbreak-inner">
+    <div class="cbreak-bg"></div>
+    <div class="cbreak-content r">
+      <div class="cbreak-line">the work you're already doing</div>
+      <div class="cbreak-line accent">deserves better results.</div>
+      <div class="cbreak-sub">you're not failing because you're lazy or untalented.<br>you're failing because you're doing everything manually, alone, with no system.<br>that ends here.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SCENE 4: TRUTH ── -->
+<section id="c4">
+  <div class="c4-inner r">
+    <div class="c4-q">Built for the creator<br><em>who's done guessing.</em></div>
+    <div class="c4-honest">
+      <div class="c4-col">
+        <span class="c4-col-label yes">This is who PURX is built for</span>
+        <div class="c4-item"><span class="ci y">✓</span>You post 3-5x a week and still feel like you're not gaining traction</div>
+        <div class="c4-item"><span class="ci y">✓</span>You spend more time thinking about what to post than actually creating</div>
+        <div class="c4-item"><span class="ci y">✓</span>You've watched smaller accounts blow past you and couldn't figure out why</div>
+        <div class="c4-item"><span class="ci y">✓</span>You know your content is good — you just need it to reach more people</div>
+        <div class="c4-item"><span class="ci y">✓</span>You're serious about this — it's not a hobby, it's a career</div>
+      </div>
+      <div class="c4-col" style="background:rgba(255,255,255,.01)">
+        <span class="c4-col-label no">If this sounds like you, keep reading</span>
+        <div class="c4-item"><span class="ci n">→</span>You're in the lifestyle, cars, fashion, fitness, or business space</div>
+        <div class="c4-item"><span class="ci n">→</span>You're between 1K and 500K followers and you want more</div>
+        <div class="c4-item"><span class="ci n">→</span>You treat your page like a brand, not a diary</div>
+        <div class="c4-item"><span class="ci n">→</span>You're willing to put in the work — you just want the work to actually convert</div>
+        <div class="c4-item"><span class="ci n">→</span>You're ready to stop winging it and start winning</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SCENE 5: ALL THE TOOLS ── -->
+<section id="c5">
+  <div class="c5-inner">
+    <div class="c5-head">
+      <div class="r">
+        <div class="c5-tag">002 / Full Tool Suite</div>
+        <h2 class="c5-h">8 Tools.<br><em>Every Gap Covered.</em></h2>
+      </div>
+      <p class="c5-sub r d2">Not one tool. Not a feature. A complete intelligence layer for your Instagram — from captions to viral analysis to profile optimization. <strong>Everything you need. Nothing you don't.</strong></p>
+    </div>
+
+    <div class="tools-split">
+      <div class="tools-col r fl2">
+        <div class="tools-col-header">
+          <span class="tools-col-tier pro-tier">Content Creation</span>
+          <span class="tools-col-count">4 tools</span>
+        </div>
+        <div class="tl-row">
+          <div class="tl-icon">✦</div>
+          <div><div class="tl-name">Caption Generator</div><div class="tl-desc">3 distinct AI captions per post. Voice-matched to your niche and goal.</div></div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-icon">✦</div>
+          <div><div class="tl-name">Hook Generator</div><div class="tl-desc">5 scroll-stopping opening lines for your next reel. Built to hold attention in the first second.</div></div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-icon">✦</div>
+          <div><div class="tl-name">Hashtag Strategy</div><div class="tl-desc">15 hashtags across 3 tiers — broad, mid, and niche. Strategically tiered for maximum reach.</div></div>
+        </div>
+        <div class="tl-row" style="border-bottom:none">
+          <div class="tl-icon">✦</div>
+          <div><div class="tl-name">Content Calendar</div><div class="tl-desc">Your full week planned from one prompt — what to post, when, and why it works.</div></div>
+        </div>
+      </div>
+
+      <div class="tools-col r fr2 d2">
+        <div class="tools-col-header">
+          <span class="tools-col-tier pro-tier">Intelligence & Analysis</span>
+          <span class="tools-col-count">4 tools</span>
+        </div>
+        <div class="tl-row">
+          <div class="tl-icon">◈</div>
+          <div><div class="tl-name">Pre-Post Checker</div><div class="tl-desc">Upload your content before posting. AI grades it and tells you exactly what to fix.</div></div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-icon">◈</div>
+          <div><div class="tl-name">Viral Post Analyzer</div><div class="tl-desc">Upload any viral post. AI breaks down exactly why it worked and how to replicate it.</div></div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-icon">◈</div>
+          <div><div class="tl-name">Bio Audit</div><div class="tl-desc">Upload your profile screenshot. Get your bio rewritten and a clear action plan to convert more followers.</div></div>
+        </div>
+        <div class="tl-row" style="border-bottom:none">
+          <div class="tl-icon">◈</div>
+          <div><div class="tl-name">Progress Tracking</div><div class="tl-desc">Every generation tracked. Every post marked. See your streak, grades, and momentum score build.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOUNDER ── -->
+<section id="cfounder">
+  <div class="cfounder-inner">
+    <div class="cfounder-left r fl2">
+      <div class="cfounder-tag">from the builder</div>
+      <div class="cfounder-quote r d1">
+        "i spent months posting every single day and watching accounts that posted twice a week pull three times my numbers.<br><br>
+        i bought the courses. used the tools. read the playbooks. none of it was built for the way i actually work.<br><br>
+        so i built PURX. not for the creator with a team and a budget. for the one doing everything alone, trying to make every post count, wondering why the work isn't converting the way it should.<br><br>
+        this is the tool i needed two years ago. seven days free. use it on your next post. if you don't feel the difference, walk away — nothing lost."
+      </div>
+      <div class="cfounder-sig r d2">
+        <div class="cfounder-name">Elijah</div>
+        <div class="cfounder-role">Founder · Creator · Tampa, FL</div>
+      </div>
+    </div>
+    <div class="cfounder-right r fr2 d2">
+      <div class="cfounder-stat-block">
+        <div class="cfsb-item">
+          <div class="cfsb-num">8</div>
+          <div class="cfsb-label">AI tools<br>in one platform</div>
+        </div>
+        <div class="cfsb-div"></div>
+        <div class="cfsb-item">
+          <div class="cfsb-num">7</div>
+          <div class="cfsb-label">days<br>free trial</div>
+        </div>
+        <div class="cfsb-div"></div>
+        <div class="cfsb-item">
+          <div class="cfsb-num">$19</div>
+          <div class="cfsb-label">per month<br>everything included</div>
+        </div>
+      </div>
+      <div class="cfounder-cta-block">
+        <a href="https://purx.live" class="cfounder-cta">Start 7-day free trial ↗</a>
+        <div class="cfounder-fine">7-day free trial · $19/month after · cancel anytime</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SCENE 6: PRICE ── -->
+<section id="c6">
+  <div class="c6-inner">
+    <div class="c6-head r">
+      <div class="c6-tag">003 / Pricing</div>
+      <h2 class="c6-h">One price.<br><em>Everything included.</em></h2>
+    </div>
+    <div class="r d1">
+      <div class="rate">
+        <div class="rate-grid">
+          <div class="r-left">
+            <div class="r-badge">PURX Pro</div>
+            <div class="r-name">Full Access</div>
+            <div class="r-for">All 8 tools · Unlimited generations</div>
+          </div>
+          <div class="r-mid">
+            <div class="r-feat">Caption Generator</div>
+            <div class="r-feat">Hook Generator</div>
+            <div class="r-feat">Hashtag Strategy</div>
+            <div class="r-feat">Content Calendar</div>
+            <div class="r-feat">Pre-Post Checker</div>
+            <div class="r-feat">Viral Post Analyzer</div>
+            <div class="r-feat">Bio Audit</div>
+            <div class="r-feat">Progress Tracking</div>
+          </div>
+          <div class="r-right">
+            <div class="r-price"><span class="r-cur">$</span>19<span class="r-per">/mo</span></div>
+            <div class="r-trial">7-day free trial · if it doesn't change how you create, cancel</div>
+            <a href="https://buy.stripe.com/14AbJ1cDnaQIfmr3EQ9ws00" class="r-btn">Start Free Trial →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="rate-note r d2">post once with PURX and feel the difference — or cancel in under 60 seconds · no contracts · no fine print · just results</p>
+  </div>
+</section>
+
+<!-- ── SCENE 7: CLOSE ── -->
+<section id="c7">
+  <div class="c7-left r fl2">
+    <h2 class="c7-h">The gap between<br>you and them<br><em>is a system.</em></h2>
+    <p class="c7-p">You already have the work ethic. You already have the content. PURX gives you the intelligence layer that makes it all click — the captions that sound like you, the plan that keeps you consistent, the analysis that shows you what's actually working. Seven days. See for yourself.</p>
+    <a href="https://purx.live" class="c7-cta">Start Free Trial →</a>
+    <div class="c7-note">$19/month after · cancel anytime · every tool unlocked from day one</div>
+    <div class="wl-social">
+      <div class="wl-av" style="background:rgba(124,58,237,.15)">JR</div>
+      <div class="wl-av" style="background:rgba(16,185,129,.1)">MK</div>
+      <div class="wl-av" style="background:rgba(245,158,11,.1)">TW</div>
+      <div class="wl-av" style="background:rgba(124,58,237,.1)">AL</div>
+      <div class="wl-av" style="background:rgba(16,185,129,.08)">DS</div>
+      <span class="wl-avt">Join the creators already <strong>building smarter</strong></span>
+    </div>
+  </div>
+  <div class="c7-right r fr2 d2">
+    <div class="urg">
+      <div class="urg-top"><div class="urg-dot"></div><span class="urg-label">Live Now</span></div>
+      <div class="urg-h">Your next post could be your best one.</div>
+      <p class="urg-p">Start at <span>purx.live</span>. Run your first caption. Feel the difference immediately. Then decide if $19/month is worth never staring at a blank screen again.</p>
+    </div>
+    <div class="guarantees">
+      <div class="guar"><div class="guar-ck">✓</div>3 free generations the moment you sign up — no commitment required</div>
+      <div class="guar"><div class="guar-ck">✓</div>Every tool unlocked from day one — not drip-fed over time</div>
+      <div class="guar"><div class="guar-ck">✓</div>If it doesn't make your content process better, cancel in 60 seconds</div>
+      <div class="guar"><div class="guar-ck">✓</div>$19/month is less than what most creators waste on tools that don't work together</div>
+    </div>
+    <div class="c7-bigword">PURX</div>
+  </div>
+</section>
+
+<footer>
+  <a href="#" class="fl">PURX</a>
+  <div class="flinks">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="mailto:hello@purx.live">Contact</a>
+  </div>
+  <span class="fc">© 2026 PURX · Tampa, FL</span>
+</footer>
+
+<script>
+// Cursor
+const cur=document.getElementById('cur');
+let mx=0,my=0,cx=0,cy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function lp(){cx+=(mx-cx)*.13;cy+=(my-cy)*.13;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(lp)})();
+document.querySelectorAll('a,button,.tool-pill').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+});
+
+// Nav
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('on',scrollY>60));
+
+// Scroll reveal
+const ro=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.06});
+document.querySelectorAll('.r').forEach(el=>ro.observe(el));
+
+// Parallax glow
+const c1glow=document.querySelector('.c1-glow');
+window.addEventListener('scroll',()=>{if(c1glow)c1glow.style.transform=`translate(-50%,-52%) translateY(${scrollY*.25}px)`});
+
+// Tool tab switching
+function switchTool(pill){
+  const t=pill.dataset.tool;
+  document.querySelectorAll('.tool-pill').forEach(p=>p.classList.toggle('on',p.dataset.tool===t));
+  document.querySelectorAll('.tr-tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  document.querySelectorAll('.tr-panel').forEach(p=>p.classList.toggle('on',p.id==='tp-'+t));
+}
+function switchTool2(btn){
+  const t=btn.dataset.t;
+  document.querySelectorAll('.tr-tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  document.querySelectorAll('.tr-panel').forEach(p=>p.classList.toggle('on',p.id==='tp-'+t));
+  document.querySelectorAll('.tool-pill').forEach(p=>p.classList.toggle('on',p.dataset.tool===t));
+}
+
+// Demo AI — calls PURX worker
+const WORKER='https://purx-api.elijahfisher51.workers.dev';
+const PROMPTS={
+  caption:(n,g,b)=>`You are PURX, a premium Instagram growth platform. Generate ONE Instagram caption for a ${n} creator. ${g?'Goal: '+g+'.':''} Post: "${b||'premium lifestyle content, aspirational aesthetic'}". Style: lowercase, effortless, understated — cool and minimal. 1-2 short sentences max. Include 3 sharp relevant hashtags. Output ONLY the caption — no quotes, no explanation.`,
+  hook:(n,g,b)=>`You are PURX. Generate exactly 5 high-retention Reel opening hooks for a ${n} creator. Goal: ${g}. Reel: "${b||'premium lifestyle content'}". Each hook: punchy, scroll-stopping, 1-2 sentences. Numbered 1-5. Make them feel human. Output hooks only — no intro, no explanation.`,
+  hashtag:(n,d,b)=>`You are PURX. Generate a strategic 15-hashtag set for a ${n} creator. Post: "${b||'premium aesthetic content'}". Organize into exactly 3 groups: BROAD (5 tags, 1M+ posts), MID-TIER (5 tags, 100K-1M), NICHE (5 tags, under 100K). Output hashtags only — no explanation.`,
+  calendar:(n,g,b)=>`You are PURX. Build a 7-day Instagram content calendar for a ${n} creator. Goal: ${g}. Theme: "${b||'lifestyle and growth content'}". For each day: post type, concept/hook idea, best time to post. Format clean and scannable. Output only.`
+};
+
+async function runTool(tool){
+  const configs={
+    caption:{n:'cap-niche',g:'cap-goal',b:'cap-brief',btn:'cap-btn',out:'cap-out',ld:'cap-ld',tags:'cap-tags'},
+    hook:{n:'hook-niche',g:'hook-goal',b:'hook-brief',btn:'hook-btn',out:'hook-out',ld:'hook-ld',tags:'hook-tags'},
+    hashtag:{n:'ht-niche',g:'ht-detail',b:'ht-brief',btn:'ht-btn',out:'ht-out',ld:'ht-ld',tags:'ht-tags'},
+    calendar:{n:'cal-niche',g:'cal-goal',b:'cal-brief',btn:'cal-btn',out:'cal-out',ld:'cal-ld',tags:'cal-tags'}
+  };
+  const c=configs[tool];
+  const n=document.getElementById(c.n).value;
+  const g=document.getElementById(c.g)?document.getElementById(c.g).value:'';
+  const b=document.getElementById(c.b).value.trim();
+  const btn=document.getElementById(c.btn);
+  const out=document.getElementById(c.out);
+  const ld=document.getElementById(c.ld);
+  const tags=document.getElementById(c.tags);
+  btn.disabled=true;btn.textContent='Generating...';
+  out.innerHTML='';ld.classList.add('on');tags.style.display='none';
+  try{
+    const res=await fetch(WORKER,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt:PROMPTS[tool](n,g,b)})
+    });
+    const data=await res.json();
+    const text=data.ok?data.text:'Something went wrong — try again.';
+    out.innerHTML='<span style="white-space:pre-wrap;font-style:italic">'+text.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span>';
+    tags.style.display='flex';
+  }catch(e){
+    out.innerHTML='<span style="color:var(--red);font-size:11px;font-style:normal">Connection error — try again.</span>';
+  }
+  ld.classList.remove('on');
+  const labels={caption:'Generate Caption ↗',hook:'Generate 5 Hooks ↗',hashtag:'Generate Strategy ↗',calendar:'Build My Week ↗'};
+  btn.disabled=false;btn.textContent=labels[tool];
+}
+
+// Magnetic CTAs
+document.querySelectorAll('.btn-w,.nb,.r-btn,.c7-cta,.cfounder-cta').forEach(btn=>{
+  btn.addEventListener('mousemove',e=>{const r=btn.getBoundingClientRect();btn.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.09}px,${(e.clientY-r.top-r.height/2)*.09}px)`});
+  btn.addEventListener('mouseleave',()=>btn.style.transform='');
+});
+</script>
+</body>
+</html>
