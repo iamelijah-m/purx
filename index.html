@@ -4567,15 +4567,22 @@ async function runChecker() {
     renderCheckerOutput(resultText, output);
     output.style.display = 'block';
     setTimeout(function(){ output.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
-    // Extract grade from checker output for progress tracking
-    var chkGradeMatch = (resultText||'').match(/GRADE:\s*([A-F])/i);
-    var chkGrade = chkGradeMatch ? chkGradeMatch[1].toUpperCase() : null;
-    lastCheckerGenId = await saveGeneration('checker', resultText, { contentType: contentType, goal: goal, grade: chkGrade });
-    loadStats();
 
   } catch(e) {
     showToast('Error analyzing content - please try again');
     console.error('Checker error:', e);
+  }
+
+  // Save outside try/catch so a DB error doesn't hide the output
+  try {
+    var chkGradeMatch = (resultText||'').match(/GRADE:\s*([A-F])/i);
+    var chkGrade = chkGradeMatch ? chkGradeMatch[1].toUpperCase() : null;
+    // Truncate to 8000 chars to avoid DB column limits
+    var saveContent = (resultText||'').substring(0, 8000);
+    lastCheckerGenId = await saveGeneration('checker', saveContent, { contentType: contentType, goal: goal, grade: chkGrade });
+    loadStats();
+  } catch(saveErr) {
+    console.warn('Checker save failed:', saveErr);
   }
   loading.classList.remove('show');
   btn.disabled = false;
