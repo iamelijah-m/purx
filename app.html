@@ -272,14 +272,14 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
   position:fixed;bottom:0;left:0;right:0;z-index:200;
   background:rgba(5,5,7,.97);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
   border-top:1px solid var(--border);
-  padding:0 0 env(safe-area-inset-bottom,0px);
+  padding:0 0 calc(env(safe-area-inset-bottom,16px) + 8px);
 }
 .mobile-tabs{display:flex;align-items:stretch}
 .mobile-tab{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:5px;padding:10px 4px;background:none;border:none;cursor:pointer;
+  gap:5px;padding:12px 4px 10px;background:none;border:none;cursor:pointer;
   font-family:var(--mono);font-size:7px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--t3);transition:color .2s;min-height:56px;
+  color:var(--t3);transition:color .2s;min-height:64px;
 }
 .mobile-tab.on{color:var(--purple3)}
 .mobile-tab:active{opacity:.7}
@@ -1315,12 +1315,38 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 </style>
 </head>
 <body>
-<div id="pwa-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#111;border-top:1px solid #222;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px">
-  <div>
-    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:14px;letter-spacing:.12em;color:#fff;text-transform:uppercase">Add PURX to Home Screen</div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#555;letter-spacing:.08em;margin-top:2px">Tap Share → Add to Home Screen</div>
+<div id="pwa-modal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);align-items:flex-end;justify-content:center;padding:0">
+  <div style="background:#111;border:1px solid #222;border-radius:16px 16px 0 0;width:100%;max-width:480px;padding:32px 28px calc(32px + env(safe-area-inset-bottom,16px));position:relative">
+    <div style="width:36px;height:4px;background:#333;border-radius:2px;margin:0 auto 28px"></div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;letter-spacing:.08em;color:#fff;text-transform:uppercase;margin-bottom:6px">Install PURX</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#7c3aed;letter-spacing:.15em;text-transform:uppercase;margin-bottom:20px">works like a native app · no app store needed</div>
+    <div style="font-family:'DM Sans',sans-serif;font-size:14px;color:#888;line-height:1.65;margin-bottom:28px">Add PURX to your home screen for the best experience — full screen, faster, and it opens like any other app on your phone.</div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px">
+      <div style="display:flex;align-items:center;gap:16px;background:#0c0c0c;border:1px solid #1e1e1e;border-radius:8px;padding:14px 16px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:#7c3aed;min-width:28px;text-align:center">1</div>
+        <div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:13px;color:#ddd;margin-bottom:2px">Tap the <strong style="color:#fff">Share</strong> button</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#555;letter-spacing:.06em">the box with an arrow at the bottom of Safari</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;background:#0c0c0c;border:1px solid #1e1e1e;border-radius:8px;padding:14px 16px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:#7c3aed;min-width:28px;text-align:center">2</div>
+        <div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:13px;color:#ddd;margin-bottom:2px">Tap <strong style="color:#fff">Add to Home Screen</strong></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#555;letter-spacing:.06em">scroll down in the share menu to find it</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;background:#0c0c0c;border:1px solid #1e1e1e;border-radius:8px;padding:14px 16px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:#7c3aed;min-width:28px;text-align:center">3</div>
+        <div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:13px;color:#ddd;margin-bottom:2px">Tap <strong style="color:#fff">Add</strong> in the top right</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#555;letter-spacing:.06em">PURX icon appears on your home screen</div>
+        </div>
+      </div>
+    </div>
+    <button onclick="document.getElementById('pwa-modal').style.display='none';localStorage.setItem('pwa-dismissed','1')" style="width:100%;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;letter-spacing:.18em;text-transform:uppercase;background:#fff;color:#060606;border:none;padding:18px;border-radius:6px;cursor:pointer;margin-bottom:12px">Got it</button>
+    <button onclick="document.getElementById('pwa-modal').style.display='none';localStorage.setItem('pwa-dismissed','1')" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:none;color:#444;border:none;padding:8px;cursor:pointer">not now</button>
   </div>
-  <button onclick="document.getElementById('pwa-banner').style.display='none';localStorage.setItem('pwa-dismissed','1')" style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#555;background:none;border:1px solid #333;padding:6px 12px;cursor:pointer;border-radius:2px;white-space:nowrap">Got it</button>
 </div>
 <script>
 (function(){
@@ -1329,8 +1355,9 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
   var dismissed = localStorage.getItem('pwa-dismissed');
   if(isIOS && !isStandalone && !dismissed){
     setTimeout(function(){
-      document.getElementById('pwa-banner').style.display='flex';
-    }, 3000);
+      var m = document.getElementById('pwa-modal');
+      m.style.display='flex';
+    }, 4000);
   }
 })();
 </script>
