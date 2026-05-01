@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PURX Graphics — Download Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#060606;color:#fff;font-family:'DM Sans',sans-serif;padding:24px 16px;min-height:100vh}
+h1{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:4px}
+.sub{font-family:'JetBrains Mono',monospace;font-size:9px;color:#555;letter-spacing:.2em;text-transform:uppercase;margin-bottom:32px}
+.section{margin-bottom:40px}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:8px;color:#7c3aed;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #1a1a1a}
+.card{background:#0c0c0c;border:1px solid #1a1a1a;border-radius:8px;padding:16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.card-info{}
+.card-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:2px}
+.card-size{font-family:'JetBrains Mono',monospace;font-size:8px;color:#444;letter-spacing:.1em}
+.dl-btn{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:13px;letter-spacing:.14em;text-transform:uppercase;background:#fff;color:#060606;border:none;padding:12px 20px;border-radius:4px;cursor:pointer;white-space:nowrap;flex-shrink:0;-webkit-appearance:none}
+.dl-btn:active{opacity:.8}
+.dl-btn.loading{background:#333;color:#666}
+.note{font-family:'JetBrains Mono',monospace;font-size:8px;color:#333;letter-spacing:.08em;line-height:1.7;margin-top:8px}
+.iphone-tip{background:#0a0a14;border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:16px;margin-bottom:32px}
+.iphone-tip-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;letter-spacing:.08em;text-transform:uppercase;color:#9d5cf6;margin-bottom:6px}
+.iphone-tip-text{font-family:'DM Sans',sans-serif;font-size:12px;color:#666;line-height:1.65}
+canvas{display:none}
+</style>
+</head>
+<body>
+
+<h1>PURX</h1>
+<div class="sub">Graphics Download Kit · Tap to save to camera roll</div>
+
+<div class="iphone-tip">
+  <div class="iphone-tip-title">iPhone Instructions</div>
+  <div class="iphone-tip-text">Tap any Download button → image opens in a new tab → press and hold the image → tap "Save to Photos". Takes 3 seconds per image.</div>
+</div>
+
+<div class="section">
+  <div class="section-label">Feed Post · 1080×1080</div>
+  <div class="card">
+    <div class="card-info">
+      <div class="card-name">Feed Post</div>
+      <div class="card-size">1:1 Square · Post to feed tonight</div>
+    </div>
+    <button class="dl-btn" onclick="downloadGraphic('feed')">Download →</button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Story Ad · 1080×1920</div>
+  <div class="card">
+    <div class="card-info">
+      <div class="card-name">Story Ad</div>
+      <div class="card-size">9:16 Vertical · Story or paid ad</div>
+    </div>
+    <button class="dl-btn" onclick="downloadGraphic('story')">Download →</button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Carousel 1 · 5 Slides · 1080×1080 each</div>
+  <div class="card"><div class="card-info"><div class="card-name">Carousel 1 · Slide 1</div><div class="card-size">Hook slide — "your captions are killing your reach"</div></div><button class="dl-btn" onclick="downloadGraphic('c1s1')">Download →</button></div>
+  <div class="card"><div class="card-info"><div class="card-name">Carousel 1 · Slide 2</div><div class="card-size">Stats slide — 47 min vs 8 sec</div></div><button class="dl-btn" onclick="downloadGraphic('c1s2')">Download →</button></div>
+  <div class="card"><div class="card-info"><div class="card-name">Carousel 1 · Slide 3</div><div class="card-size">Product slide — 8 AI tools</div></div><button class="dl-btn" onclick="downloadGraphic('c1s3')">Download →</button></div>
+  <div class="card"><div class="card-info"><div class="card-name">Carousel 1 · Slide 4</div><div class="card-size">Demo slide — caption in 8 seconds</div></div><button class="dl-btn" onclick="downloadGraphic('c1s4')">Download →</button></div>
+  <div class="card"><div class="card-info"><div class="card-name">Carousel 1 · Slide 5</div><div class="card-size">CTA slide — 10 free generations</div></div><button class="dl-btn" onclick="downloadGraphic('c1s5')">Download →</button></div>
+</div>
+
+<div class="section">
+  <div class="section-label">Carousel 2 · 5 Slides · 1080×1080 each</div>
+  <div class="card"><div class="card-info"><div class="card-name">Carousel 2 · Slide 1</div><div class="card-size">Hook — "how long did your last caption take?"</div></div><button class="dl-btn" onclick="downloadGraphic('c2s1')">Download →</button></div>
+  <div class="card"><div class="card-info"><div class="card-name">Carousel 2 · Slide 2</div><div class="card-size">Before/After comparison</div></div><button class="dl-btn" onclick="downloadGraphic('c2s2')">Download →</button></div>
+  <div class="card"><div class="card-info"><div class="card-name">Carousel 2 · Slide 3</div><div class="card-size">Timeline — your first session</div></div><button class="dl-btn" onclick="downloadGraphic('c2s3')">Download →</button></div>
+  <div class="card"><div class="card-info"><div class="card-name">Carousel 2 · Slide 4</div><div class="card-size">Math — 46 minutes back per day</div></div><button class="dl-btn" onclick="downloadGraphic('c2s4')">Download →</button></div>
+  <div class="card"><div class="card-info"><div class="card-name">Carousel 2 · Slide 5</div><div class="card-size">CTA — "try it free. no card."</div></div><button class="dl-btn" onclick="downloadGraphic('c2s5')">Download →</button></div>
+</div>
+
+<canvas id="cv"></canvas>
+
+<script>
+const BG = '#060606';
+const PURPLE = '#7c3aed';
+const PURPLE2 = '#9d5cf6';
+const PURPLE3 = '#c4b5fd';
+const WHITE = '#ffffff';
+const T1 = '#f0f0f0';
+const T2 = '#a0a0a0';
+const T3 = '#555555';
+const BORDER = '#1a1a1a';
+const GREEN = '#10b981';
+const RED = '#ef4444';
+
+function rnd(cv, w, h) {
+  cv.width = w; cv.height = h;
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0,0,w,h);
+  return ctx;
+}
+
+function drawGrid(ctx, w, h, size=54) {
+  ctx.strokeStyle = 'rgba(255,255,255,0.025)';
+  ctx.lineWidth = 1;
+  for(let x=0;x<w;x+=size){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+  for(let y=0;y<h;y+=size){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+}
+
+function drawGlow(ctx, x, y, r, color) {
+  const g = ctx.createRadialGradient(x,y,0,x,y,r);
+  g.addColorStop(0, color);
+  g.addColorStop(1, 'transparent');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(x,y,r,0,Math.PI*2);
+  ctx.fill();
+}
+
+function drawTag(ctx, x, y, text, fs=22) {
+  ctx.font = `500 ${fs}px 'JetBrains Mono'`;
+  ctx.fillStyle = PURPLE2;
+  const tw = ctx.measureText(text).width;
+  const pad = 20; const h2 = fs+16;
+  ctx.strokeStyle = 'rgba(124,58,237,0.3)';
+  ctx.lineWidth = 1;
+  ctx.fillStyle = 'rgba(124,58,237,0.1)';
+  roundRect(ctx, x, y-h2+4, tw+pad*2, h2, h2/2);
+  ctx.fill(); ctx.stroke();
+  ctx.fillStyle = PURPLE2;
+  ctx.textAlign = 'left';
+  ctx.fillText(text, x+pad, y);
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h);
+  ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r);
+  ctx.arcTo(x,y,x+r,y,r);
+  ctx.closePath();
+}
+
+function logo(ctx, x, y, size=42) {
+  ctx.font = `900 ${size}px 'Barlow Condensed'`;
+  ctx.fillStyle = WHITE;
+  ctx.textAlign = 'left';
+  ctx.letterSpacing = '4px';
+  ctx.fillText('PURX', x, y);
+  ctx.letterSpacing = '0px';
+}
+
+function arrow(ctx, x, y, fs=28) {
+  ctx.font = `700 ${fs}px 'Barlow Condensed'`;
+  ctx.fillStyle = PURPLE2;
+  ctx.textAlign = 'right';
+  ctx.fillText('swipe →', x, y);
+}
+
+function hline(ctx, x, y, w, col=PURPLE) {
+  const g = ctx.createLinearGradient(x,y,x+w,y);
+  g.addColorStop(0,'transparent');
+  g.addColorStop(0.5,col);
+  g.addColorStop(1,'transparent');
+  ctx.strokeStyle = g;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x,y);
+  ctx.lineTo(x+w,y);
+  ctx.stroke();
+}
+
+function pill(ctx, x, y, text, fs=20) {
+  ctx.font = `500 ${fs}px 'JetBrains Mono'`;
+  const tw = ctx.measureText(text).width;
+  const ph = fs+20; const pw = tw+40;
+  ctx.fillStyle = '#111';
+  ctx.strokeStyle = '#222';
+  ctx.lineWidth = 1;
+  roundRect(ctx, x, y, pw, ph, 4);
+  ctx.fill(); ctx.stroke();
+  ctx.fillStyle = PURPLE2;
+  ctx.beginPath(); ctx.arc(x+20, y+ph/2, 8, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#666';
+  ctx.textAlign = 'left';
+  ctx.fillText(text, x+38, y+ph/2+7);
+  return ph+14;
+}
+
+function slideBase(ctx, w, h) {
+  ctx.fillStyle = BG;
+  ctx.fillRect(0,0,w,h);
+  drawGrid(ctx,w,h);
+}
+
+function slideTopBottom(ctx, w, h, slideNum, total) {
+  ctx.font = '400 22px JetBrains Mono';
+  ctx.fillStyle = '#333';
+  ctx.textAlign = 'left';
+  ctx.fillText(`0${slideNum} / 0${total}`, 48, 72);
+  drawTag(ctx, w-260, 72, 'PURX', 20);
+  logo(ctx, 48, h-48);
+}
+
+// ── FEED POST ──
+function drawFeed(ctx, w, h) {
+  slideBase(ctx,w,h);
+  drawGlow(ctx, w/2, h/2, 480, 'rgba(124,58,237,0.13)');
+  logo(ctx, 48, 100, 52);
+  drawTag(ctx, w-320, 100, 'AI · CREATOR TOOLS', 18);
+  ctx.font = '400 24px JetBrains Mono';
+  ctx.fillStyle = '#444';
+  ctx.textAlign = 'center';
+  ctx.fillText('what if captions took 8 seconds', w/2, 280);
+  ctx.font = '900 180px Barlow Condensed';
+  ctx.fillStyle = WHITE;
+  ctx.textAlign = 'center';
+  ctx.fillText('STOP', w/2, 450);
+  ctx.fillText('WRITING.', w/2, 610);
+  ctx.font = '900 180px Barlow Condensed';
+  ctx.fillStyle = PURPLE2;
+  ctx.fillText('START', w/2, 770);
+  ctx.fillStyle = WHITE;
+  ctx.fillText('GROWING.', w/2, 930);
+  ctx.font = '400 30px DM Sans';
+  ctx.fillStyle = '#666';
+  ctx.textAlign = 'center';
+  ctx.fillText('8 AI tools built for creators who are serious about growth.', w/2, 1010, w-120);
+  hline(ctx, 60, 1060, w-120);
+  // stats
+  const stats = [['8','AI Tools'],['10','Free Gens'],['8s','Per Caption'],['$0','To Start']];
+  const sw = (w-120)/4;
+  stats.forEach((s,i) => {
+    const sx = 60 + sw*i + sw/2;
+    ctx.font = '900 64px Barlow Condensed';
+    ctx.fillStyle = i%2===1 ? PURPLE2 : WHITE;
+    ctx.textAlign = 'center';
+    ctx.fillText(s[0], sx, 1130);
+    ctx.font = '400 18px JetBrains Mono';
+    ctx.fillStyle = '#444';
+    ctx.fillText(s[1].toUpperCase(), sx, 1155);
+  });
+  ctx.font = '400 22px JetBrains Mono';
+  ctx.fillStyle = '#555';
+  ctx.textAlign = 'center';
+  ctx.fillText('link in bio → ', w/2 - 60, 1040);
+  ctx.fillStyle = PURPLE2;
+  ctx.fillText('purx.live', w/2+80, 1040);
+}
+
+// ── STORY ──
+function drawStory(ctx, w, h) {
+  slideBase(ctx,w,h);
+  drawGlow(ctx, w/2, -80, 480, 'rgba(124,58,237,0.18)');
+  drawGlow(ctx, w+60, h-100, 320, 'rgba(124,58,237,0.1)');
+  logo(ctx, 48, 110, 44);
+  drawTag(ctx, w-400, 110, 'CREATOR INTELLIGENCE', 18);
+  // progress bars
+  const bars = [1, 0.6, 0];
+  bars.forEach((v,i) => {
+    const bx = 48 + i*(w-96)/3 + (i>0?8:0);
+    const bw = (w-96)/3 - 8;
+    ctx.fillStyle = '#222'; ctx.fillRect(bx,150,bw,4);
+    ctx.fillStyle = PURPLE; ctx.fillRect(bx,150,bw*v,4);
+  });
+  ctx.font = '400 22px JetBrains Mono';
+  ctx.fillStyle = '#555'; ctx.textAlign = 'left';
+  ctx.fillText('STOP GUESSING. START GROWING.', 48, 280);
+  ctx.font = '900 148px Barlow Condensed';
+  ctx.fillStyle = WHITE; ctx.textAlign = 'left';
+  ctx.fillText('AI BUILT', 48, 420);
+  ctx.fillText('FOR', 48, 550);
+  ctx.fillStyle = PURPLE2;
+  ctx.fillText('CREATORS', 48, 680);
+  ctx.fillStyle = WHITE;
+  ctx.fillText('LIKE YOU.', 48, 810);
+  hline(ctx, 48, 860, w-96, PURPLE);
+  ctx.font = '400 30px DM Sans';
+  ctx.fillStyle = '#777'; ctx.textAlign = 'left';
+  const bodyText = '8 tools that write your captions, hooks,\nhashtags, and plan your whole week — in seconds.';
+  bodyText.split('\n').forEach((line,i) => ctx.fillText(line, 48, 920+i*44));
+  const feats = ['Caption Generator','Hook Generator','Hashtag Strategy','Content Calendar + 4 more'];
+  feats.forEach((f,i) => {
+    ctx.fillStyle = PURPLE; ctx.beginPath(); ctx.arc(58,1050+i*62,8,0,Math.PI*2); ctx.fill();
+    ctx.font = '400 24px JetBrains Mono'; ctx.fillStyle = '#666'; ctx.textAlign='left';
+    ctx.fillText(f, 82, 1057+i*62);
+  });
+  // CTA box
+  ctx.fillStyle = 'rgba(124,58,237,0.08)';
+  ctx.strokeStyle = 'rgba(124,58,237,0.25)'; ctx.lineWidth = 2;
+  roundRect(ctx, 48, 1310, w-96, 120, 4); ctx.fill(); ctx.stroke();
+  ctx.font = '400 18px JetBrains Mono'; ctx.fillStyle = PURPLE2; ctx.textAlign='left';
+  ctx.fillText('10 FREE · NO CARD NEEDED', 72, 1360);
+  ctx.font = '900 56px Barlow Condensed'; ctx.fillStyle = WHITE;
+  ctx.fillText('purx.live', 72, 1410);
+  ctx.font = '900 72px Barlow Condensed'; ctx.fillStyle = PURPLE2; ctx.textAlign='right';
+  ctx.fillText('→', w-60, 1410);
+  ctx.font = '400 18px JetBrains Mono'; ctx.fillStyle = '#444'; ctx.textAlign='left';
+  ctx.fillText('↑ SWIPE UP', 48, h-48);
+}
+
+// ── CAROUSEL 1 SLIDES ──
+function drawC1S1(ctx,w,h){
+  slideBase(ctx,w,h); drawGlow(ctx,w,0,380,'rgba(124,58,237,0.12)');
+  slideTopBottom(ctx,w,h,1,5);
+  ctx.font='400 22px JetBrains Mono';ctx.fillStyle='#555';ctx.textAlign='center';
+  ctx.fillText('THE PROBLEM',w/2,280);
+  ctx.font='900 172px Barlow Condensed';ctx.fillStyle=WHITE;ctx.textAlign='center';
+  ctx.fillText('YOUR',w/2,440);ctx.fillText('CAPTIONS',w/2,590);
+  ctx.fillStyle=PURPLE2;ctx.fillText('ARE KILLING',w/2,740);
+  ctx.fillStyle=WHITE;ctx.fillText('YOUR REACH',w/2,890);
+  hline(ctx,120,950,w-240);
+  ctx.font='400 28px DM Sans';ctx.fillStyle='#555';ctx.textAlign='center';
+  ctx.fillText("and you don't even know it.",w/2,1010);
+}
+function drawC1S2(ctx,w,h){
+  slideBase(ctx,w,h); drawGlow(ctx,0,h,300,'rgba(124,58,237,0.08)');
+  slideTopBottom(ctx,w,h,2,5);
+  ctx.font='400 22px JetBrains Mono';ctx.fillStyle='#555';ctx.textAlign='left';
+  ctx.fillText('THE REALITY',48,200);
+  ctx.font='900 130px Barlow Condensed';ctx.fillStyle=WHITE;ctx.textAlign='left';
+  ctx.fillText('47',48,340);ctx.font='900 60px Barlow Condensed';ctx.fillStyle=PURPLE2;ctx.fillText('min',190,340);
+  ctx.font='400 22px JetBrains Mono';ctx.fillStyle='#444';ctx.fillText('AVG TIME ON CAPTIONS/WEEK',48,375);
+  ctx.fillStyle='#1a1a1a';ctx.fillRect(48,400,w-96,2);
+  ctx.font='900 130px Barlow Condensed';ctx.fillStyle=WHITE;ctx.textAlign='left';
+  ctx.fillText('3.2',48,540);ctx.font='900 60px Barlow Condensed';ctx.fillStyle=RED;ctx.fillText('%',220,540);
+  ctx.font='400 22px JetBrains Mono';ctx.fillStyle='#444';ctx.fillText('AVG ENGAGEMENT WITHOUT STRATEGY',48,575);
+  ctx.fillStyle='#111';ctx.fillRect(48,610,w-96,2);
+  ctx.font='900 88px Barlow Condensed';ctx.fillStyle=WHITE;ctx.textAlign='left';
+  ctx.fillText('CREATORS USING AI',48,720);ctx.fillText('TOOLS GROW',48,800);
+  ctx.fillStyle=PURPLE2;ctx.fillText('3X FASTER.',48,880);
+  ctx.font='400 26px DM Sans';ctx.fillStyle='#666';
+  ctx.fillText("the ones winning aren't working harder.",48,940,w-96);
+  ctx.fillText("they're working smarter.",48,978,w-96);
+}
+function drawC1S3(ctx,w,h){
+  slideBase(ctx,w,h); drawGlow(ctx,w/2,0,360,'rgba(124,58,237,0.1)');
+  slideTopBottom(ctx,w,h,3,5);
+  ctx.font='400 22px JetBrains Mono';ctx.fillStyle='#555';ctx.textAlign='left';
+  ctx.fillText('THE SOLUTION',48,200);
+  ctx.font='900 110px Barlow Condensed';ctx.fillStyle=WHITE;ctx.textAlign='left';
+  ctx.fillText('8 AI TOOLS.',48,330);ctx.fillText('ONE PLATFORM.',48,430);
+  ctx.fillStyle=PURPLE2;ctx.fillText('BUILT FOR',48,530);ctx.fillText('CREATORS.',48,630);
+  let py=700;
+  ['Caption Generator','Hook Generator','Hashtag Strategy','Content Calendar + 4 more'].forEach(t=>{py+=pill(ctx,48,py,t,24);});
+}
+function drawC1S4(ctx,w,h){
+  slideBase(ctx,w,h);
+  slideTopBottom(ctx,w,h,4,5);
+  ctx.font='400 22px JetBrains Mono';ctx.fillStyle='#555';ctx.textAlign='left';
+  ctx.fillText('HOW IT WORKS',48,200);
+  // input boxes
+  function inputBox(label,val,y){
+    ctx.fillStyle='#0c0c0c';ctx.strokeStyle='#1e1e1e';ctx.lineWidth=2;
+    roundRect(ctx,48,y,w-96,110,4);ctx.fill();ctx.stroke();
+    ctx.font='400 18px JetBrains Mono';ctx.fillStyle='#333';ctx.textAlign='left';
+    ctx.fillText(label.toUpperCase(),72,y+38);
+    ctx.font='400 28px DM Sans';ctx.fillStyle='#666';
+    ctx.fillText(val,72,y+80);
+  }
+  inputBox('Your niche','Cars · Lifestyle',240);
+  inputBox('Describe your post','C8 at sunset, clean luxury vibe...',390);
+  ctx.font='900 32px JetBrains Mono';ctx.fillStyle=PURPLE2;ctx.textAlign='center';
+  ctx.fillText('↓  8 SECONDS  ↓',w/2,560);
+  // output box
+  ctx.fillStyle='#0a0a0a';ctx.strokeStyle='rgba(124,58,237,0.2)';ctx.lineWidth=2;
+  roundRect(ctx,48,590,w-96,340,4);ctx.fill();ctx.stroke();
+  ctx.fillStyle=PURPLE;ctx.fillRect(48,590,4,340);
+  ctx.font='400 18px JetBrains Mono';ctx.fillStyle=PURPLE2;ctx.textAlign='left';
+  ctx.fillText('✦ YOUR CAPTION',72,640);
+  ctx.font='400 30px DM Sans';ctx.fillStyle='#aaa';
+  ctx.fillText("built different. the c8 doesn't ask",72,700,w-144);
+  ctx.fillText("for attention — it takes it.",72,742,w-144);
+  ctx.fillText('#corvette #luxurylifestyle #c8corvette',72,810,w-144);
+}
+function drawC1S5(ctx,w,h){
+  slideBase(ctx,w,h); drawGlow(ctx,w/2,h/2,500,'rgba(124,58,237,0.14)');
+  slideTopBottom(ctx,w,h,5,5);
+  ctx.font='400 22px JetBrains Mono';ctx.fillStyle=PURPLE2;ctx.textAlign='center';
+  ctx.fillText('START FREE TODAY',w/2,240);
+  ctx.font='900 160px Barlow Condensed';ctx.fillStyle=WHITE;ctx.textAlign='center';
+  ctx.fillText('10 FREE',w/2,400);ctx.fillText('GENERATIONS.',w/2,540);
+  ctx.fillStyle=PURPLE2;ctx.fillText('NO CARD.',w/2,680);ctx.fillText('NO BS.',w/2,820);
+  hline(ctx,120,870,w-240);
+  ctx.fillStyle='rgba(124,58,237,0.12)';ctx.strokeStyle='rgba(124,58,237,0.3)';ctx.lineWidth=2;
+  roundRect(ctx,120,910,w-240,100,4);ctx.fill();ctx.stroke();
+  ctx.font='900 52px Barlow Condensed';ctx.fillStyle=PURPLE3;ctx.textAlign='center';
+  ctx.fillText('purx.live',w/2,975);
+  ctx.font='400 24px DM Sans';ctx.fillStyle='#555';ctx.textAlign='center';
+  ctx.fillText('link in bio',w/2,1050);
+}
+
+// ── CAROUSEL 2 SLIDES ──
+function drawC2S1(ctx,w,h){
+  slideBase(ctx,w,h);
+  drawGlow(ctx,w,0,340,'rgba(239,68,68,0.07)');
+  drawGlow(ctx,0,h,300,'rgba(124,58,237,0.09)');
+  slideTopBottom(ctx,w,h,1,5);
+  ctx.font='400 22px JetBrains Mono';ctx.fillStyle='#555';ctx.textAlign='center';
+  ctx.fillText('BE HONEST WITH YOURSELF',w/2,260);
+  ctx.font='900 128px Barlow Condensed';ctx.fillStyle=WHITE;ctx.textAlign='center';
+  ctx.fillText('HOW LONG DID',w/2,400);ctx.fillText('YOUR LAST',w/2,510);
+  ctx.fillText('CAPTION TAKE',w/2,620);ctx.fillText('TO WRITE?',w/2,730);
+  hline(ctx,160,800,w-320,RED);
+  ctx.font='400 28px JetBrains Mono';ctx.fillStyle='#555';ctx.textAlign='center';
+  ctx.fillText('whatever it was — it was too long.',w/2,880);
+}
+function drawC2S2(ctx,w,h){
+  slideBase(ctx,w,h);
+  slideTopBottom(ctx,w,h,2,5);
+  ctx.font='400 22px JetBrains Mono';ctx.fillStyle='#555';ctx.textAlign='left';
+  ctx.fillText('BEFORE VS AFTER PURX',48,200);
+  const colW=(w-112)/2;
+  // before
+  ctx.fillStyle='#0f0808';ctx.strokeStyle='#2a1515';ctx.lineWidth=2;
+  roundRect(ctx,48,230,colW,500,4);ctx.fill();ctx.stroke();
+  ctx.font='900 26px Barlow Condensed';ctx.fillStyle=RED;ctx.textAlign='left';
+  ctx.fillText('BEFORE',72,278);
+  ['30 min writing captions','guessing hashtags','no content plan','posting and hoping'].forEach((t,i)=>{
+    ctx.font='400 24px DM Sans';ctx.fillStyle='#666';ctx.fillText(t,72,330+i*60);
+  });
+  // after
+  ctx.fillStyle='#080f0a';ctx.strokeStyle='rgba(16,185,129,0.2)';ctx.lineWidth=2;
+  roundRect(ctx,64+colW,230,colW,500,4);ctx.fill();ctx.stroke();
+  ctx.font='900 26px Barlow Condensed';ctx.fillStyle=GREEN;ctx.textAlign='left';
+  ctx.fillText('AFTER',88+colW,278);
+  ['8 sec per caption','strategic 15 tags','full week planned','data-driven posts'].forEach((t,i)=>{
+    ctx.font='400 24px DM Sans';ctx.fillStyle='#888';ctx.fillText(t,88+colW,330+i*60);
+  });
+  ctx.fillStyle='#111';ctx.fillRect(48,760,w-96,2);
+  ctx.font='900 88px Barlow Condensed';ctx.fillStyle=WHITE;ctx.textAlign='left';
+  ctx.fillText('SAME CREATOR.',48,860);
+  ctx.fillStyle=PURPLE2;ctx.fillText('COMPLETELY',48,940);ctx.fillText('DIFFERENT RESULTS.',48,1020);
+}
+function drawC2S3(ctx,w,h){
+  slideBase(ctx,w,h); drawGlow(ctx,w,0,280,'rgba(124,58,237,0.1)');
+  slideTopBottom(ctx,w,h,3,5);
+  ctx.font='400 22px JetBrains Mono';ctx.fillStyle='#555';ctx.textAlign='left';
+  ctx.fillText('YOUR FIRST SESSION',48,200);
+  const steps=[
+    ['0:00','Sign up free at purx.live'],
+    ['0:30','Pick your niche, set your goal'],
+    ['0:38','First caption generated. 8 seconds flat.'],
+    ['2:00','Full week of content planned and ready.'],
+    ['2:01',"you're already ahead."]
+  ];
+  steps.forEach((s,i)=>{
+    const y=280+i*148;
+    ctx.fillStyle=i===4?GREEN:PURPLE;
+    ctx.beginPath();ctx.arc(68,y,14,0,Math.PI*2);ctx.fill();
+    if(i<4){ctx.fillStyle='#222';ctx.fillRect(66,y+14,4,110);}
+    ctx.font='400 20px JetBrains Mono';ctx.fillStyle='#555';ctx.textAlign='left';
+    ctx.fillText(s[0],104,y+4);
+    ctx.font=i===4?'400 28px DM Sans':'400 26px DM Sans';
+    ctx.fillStyle=i===4?GREEN:'#888';
+    ctx.fillText(s[1],104,y+38,w-160);
+  });
+}
+function drawC2S4(ctx,w,h){
+  slideBase(ctx,w,h); drawGlow(ctx,w/2,h,320,'rgba(124,58,237,0.1)');
+  slideTopBottom(ctx,w,h,4,5);
+  ctx.font='400 22px JetBrains Mono';ctx.fillStyle='#555';ctx.textAlign='left';
+  ctx.fillText('THE MATH IS SIMPLE',48,200);
+  const bw=(w-128)/2;
+  // without
+  ctx.fillStyle='#0c0c0c';ctx.strokeStyle='#1e1e1e';ctx.lineWidth=2;
+  roundRect(ctx,48,240,bw,260,4);ctx.fill();ctx.stroke();
+  ctx.font='900 120px Barlow Condensed';ctx.fillStyle=RED;ctx.textAlign='center';
+  ctx.fillText('47',48+bw/2-30,370);ctx.font='900 56px Barlow Condensed';ctx.fillStyle='#555';ctx.fillText('min',48+bw/2+60,370);
+  ctx.font='400 20px JetBrains Mono';ctx.fillStyle='#444';ctx.textAlign='center';ctx.fillText('WITHOUT PURX',48+bw/2,460);
+  // arrow
+  ctx.font='900 48px Barlow Condensed';ctx.fillStyle='#333';ctx.textAlign='center';ctx.fillText('→',w/2,390);
+  // with
+  ctx.fillStyle='#080f0a';ctx.strokeStyle='rgba(16,185,129,0.15)';ctx.lineWidth=2;
+  roundRect(ctx,80+bw,240,bw,260,4);ctx.fill();ctx.stroke();
+  ctx.font='900 120px Barlow Condensed';ctx.fillStyle=GREEN;ctx.textAlign='center';
+  ctx.fillText('8',80+bw+bw/2-20,370);ctx.font='900 56px Barlow Condensed';ctx.fillStyle='#555';ctx.fillText('sec',80+bw+bw/2+50,370);
+  ctx.font='400 20px JetBrains Mono';ctx.fillStyle='#444';ctx.textAlign='center';ctx.fillText('WITH PURX',80+bw+bw/2,460);
+  ctx.fillStyle='#111';ctx.fillRect(48,540,w-96,2);
+  ctx.font='900 104px Barlow Condensed';ctx.fillStyle=WHITE;ctx.textAlign='left';
+  ctx.fillText("THAT'S",48,660);ctx.fillStyle=PURPLE2;ctx.fillText('46 MINUTES',48,754);
+  ctx.fillStyle=WHITE;ctx.fillText('BACK EVERY',48,848);ctx.fillText('SINGLE DAY.',48,942);
+  ctx.font='400 26px JetBrains Mono';ctx.fillStyle='#444';ctx.textAlign='left';
+  ctx.fillText('what could you do with that time?',48,1000);
+}
+function drawC2S5(ctx,w,h){
+  slideBase(ctx,w,h); drawGlow(ctx,w/2,h/2,500,'rgba(124,58,237,0.13)');
+  slideTopBottom(ctx,w,h,5,5);
+  ctx.font='400 22px JetBrains Mono';ctx.fillStyle=PURPLE2;ctx.textAlign='center';
+  ctx.fillText('NO EXCUSES LEFT',w/2,240);
+  ctx.font='900 152px Barlow Condensed';ctx.fillStyle=WHITE;ctx.textAlign='center';
+  ctx.fillText('TRY IT FREE.',w/2,400);ctx.fillText('RIGHT NOW.',w/2,530);
+  ctx.fillStyle=PURPLE2;ctx.fillText('NO CARD.',w/2,660);
+  hline(ctx,120,710,w-240);
+  ctx.fillStyle='#0a0a0a';ctx.strokeStyle='#1e1e1e';ctx.lineWidth=2;
+  roundRect(ctx,80,740,w-160,140,4);ctx.fill();ctx.stroke();
+  ctx.font='400 20px JetBrains Mono';ctx.fillStyle='#555';ctx.textAlign='left';
+  ctx.fillText('WHAT YOU GET FREE',108,790);
+  ctx.font='400 26px DM Sans';ctx.fillStyle='#777';
+  ctx.fillText('10 AI generations · captions · hooks · hashtags',108,840,w-220);
+  ctx.fillStyle='rgba(124,58,237,0.12)';ctx.strokeStyle='rgba(124,58,237,0.3)';ctx.lineWidth=2;
+  roundRect(ctx,80,910,w-160,120,4);ctx.fill();ctx.stroke();
+  ctx.font='900 60px Barlow Condensed';ctx.fillStyle=PURPLE3;ctx.textAlign='center';
+  ctx.fillText('purx.live',w/2,985);
+  ctx.font='400 26px DM Sans';ctx.fillStyle='#444';ctx.textAlign='center';
+  ctx.fillText('link in bio',w/2,1060);
+}
+
+const GRAPHICS = {
+  feed:  {w:1080,h:1080,fn:drawFeed,name:'PURX_Feed_Post.png'},
+  story: {w:1080,h:1920,fn:drawStory,name:'PURX_Story_Ad.png'},
+  c1s1:  {w:1080,h:1080,fn:drawC1S1,name:'PURX_Carousel1_Slide1.png'},
+  c1s2:  {w:1080,h:1080,fn:drawC1S2,name:'PURX_Carousel1_Slide2.png'},
+  c1s3:  {w:1080,h:1080,fn:drawC1S3,name:'PURX_Carousel1_Slide3.png'},
+  c1s4:  {w:1080,h:1080,fn:drawC1S4,name:'PURX_Carousel1_Slide4.png'},
+  c1s5:  {w:1080,h:1080,fn:drawC1S5,name:'PURX_Carousel1_Slide5.png'},
+  c2s1:  {w:1080,h:1080,fn:drawC2S1,name:'PURX_Carousel2_Slide1.png'},
+  c2s2:  {w:1080,h:1080,fn:drawC2S2,name:'PURX_Carousel2_Slide2.png'},
+  c2s3:  {w:1080,h:1080,fn:drawC2S3,name:'PURX_Carousel2_Slide3.png'},
+  c2s4:  {w:1080,h:1080,fn:drawC2S4,name:'PURX_Carousel2_Slide4.png'},
+  c2s5:  {w:1080,h:1080,fn:drawC2S5,name:'PURX_Carousel2_Slide5.png'},
+};
+
+function downloadGraphic(key) {
+  const g = GRAPHICS[key];
+  const cv = document.getElementById('cv');
+  cv.width = g.w; cv.height = g.h;
+  const ctx = cv.getContext('2d');
+  // wait for fonts
+  document.fonts.ready.then(() => {
+    g.fn(ctx, g.w, g.h);
+    const url = cv.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = g.name;
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+}
+</script>
+</body></html>
