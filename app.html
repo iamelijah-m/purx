@@ -962,6 +962,14 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .trend-card.avoid .trend-card-eyebrow{color:var(--red)}
 .trend-card.caption .trend-card-eyebrow{color:var(--purple3)}
 .trend-card.timing .trend-card-eyebrow{color:var(--amber)}
+.trend-card.hidden-mobile{display:none}
+.trend-show-more{display:none;width:100%;margin-top:10px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--t2);background:var(--surface);border:1px solid var(--border);padding:14px;border-radius:3px;cursor:pointer;transition:all .2s;text-align:center}
+.trend-show-more:hover{color:var(--t1);border-color:var(--border2)}
+@media(max-width:700px){
+  .trend-card.hidden-mobile{display:none}
+  .trend-card.hidden-mobile.revealed{display:block}
+  .trend-show-more{display:block}
+}
 .trend-card-content{font-size:12px;color:var(--t2);line-height:1.7}
 .trend-card-content strong{color:var(--t1);font-weight:600}
 .trend-loading{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -4824,24 +4832,34 @@ function renderTrendPulse(data, body) {
     { key: 'avoid',   cls: 'avoid',   label: '⚠️ What to Avoid',    headline: 'Hurting your reach',     action: 'Cut this immediately →' },
   ];
 
-  body.innerHTML = '<div class="trend-grid">' +
-    cards.map(function(c) {
+  var trendExpanded = false;
+  body.innerHTML = '<div class="trend-grid" id="trend-grid">' +
+    cards.map(function(c, i) {
       var text = data[c.key] || 'No data available';
-      // Split into first sentence (headline-like) and rest
       var sentences = text.split(/(?<=\.\s)/);
       var lead = sentences[0] || text;
       var rest = sentences.slice(1).join(' ').trim();
-      // Keep it punchy - max 2 sentences for insight
       var insight = rest ? (rest.split('.').slice(0,2).join('.') + '.').replace('..', '.') : '';
-
-      return '<div class="trend-card ' + c.cls + '">' +
+      var hiddenClass = i >= 2 ? ' hidden-mobile' : '';
+      return '<div class="trend-card ' + c.cls + hiddenClass + '" id="trend-card-' + i + '">' +
         '<div class="trend-card-eyebrow">' + escH(c.label) + '</div>' +
         '<div class="trend-card-headline">' + escH(c.headline) + '</div>' +
         '<div class="trend-card-insight">' + escH(lead) + (insight ? ' ' + escH(insight) : '') + '</div>' +
         '<div class="trend-card-action">' + escH(c.action) + '</div>' +
         '</div>';
     }).join('') +
-    '</div>';
+    '</div>' +
+    '<button class="trend-show-more" id="trend-toggle" onclick="toggleTrends()">See all 6 trends ↓</button>';
+
+  window.toggleTrends = function() {
+    trendExpanded = !trendExpanded;
+    for(var i=2;i<6;i++){
+      var card = document.getElementById('trend-card-'+i);
+      if(card) card.classList.toggle('revealed', trendExpanded);
+    }
+    var btn = document.getElementById('trend-toggle');
+    if(btn) btn.textContent = trendExpanded ? 'Hide trends ↑' : 'See all 6 trends ↓';
+  };
 }
 
 
