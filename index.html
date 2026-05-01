@@ -2777,7 +2777,7 @@ async function saveGeneration(tool, content, meta={}) {
     if(error) throw error;
     return data ? data.id : null;
   } catch(e){
-    console.warn('Could not save generation:', e);
+    console.error('saveGeneration failed - tool:', tool, 'error:', e?.message || e);
     return null;
   }
 }
@@ -4554,6 +4554,7 @@ async function runChecker() {
     chkMsgEl.textContent = chkMsgs[chkMsgIdx];
   }, 2200) : null;
 
+  var resultText = null;
   try {
     var profileCtx = getProfileContext();
     var niches = userProfile ? (userProfile.niches || []).join(' and ') : 'lifestyle';
@@ -4563,7 +4564,7 @@ async function runChecker() {
     var images = b64Images.map(function(b64, i) {
       return { data: b64, media_type: 'image/jpeg' };
     });
-    var resultText = await callWorker(prompt, images);
+    resultText = await callWorker(prompt, images);
     renderCheckerOutput(resultText, output);
     output.style.display = 'block';
     setTimeout(function(){ output.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
@@ -4575,6 +4576,7 @@ async function runChecker() {
 
   // Save outside try/catch so a DB error doesn't hide the output
   try {
+    if (!resultText) { console.warn('Checker: no resultText to save'); }
     var chkGradeMatch = (resultText||'').match(/GRADE:\s*([A-F])/i);
     var chkGrade = chkGradeMatch ? chkGradeMatch[1].toUpperCase() : null;
     // Truncate to 8000 chars to avoid DB column limits
