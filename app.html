@@ -941,8 +941,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .trend-refresh-btn:hover{color:var(--t1);border-color:var(--border2)}
 .trend-refresh-btn:disabled{opacity:.4;cursor:not-allowed}
 .trend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-@media(max-width:700px){.trend-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:420px){.trend-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.trend-grid{grid-template-columns:1fr}}
 .trend-card{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:24px 26px;position:relative;overflow:hidden;transition:all .3s}
 .trend-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.4)}
 .trend-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
@@ -955,6 +954,12 @@ html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:var(-
 .trend-card-eyebrow{font-family:var(--mono);font-size:7px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
 .trend-card-headline{font-family:var(--display);font-size:18px;font-weight:900;text-transform:uppercase;color:var(--white);line-height:1;margin-bottom:10px;letter-spacing:.02em}
 .trend-card-insight{font-size:13px;color:var(--t2);line-height:1.72}
+.trend-card-insight-wrap{position:relative}
+.trend-card-insight-wrap.collapsed .trend-card-insight{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.trend-card-insight-wrap.collapsed .trend-fade{display:block}
+.trend-fade{display:none;position:absolute;bottom:0;left:0;right:0;height:32px;background:linear-gradient(transparent,var(--surface));pointer-events:none}
+.trend-read-more{font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--purple3);background:none;border:none;padding:8px 0 0;cursor:pointer;display:none}
+@media(max-width:700px){.trend-read-more{display:inline-block}}
 .trend-card-action{font-family:var(--mono);font-size:9px;color:var(--purple3);letter-spacing:.1em;text-transform:uppercase;margin-top:12px;padding-top:10px;border-top:1px solid var(--border)}
 .trend-card.hooks .trend-card-eyebrow{color:var(--purple3)}
 .trend-card.formats .trend-card-eyebrow{color:var(--amber)}
@@ -4844,7 +4849,13 @@ function renderTrendPulse(data, body) {
       return '<div class="trend-card ' + c.cls + hiddenClass + '" id="trend-card-' + i + '">' +
         '<div class="trend-card-eyebrow">' + escH(c.label) + '</div>' +
         '<div class="trend-card-headline">' + escH(c.headline) + '</div>' +
-        '<div class="trend-card-insight">' + escH(lead) + (insight ? ' ' + escH(insight) : '') + '</div>' +
+        '<div class="trend-card-insight-wrap collapsed" id="trend-wrap-' + i + '">' +
+          '<div class="trend-card-insight">' + escH(lead) + (insight ? ' ' + escH(insight) : '') + '</div>' +
+          '<div class="trend-fade"></div>' +
+        '</div>' +
+        '<button class="trend-read-more" id="trend-rm-' + i + '" onclick="trendToggle(' + i + ')">' +
+          'Read more ↓' +
+        '</button>' +
         '<div class="trend-card-action">' + escH(c.action) + '</div>' +
         '</div>';
     }).join('') +
@@ -4859,6 +4870,20 @@ function renderTrendPulse(data, body) {
     }
     var btn = document.getElementById('trend-toggle');
     if(btn) btn.textContent = trendExpanded ? 'Hide trends ↑' : 'See all 6 trends ↓';
+  };
+
+  window.trendToggle = function(i) {
+    var wrap = document.getElementById('trend-wrap-' + i);
+    var btn = document.getElementById('trend-rm-' + i);
+    if(!wrap || !btn) return;
+    var expanded = !wrap.classList.contains('collapsed');
+    if(expanded) {
+      wrap.classList.add('collapsed');
+      btn.textContent = 'Read more ↓';
+    } else {
+      wrap.classList.remove('collapsed');
+      btn.textContent = 'Show less ↑';
+    }
   };
 }
 
